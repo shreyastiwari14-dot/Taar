@@ -9,18 +9,30 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/bebas-neue": "^5.2.7",
+    "@fontsource/dm-sans": "^5.2.8",
+    "@hello-pangea/dnd": "^18.0.1",
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.100.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.7.0",
+    "next": "14.2.35",
+    "razorpay": "^2.9.6",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.35"
+    "react-hot-toast": "^2.6.0",
+    "recharts": "^3.8.1",
+    "resend": "^6.9.4",
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "typescript": "^5"
   }
 }
