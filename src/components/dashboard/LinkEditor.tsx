@@ -166,6 +166,25 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
       {/* Editor Panel */}
       <div className="flex-1 overflow-y-auto bg-[#0A0A0A] px-4 md:px-8 py-6">
         <div className="max-w-xl mx-auto space-y-6">
+
+          {/* Mobile Live Preview — visible only on mobile */}
+          <div className="block lg:hidden bg-[#0D0D0D] border border-[#222] rounded-2xl overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-[#222]">
+              <span className="text-gray-500 text-xs">Live preview</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#E8593C] animate-pulse" />
+            </div>
+            <div className="overflow-y-auto flex justify-center py-4 px-4" style={{ maxHeight: 240 }}>
+              <div className="w-full max-w-xs">
+                <BioPagePreview
+                  page={pageData ? { ...pageData, template_id: activeTemplate as any } : null}
+                  links={links}
+                  username={profileData.username}
+                  title={profileData.title}
+                  bio={profileData.bio}
+                />
+              </div>
+            </div>
+          </div>
           {/* Profile Section */}
           <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
@@ -482,7 +501,7 @@ function TemplatePicker({
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={cn(
-              'px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0',
+              'px-2 py-0.5 text-[10px] md:px-3 md:py-1 md:text-xs rounded-full font-medium whitespace-nowrap transition-colors shrink-0',
               activeCategory === cat ? 'bg-[#E8593C] text-white' : 'bg-[#222] text-gray-400 hover:text-white'
             )}
           >

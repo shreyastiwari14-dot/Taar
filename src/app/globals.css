@@ -13,7 +13,7 @@
   --cream: #F2EDE6;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 
 html, body { background: #0A0A0A; }
 html { font-family: 'DM Sans', sans-serif; }
@@ -191,7 +191,7 @@ html { font-family: 'DM Sans', sans-serif; }
 
 /* ── TEMPLATE CARD HOVER ────────────────────────────────── */
 .template-card {
-  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease;
 }
 .template-card:hover {
   transform: translateY(-8px) scale(1.02);

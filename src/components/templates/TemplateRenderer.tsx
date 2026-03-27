@@ -141,16 +141,16 @@ function GlobalStyles({ tid }: { tid: string }) {
       .taar-name-wrap { animation: taar-name-in 0.5s ease 0.1s both; }
       .taar-bio-wrap { animation: taar-fade-up 0.5s ease 0.2s both; }
 
-      .taar-links-wrap > * { animation: taar-fade-up 0.4s ease both; }
-      .taar-links-wrap > *:nth-child(1) { animation-delay: 0.25s; }
-      .taar-links-wrap > *:nth-child(2) { animation-delay: 0.30s; }
-      .taar-links-wrap > *:nth-child(3) { animation-delay: 0.35s; }
-      .taar-links-wrap > *:nth-child(4) { animation-delay: 0.40s; }
-      .taar-links-wrap > *:nth-child(5) { animation-delay: 0.45s; }
-      .taar-links-wrap > *:nth-child(6) { animation-delay: 0.50s; }
-      .taar-links-wrap > *:nth-child(7) { animation-delay: 0.55s; }
-      .taar-links-wrap > *:nth-child(8) { animation-delay: 0.60s; }
-      .taar-links-wrap > *:nth-child(n+9) { animation-delay: 0.65s; }
+      .taar-links-wrap > * { animation: taar-fade-up 0.4s ease both; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(1) { animation-delay: 0.25s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(2) { animation-delay: 0.30s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(3) { animation-delay: 0.35s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(4) { animation-delay: 0.40s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(5) { animation-delay: 0.45s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(6) { animation-delay: 0.50s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(7) { animation-delay: 0.55s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(8) { animation-delay: 0.60s; animation-fill-mode: both; }
+      .taar-links-wrap > *:nth-child(n+9) { animation-delay: 0.65s; animation-fill-mode: both; }
 
       /* Per-template button hover — class names scoped by template ID */
       .taar-btn-${tid} {

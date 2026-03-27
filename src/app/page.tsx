@@ -462,47 +462,144 @@ export default async function LandingPage() {
 
         {/* 6 hero templates at phone scale — horizontal scroll mobile, 6-col desktop */}
         <div className="flex gap-5 overflow-x-auto pb-4 px-6 md:px-12 md:grid md:grid-cols-6" style={{ scrollbarWidth: 'none' }}>
-          {[
-            { name:'Bollywood Editorial', cat:'Indian Culture', bg:'#0A0005', accent:'#F5C842', text:'#F5C842', secondaryText:'#8B7320', btnStyle:'outline', btnR:0, font:'Bebas Neue' },
-            { name:'Streetwear', cat:'Creator', bg:'#0A0A0A', accent:'#FFFFFF', text:'#FFFFFF', secondaryText:'#555555', btnStyle:'solid', btnR:0, font:'Bebas Neue' },
-            { name:'Cyberpunk', cat:'Creator', bg:'#000000', accent:'#00FF41', text:'#00FF41', secondaryText:'#006B11', btnStyle:'outline', btnR:0, font:'Space Mono' },
-            { name:'Pastel Food', cat:'Creator', bg:'#FDF6EC', accent:'#E8593C', text:'#5C2D0E', secondaryText:'#C89B7B', btnStyle:'outline', btnR:999, font:'Playfair Display' },
-            { name:'Dark Academia', cat:'Creator', bg:'#1A1209', accent:'#C8A96E', text:'#C8A96E', secondaryText:'#7A5C2A', btnStyle:'outline', btnR:0, font:'Cormorant Garamond' },
-            { name:'Rose Gold', cat:'Creator', bg:'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', accent:'#FFFFFF', text:'#FFFFFF', secondaryText:'rgba(255,255,255,0.7)', btnStyle:'outline', btnR:999, font:'Cormorant Garamond' },
-          ].map((t) => (
-            <Link key={t.name} href="/login"
-              className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block"
-              style={{ background: t.bg, width: 150, minWidth: 150, height: 280 }}>
-              <div style={{ padding: '20px 14px 16px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                {/* Avatar */}
-                <div style={{ width: 36, height: 36, borderRadius: '50%', background: `${t.accent}33`, border: `1.5px solid ${t.accent}77`, flexShrink: 0 }} />
-                {/* Name */}
-                <div style={{ fontFamily: `'${t.font}', serif`, fontSize: 11, letterSpacing: 1.5, color: t.text, textAlign: 'center', lineHeight: 1.2 }}>CREATOR NAME</div>
-                {/* Bio */}
-                <div style={{ fontSize: 8, color: t.secondaryText, textAlign: 'center', lineHeight: 1.4 }}>Creator · Mumbai</div>
-                {/* Links */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, width: '100%', marginTop: 4 }}>
-                  {['UPI Payment ₹', 'Instagram', 'YouTube'].map((label, i) => (
-                    <div key={i} style={{
-                      padding: '6px 10px', textAlign: 'center', fontSize: 8, fontWeight: 700, letterSpacing: 0.5,
-                      color: t.btnStyle === 'solid' ? (t.bg.startsWith('#0') || t.bg.startsWith('#1') ? '#000' : t.text) : t.accent,
-                      background: t.btnStyle === 'solid' ? t.accent : 'transparent',
-                      border: t.btnStyle === 'outline' ? `1px solid ${t.accent}66` : 'none',
-                      borderRadius: t.btnR,
-                      opacity: i === 0 ? 1 : 0.7,
-                    }}>
-                      {label}
-                    </div>
-                  ))}
-                </div>
-                {/* Template name */}
-                <div style={{ marginTop: 'auto', textAlign: 'center' }}>
-                  <div style={{ fontSize: 7, color: t.secondaryText, letterSpacing: 2, textTransform: 'uppercase', opacity: 0.5 }}>{t.cat}</div>
-                  <div style={{ fontSize: 9, color: t.text, marginTop: 2, fontWeight: 600 }}>{t.name}</div>
-                </div>
+          {/* ── Bollywood Editorial ── */}
+          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#0A0005', width: 150, minWidth: 150, height: 280 }}>
+            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
+              {/* Diamond grid decoration */}
+              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+                {[['20%','15%'],['65%','45%'],['35%','70%']].map(([l,t],i) => (
+                  <div key={i} style={{ position:'absolute', left:l, top:t, width:18, height:18, border:'1px solid #F5C84226', transform:'rotate(45deg)' }} />
+                ))}
               </div>
-            </Link>
-          ))}
+              {/* Corner brackets */}
+              <div style={{ position:'absolute', top:8, left:8, width:8, height:8, borderTop:'1px solid #F5C842', borderLeft:'1px solid #F5C842' }} />
+              <div style={{ position:'absolute', bottom:8, right:8, width:8, height:8, borderBottom:'1px solid #F5C842', borderRight:'1px solid #F5C842' }} />
+              {/* Avatar */}
+              <div style={{ width:36, height:36, borderRadius:'50%', background:'#F5C84222', border:'2px solid #F5C842', flexShrink:0, marginTop:8 }} />
+              {/* Name */}
+              <div style={{ fontFamily:'sans-serif', fontWeight:700, fontSize:11, letterSpacing:2, color:'#F5C842', textAlign:'center', textTransform:'uppercase', lineHeight:1.2 }}>YOUR NAME</div>
+              <div style={{ fontSize:7, color:'#8B7320', textAlign:'center', letterSpacing:1 }}>Creator · Mumbai</div>
+              {/* Buttons */}
+              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
+                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
+                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:700, letterSpacing:0.5, color:'#F5C842', background:'transparent', border:'1px solid #F5C84266', borderRadius:0, opacity: i===0?1:0.7 }}>{lbl}</div>
+                ))}
+              </div>
+              <div style={{ marginTop:'auto', textAlign:'center' }}>
+                <div style={{ fontSize:7, color:'#8B7320', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Indian Culture</div>
+                <div style={{ fontSize:9, color:'#F5C842', marginTop:2, fontWeight:600 }}>Bollywood Editorial</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* ── Streetwear ── */}
+          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#0A0A0A', width: 150, minWidth: 150, height: 280 }}>
+            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
+              {/* Horizontal rule above name */}
+              <div style={{ width:'80%', height:1, background:'#FFFFFF33', marginTop:8, flexShrink:0 }} />
+              {/* Avatar — square */}
+              <div style={{ width:36, height:36, borderRadius:0, background:'#FFFFFF22', border:'1px solid #FFFFFF', flexShrink:0 }} />
+              {/* Name */}
+              <div style={{ fontFamily:'sans-serif', fontWeight:700, fontSize:11, letterSpacing:3, color:'#FFFFFF', textAlign:'center', textTransform:'uppercase', lineHeight:1.2 }}>YOUR NAME</div>
+              <div style={{ fontSize:7, color:'#555555', textAlign:'center', letterSpacing:1 }}>Creator · Mumbai</div>
+              {/* Buttons — solid white/black */}
+              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
+                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
+                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:700, letterSpacing:0.5, color:'#000000', background:'#FFFFFF', borderRadius:0, opacity: i===0?1:0.7 }}>{lbl}</div>
+                ))}
+              </div>
+              <div style={{ marginTop:'auto', textAlign:'center' }}>
+                <div style={{ fontSize:7, color:'#555', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
+                <div style={{ fontSize:9, color:'#FFFFFF', marginTop:2, fontWeight:600 }}>Streetwear</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* ── Cyberpunk ── */}
+          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#000000', width: 150, minWidth: 150, height: 280 }}>
+            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
+              {/* Scan-line stripes */}
+              <div style={{ position:'absolute', inset:0, backgroundImage:'repeating-linear-gradient(0deg, #00FF4108 0px, #00FF4108 1px, transparent 1px, transparent 6px)', pointerEvents:'none' }} />
+              {/* Avatar with neon glow */}
+              <div style={{ width:36, height:36, borderRadius:'50%', background:'#00FF4115', border:'1.5px solid #00FF41', boxShadow:'0 0 8px #00FF41', flexShrink:0, marginTop:8 }} />
+              {/* Name */}
+              <div style={{ fontFamily:'monospace', fontWeight:700, fontSize:10, letterSpacing:1, color:'#00FF41', textAlign:'center', lineHeight:1.2 }}>YOUR NAME</div>
+              <div style={{ fontSize:7, color:'#006B11', textAlign:'center', fontFamily:'monospace' }}>Creator · Mumbai</div>
+              {/* Buttons */}
+              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
+                {['UPI_PAY ₹','INSTAGRAM','YOUTUBE'].map((lbl,i) => (
+                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:700, letterSpacing:0.5, color:'#00FF41', background:'transparent', border:'1px solid #00FF4166', borderRadius:0, fontFamily:'monospace', opacity: i===0?1:0.7 }}>{lbl}</div>
+                ))}
+              </div>
+              <div style={{ marginTop:'auto', textAlign:'center' }}>
+                <div style={{ fontSize:7, color:'#006B11', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
+                <div style={{ fontSize:9, color:'#00FF41', marginTop:2, fontWeight:600 }}>Cyberpunk</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* ── Pastel Food ── */}
+          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#FDF6EC', width: 150, minWidth: 150, height: 280 }}>
+            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
+              {/* Avatar */}
+              <div style={{ width:36, height:36, borderRadius:'50%', background:'#E8593C22', border:'2px solid #E8593C', flexShrink:0, marginTop:8 }} />
+              {/* Name — italic serif */}
+              <div style={{ fontFamily:'serif', fontStyle:'italic', fontWeight:700, fontSize:11, letterSpacing:0.5, color:'#5C2D0E', textAlign:'center', lineHeight:1.2 }}>Your Name</div>
+              <div style={{ fontSize:7, color:'#C89B7B', textAlign:'center' }}>Creator · Mumbai</div>
+              {/* Buttons — pill outline coral */}
+              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
+                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
+                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:600, letterSpacing:0.3, color:'#E8593C', background:'transparent', border:'1px solid #E8593C88', borderRadius:999, opacity: i===0?1:0.7 }}>{lbl}</div>
+                ))}
+              </div>
+              <div style={{ marginTop:'auto', textAlign:'center' }}>
+                <div style={{ fontSize:7, color:'#C89B7B', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
+                <div style={{ fontSize:9, color:'#5C2D0E', marginTop:2, fontWeight:600 }}>Pastel Food</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* ── Dark Academia ── */}
+          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#1A1209', width: 150, minWidth: 150, height: 280 }}>
+            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
+              {/* Avatar */}
+              <div style={{ width:36, height:36, borderRadius:'50%', background:'#C8A96E22', border:'1.5px solid #C8A96E', flexShrink:0, marginTop:8 }} />
+              {/* Name — serif amber */}
+              <div style={{ fontFamily:'serif', fontWeight:400, fontSize:11, letterSpacing:1, color:'#C8A96E', textAlign:'center', lineHeight:1.2 }}>Your Name</div>
+              <div style={{ fontSize:7, color:'#7A5C2A', textAlign:'center' }}>Creator · Mumbai</div>
+              {/* Buttons — outline amber */}
+              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
+                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
+                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:500, letterSpacing:0.3, color:'#C8A96E', background:'transparent', border:'1px solid #C8A96E55', borderRadius:2, opacity: i===0?1:0.7 }}>{lbl}</div>
+                ))}
+              </div>
+              <div style={{ marginTop:'auto', textAlign:'center' }}>
+                <div style={{ fontSize:7, color:'#7A5C2A', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
+                <div style={{ fontSize:9, color:'#C8A96E', marginTop:2, fontWeight:600 }}>Dark Academia</div>
+              </div>
+            </div>
+          </Link>
+
+          {/* ── Rose Gold ── */}
+          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: 'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', width: 150, minWidth: 150, height: 280 }}>
+            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
+              {/* Avatar */}
+              <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,0.3)', border:'2px solid #FFFFFF', flexShrink:0, marginTop:8 }} />
+              {/* Name — italic serif white */}
+              <div style={{ fontFamily:'serif', fontStyle:'italic', fontWeight:400, fontSize:11, letterSpacing:0.5, color:'#FFFFFF', textAlign:'center', lineHeight:1.2 }}>Your Name</div>
+              <div style={{ fontSize:7, color:'rgba(255,255,255,0.7)', textAlign:'center' }}>Creator · Mumbai</div>
+              {/* Buttons — pill outline white */}
+              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
+                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
+                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:500, letterSpacing:0.3, color:'#FFFFFF', background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.6)', borderRadius:999, opacity: i===0?1:0.7 }}>{lbl}</div>
+                ))}
+              </div>
+              <div style={{ marginTop:'auto', textAlign:'center' }}>
+                <div style={{ fontSize:7, color:'rgba(255,255,255,0.6)', letterSpacing:2, textTransform:'uppercase', opacity:0.7 }}>Creator</div>
+                <div style={{ fontSize:9, color:'#FFFFFF', marginTop:2, fontWeight:600 }}>Rose Gold</div>
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Row 2 — more templates */}
