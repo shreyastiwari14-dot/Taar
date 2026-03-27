@@ -1,0 +1,31 @@
+# Taar
+
+> Taar is a free link-in-bio tool built specifically for Indian creators.
+
+Taar helps Indian content creators, YouTubers, Instagram influencers, and digital entrepreneurs consolidate all their important links into one beautiful bio page.
+
+## What makes Taar different from Linktree
+
+- UPI payment links: Accept money directly via GPay, PhonePe, Paytm — no payment gateway needed
+- Auto Instagram Reels: Connect your Instagram handle, latest 3 reels auto-appear on your page
+- Sell digital products: PDFs, presets, courses, music packs — Razorpay checkout, auto email delivery
+- 50 templates: Bollywood editorial, Desi, Y2K, Cyberpunk, Pastel, Streetwear and more
+- Built for India: Hindi font support, WhatsApp CTA, INR pricing
+- Pro plan: ₹399/month (vs Linktree's ~₹750 equivalent)
+- Free plan: Genuinely free forever, no credit card needed
+
+## Target users
+
+Indian Instagram creators, YouTubers, food bloggers, fitness coaches, musicians, artists, fashion influencers, educators, coaches, freelancers
+
+## Pricing
+
+- Free: ₹0 forever — 1 page, 8 links, all 50 templates, UPI links, WhatsApp button
+- Pro: ₹399/month — analytics, auto Reels, sell digital products, remove watermark
+
+## Links
+
+- Website: https://taar-five.vercel.app
+- Sign up: https://taar-five.vercel.app/login
+- Linktree alternative: https://taar-five.vercel.app/linktree-alternative-india
+- Demo page: https://taar-five.vercel.app/demo

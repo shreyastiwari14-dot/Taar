@@ -23,8 +23,13 @@ export async function POST(request: Request) {
   }
 
   const supabase = getSupabase()
-  const event = JSON.parse(body)
-  const { event: eventType, payload } = event
+  let parsed: { event: string; payload: { subscription: { entity: { id: string; notes?: Record<string, string>; current_end?: number } } } }
+  try {
+    parsed = JSON.parse(body)
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+  const { event: eventType, payload } = parsed
 
   switch (eventType) {
     case 'subscription.activated':
@@ -37,7 +42,7 @@ export async function POST(request: Request) {
           user_id: userId,
           razorpay_sub_id: sub.id,
           status: 'active',
-          current_period_end: new Date(sub.current_end * 1000).toISOString(),
+          current_period_end: sub.current_end ? new Date(sub.current_end * 1000).toISOString() : null,
         }, { onConflict: 'razorpay_sub_id' })
       }
       break

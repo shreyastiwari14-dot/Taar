@@ -4,6 +4,14 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "regions": ["bom1"],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "taar-five.vercel.app" }],
+      "destination": "https://taar.bio/$1",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

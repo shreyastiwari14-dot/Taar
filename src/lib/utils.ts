@@ -10,9 +10,10 @@ export function getLinkUrl(type: LinkType, url: string): string {
   switch (type) {
     case 'upi':
       return `upi://pay?pa=${url}`
-    case 'whatsapp':
+    case 'whatsapp': {
       const num = url.replace(/\D/g, '')
       return `https://wa.me/${num}?text=Hi!`
+    }
     case 'instagram':
       return url.startsWith('http') ? url : `https://instagram.com/${url}`
     case 'youtube':

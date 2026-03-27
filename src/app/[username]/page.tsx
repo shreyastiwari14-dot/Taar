@@ -26,9 +26,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .eq('is_published', true)
     .single()
 
+  const title = `${page?.title || params.username} — Link in Bio | Taar`
+  const description = page?.bio
+    ? `${page.bio} — Follow ${page.title || params.username} on Taar.`
+    : `${params.username}'s link in bio — all links, UPI payments and more on Taar.`
+
   return {
-    title: `${page?.title || params.username} — Taar`,
-    description: page?.bio || `${params.username}'s link in bio`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://taar.bio/${params.username}`,
+      siteName: 'Taar',
+      type: 'profile',
+    },
+    twitter: {
+      card: 'summary',
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://taar.bio/${params.username}`,
+    },
   }
 }
 

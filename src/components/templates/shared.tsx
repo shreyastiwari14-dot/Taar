@@ -77,37 +77,51 @@ export function ProductCard({
   )
 }
 
+interface RazorpayResponse {
+  razorpay_payment_id: string
+  razorpay_order_id: string
+  razorpay_signature: string
+}
+
 function BuyButton({ product, theme }: { product: Product; theme: string }) {
   async function handleBuy() {
-    const res = await fetch('/api/razorpay/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product_id: product.id }),
-    })
-    const { order_id, key_id, amount } = await res.json()
-
-    if (typeof window !== 'undefined' && (window as any).Razorpay) {
-      const rzp = new (window as any).Razorpay({
-        key: key_id,
-        amount,
-        currency: 'INR',
-        name: 'Taar',
-        description: product.name,
-        order_id,
-        handler: async (response: any) => {
-          await fetch('/api/razorpay/verify-payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              product_id: product.id,
-            }),
-          })
-        },
+    try {
+      const res = await fetch('/api/razorpay/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_id: product.id }),
       })
-      rzp.open()
+      const data = await res.json()
+      if (data.error) return
+
+      const { order_id, key_id, amount } = data
+
+      if (typeof window !== 'undefined' && (window as unknown as { Razorpay?: unknown }).Razorpay) {
+        const RazorpayConstructor = (window as unknown as { Razorpay: new (opts: unknown) => { open: () => void } }).Razorpay
+        const rzp = new RazorpayConstructor({
+          key: key_id,
+          amount,
+          currency: 'INR',
+          name: 'Taar',
+          description: product.name,
+          order_id,
+          handler: async (response: RazorpayResponse) => {
+            await fetch('/api/razorpay/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                product_id: product.id,
+              }),
+            })
+          },
+        })
+        rzp.open()
+      }
+    } catch {
+      // Silent — user will see no response change; could toast here if toast is imported
     }
   }
 

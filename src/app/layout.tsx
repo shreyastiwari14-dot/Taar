@@ -3,13 +3,118 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-  title: 'Taar — Your thread to everything.',
-  description: 'One link. Your UPI. Your reels. Your products. Built for Indian creators.',
+  title: "Taar — Free Link in Bio for Indian Creators | UPI, Reels, Sell Digital Products",
+  description: "Taar is a free Linktree alternative built for Indian creators. Add UPI payment links, auto Instagram Reels, sell digital products, and pick from 50 templates. Pro plan at ₹399/month.",
+  keywords: "link in bio India, linktree alternative India, UPI link in bio, Indian creator tools, bio link Indian creators, linktree India free, taar bio",
+  authors: [{ name: "Taar" }],
+  creator: "Taar",
+  metadataBase: new URL("https://taar.bio"),
+  alternates: { canonical: "https://taar.bio" },
   openGraph: {
-    title: 'Taar — Your thread to everything.',
-    description: 'One link. Your UPI. Your reels. Your products. Built for Indian creators.',
-    siteName: 'Taar',
+    title: "Taar — Free Link in Bio for Indian Creators",
+    description: "UPI links, Auto Reels, 50 templates, sell digital products. Built for Bharat. Free forever.",
+    url: "https://taar.bio",
+    siteName: "Taar",
+    locale: "en_IN",
+    type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Taar — Link in Bio for Indian Creators" }]
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Taar — Free Link in Bio for Indian Creators",
+    description: "UPI links, Auto Reels, 50 templates. Built for Bharat. Free forever.",
+    images: ["/og-image.png"]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" }
+  },
+  verification: {
+    google: 'ScdS2gXzfCDswJtOvonDFhuKkTHDgJ_j2siJ6cdjCTk',
+  },
+}
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Taar",
+      "applicationCategory": "BusinessApplication",
+      "description": "Free link in bio tool for Indian creators. Supports UPI payment links, auto Instagram Reels, digital product sales, and 50 templates. Built for Bharat.",
+      "url": "https://taar.bio",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Free Plan",
+          "price": "0",
+          "priceCurrency": "INR",
+          "description": "1 bio page, 8 links, 50 templates, UPI links, WhatsApp CTA"
+        },
+        {
+          "@type": "Offer",
+          "name": "Pro Plan",
+          "price": "399",
+          "priceCurrency": "INR",
+          "billingDuration": "P1M",
+          "description": "Analytics, Auto Reels, sell digital products, remove watermark"
+        }
+      ],
+      "operatingSystem": "Web",
+      "inLanguage": ["en-IN", "hi"],
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "Indian content creators, influencers, YouTubers, Instagram creators"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://taar.bio/#organization",
+      "name": "Taar",
+      "url": "https://taar.bio",
+      "foundingDate": "2024",
+      "foundingLocation": { "@type": "Country", "name": "India" },
+      "areaServed": "IN"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://taar.bio/#website",
+      "url": "https://taar.bio",
+      "name": "Taar",
+      "publisher": { "@id": "https://taar.bio/#organization" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Taar?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Taar is a free link in bio tool built specifically for Indian creators. It lets you put all your important links — UPI payment, Instagram, YouTube, WhatsApp, digital products — on one custom page you share in your Instagram bio." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Taar free?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Taar has a free plan that is free forever — no credit card, no trial period. It includes 1 bio page, 8 links, all 50 templates, UPI payment links, WhatsApp links, and a custom username. Pro is ₹399/month." }
+        },
+        {
+          "@type": "Question",
+          "name": "How is Taar different from Linktree?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Taar is built specifically for India. It supports UPI payment links (GPay, PhonePe, Paytm) which Linktree does not. Taar uses Razorpay for Indian payments, has Indian-specific templates, costs ₹399/month vs Linktree's ~₹750/month, and has auto Instagram Reels shelf." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the best Linktree alternative for India?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Taar is the best Linktree alternative for India. It is the only link in bio tool built specifically for Indian creators with UPI payment support, Indian templates, Razorpay integration, and INR pricing. Free forever with a Pro plan at ₹399/month." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Taar support UPI payments?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Taar supports UPI payment links as a free feature. Add your UPI ID and fans pay you directly via GPay, PhonePe, or Paytm. No platform cut, no gateway fee." }
+        }
+      ]
+    }
+  ]
 }
 
 export default function RootLayout({
@@ -18,8 +123,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="antialiased font-body">
+    <html lang="en-IN" className="bg-[#0A0A0A]" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className="antialiased font-body bg-[#0A0A0A]">
         {children}
         <Toaster
           position="bottom-center"

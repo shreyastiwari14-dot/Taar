@@ -23,8 +23,8 @@ export async function POST(request: Request) {
     })
 
     return NextResponse.json({ subscription_id: subscription.id })
-  } catch (err: any) {
-    console.error('Razorpay subscription error:', err)
-    return NextResponse.json({ error: err.message || 'Failed to create subscription' }, { status: 500 })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to create subscription'
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }

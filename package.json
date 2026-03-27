@@ -12,9 +12,11 @@
     "@fontsource/bebas-neue": "^5.2.7",
     "@fontsource/dm-sans": "^5.2.8",
     "@hello-pangea/dnd": "^18.0.1",
+    "@studio-freight/lenis": "^1.0.42",
     "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.100.1",
     "clsx": "^2.1.1",
+    "gsap": "^3.14.2",
     "lucide-react": "^1.7.0",
     "next": "14.2.35",
     "razorpay": "^2.9.6",
@@ -32,6 +34,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
     "postcss": "^8",
+    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

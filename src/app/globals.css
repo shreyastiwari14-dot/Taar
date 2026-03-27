@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Anton&family=Josefin+Sans:wght@300;400;600&family=Cinzel:wght@400;600;700&family=Oswald:wght@400;500;600;700&family=Abril+Fatface&family=Righteous&family=Raleway:wght@300;400;600;700&family=Caveat:wght@400;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Russo+One&family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,9 +15,12 @@
 
 * { box-sizing: border-box; }
 
-html { font-family: 'DM Sans', sans-serif; scroll-behavior: smooth; }
+html, body { background: #0A0A0A; }
+html { font-family: 'DM Sans', sans-serif; }
 
-body { cursor: none; }
+/* cursor: none is scoped via JS class — only on pages that mount CursorGlow */
+.has-custom-cursor,
+.has-custom-cursor * { cursor: none !important; }
 
 /* ── GRAIN OVERLAY ──────────────────────────────────────── */
 .grain-overlay {
@@ -40,6 +43,11 @@ body { cursor: none; }
 }
 
 /* ── CUSTOM CURSOR ──────────────────────────────────────── */
+/* Hidden on touch devices — JS won't mount if hover: none, but belt-and-suspenders */
+@media (hover: none) {
+  .cursor-dot, .cursor-ring { display: none !important; }
+}
+
 .cursor-dot {
   position: fixed;
   top: 0; left: 0;
@@ -47,10 +55,10 @@ body { cursor: none; }
   background: #E8593C;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: transform 0.05s, width 0.2s, height 0.2s, opacity 0.2s;
-  mix-blend-mode: difference;
+  z-index: 10001;
+  /* transform is driven entirely by JS rAF — no CSS transition on transform */
+  transition: width 0.2s, height 0.2s, opacity 0.3s;
+  will-change: transform;
 }
 .cursor-ring {
   position: fixed;
@@ -60,8 +68,9 @@ body { cursor: none; }
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
-  transform: translate(-50%, -50%);
-  transition: transform 0.12s ease-out, width 0.2s, height 0.2s, opacity 0.2s;
+  /* transform is driven entirely by JS rAF — no CSS transition on transform */
+  transition: width 0.2s, height 0.2s, border-color 0.2s, opacity 0.3s;
+  will-change: transform;
 }
 
 /* ── FONT HELPERS ───────────────────────────────────────── */

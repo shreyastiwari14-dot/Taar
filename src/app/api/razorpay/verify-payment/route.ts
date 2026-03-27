@@ -11,8 +11,21 @@ function getSupabase() {
 }
 
 export async function POST(request: Request) {
-  const { razorpay_payment_id, razorpay_order_id, razorpay_signature, product_id, buyer_email } =
-    await request.json()
+  let razorpay_payment_id: string, razorpay_order_id: string, razorpay_signature: string, product_id: string, buyer_email: string
+  try {
+    const body = await request.json()
+    razorpay_payment_id = body.razorpay_payment_id
+    razorpay_order_id = body.razorpay_order_id
+    razorpay_signature = body.razorpay_signature
+    product_id = body.product_id
+    buyer_email = body.buyer_email
+  } catch {
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+  }
+
+  if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature || !product_id) {
+    return NextResponse.json({ error: 'Missing required payment fields' }, { status: 400 })
+  }
 
   const body = `${razorpay_order_id}|${razorpay_payment_id}`
   const expectedSignature = crypto

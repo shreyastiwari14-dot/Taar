@@ -472,18 +472,18 @@ function TemplatePicker({
 
   return (
     <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
-      <h2 className="font-semibold text-white mb-3">Template <span className="text-gray-600 font-normal text-sm">{TEMPLATES.length} designs</span></h2>
+      <h2 className="font-semibold text-white mb-3">
+        Template <span className="text-gray-600 font-normal text-sm">{TEMPLATES.length} designs</span>
+      </h2>
 
-      <div className="flex gap-2 overflow-x-auto pb-3 mb-4" style={{scrollbarWidth:'none'}}>
+      <div className="flex gap-2 overflow-x-auto pb-3 mb-4" style={{ scrollbarWidth: 'none' }}>
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={cn(
               'px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0',
-              activeCategory === cat
-                ? 'bg-[#E8593C] text-white'
-                : 'bg-[#222] text-gray-400 hover:text-white'
+              activeCategory === cat ? 'bg-[#E8593C] text-white' : 'bg-[#222] text-gray-400 hover:text-white'
             )}
           >
             {cat}
@@ -491,31 +491,44 @@ function TemplatePicker({
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
-        {filtered.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => onSelect(t.id)}
-            title={t.name}
-            className={cn(
-              'p-2.5 rounded-xl border-2 transition-all text-center',
-              activeTemplate === t.id
-                ? 'border-[#E8593C] bg-[#E8593C]/10'
-                : 'border-[#2a2a2a] hover:border-[#444]'
-            )}
-          >
-            <div
-              className="w-7 h-7 rounded-full mx-auto mb-1.5 flex items-center justify-center text-sm"
-              style={{ background: t.bgGradient || (t.bg.startsWith('linear') ? t.bg : t.bg), border: '1px solid #333' }}
+      <div className="grid grid-cols-3 gap-2 max-h-72 overflow-y-auto pr-1">
+        {filtered.map((t) => {
+          const bgVal = t.bgGradient || (t.bg.startsWith('linear') ? t.bg : t.bg)
+          const isActive = activeTemplate === t.id
+          return (
+            <button
+              key={t.id}
+              onClick={() => onSelect(t.id)}
+              title={t.name}
+              className={cn(
+                'rounded-xl border-2 transition-all overflow-hidden text-left',
+                isActive ? 'border-[#E8593C]' : 'border-[#2a2a2a] hover:border-[#555]'
+              )}
             >
-              {t.emoji}
-            </div>
-            <div className="text-[10px] text-gray-400 leading-tight truncate">{t.name}</div>
-            {activeTemplate === t.id && (
-              <div className="text-[9px] text-[#E8593C] mt-0.5">Active</div>
-            )}
-          </button>
-        ))}
+              {/* Mini page preview */}
+              <div style={{ background: bgVal, padding: '8px 8px 6px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, minHeight: 72 }}>
+                {/* Avatar dot */}
+                <div style={{ width: 18, height: 18, borderRadius: '50%', background: t.textAccent, opacity: 0.9, border: `1px solid ${t.textPrimary}33` }} />
+                {/* Name bar */}
+                <div style={{ width: '70%', height: 5, borderRadius: 2, background: t.textPrimary, opacity: 0.8 }} />
+                {/* Link bars */}
+                {[100, 85, 90].map((w, i) => (
+                  <div key={i} style={{
+                    width: `${w}%`, height: 8, borderRadius: t.btnRadius === 'full' ? 8 : t.btnRadius === 'none' ? 0 : 3,
+                    background: t.btnStyle === 'solid' ? t.btnBg : 'transparent',
+                    border: t.btnStyle === 'outline' ? `1px solid ${t.btnBorder || t.btnText}` : `1px solid ${t.btnBg}44`,
+                    opacity: 0.85,
+                  }} />
+                ))}
+              </div>
+              {/* Label */}
+              <div className={cn('px-2 py-1.5 text-center', isActive ? 'bg-[#E8593C]/10' : 'bg-[#1a1a1a]')}>
+                <div className="text-[10px] text-gray-300 leading-tight truncate">{t.name}</div>
+                {isActive && <div className="text-[9px] text-[#E8593C] mt-0.5">Active</div>}
+              </div>
+            </button>
+          )
+        })}
       </div>
     </div>
   )
