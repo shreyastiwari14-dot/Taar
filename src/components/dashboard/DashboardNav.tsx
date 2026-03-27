@@ -24,7 +24,7 @@ export function DashboardNav({ user }: { user: User | null }) {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 h-16 bg-[#0A0A0A] border-b border-[#222] flex items-center px-4 md:px-6">
-      <Link href="/dashboard" className="font-display text-xl tracking-wider text-[#E8593C] mr-8">
+      <Link href="/" className="font-display text-xl tracking-wider text-[#E8593C] mr-8">
         TAAR
       </Link>
 
