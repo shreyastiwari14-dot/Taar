@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { CursorGlow } from '@/components/landing/CursorGlow'
 import { LandingAnimations } from '@/components/landing/LandingAnimations'
 import { PageTurnEffect } from '@/components/landing/PageTurnEffect'
+import { createClient } from '@/lib/supabase/server'
 
 const _jsonLd = {
   '@context': 'https://schema.org',
@@ -129,7 +130,10 @@ const _jsonLd = {
   ],
 }
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <div className="bg-[#060606] text-white overflow-x-hidden selection:bg-[#E8593C] selection:text-white" style={{ fontFamily: 'DM Sans, sans-serif' }}>
       <div className="grain-overlay" />
@@ -147,11 +151,20 @@ export default function LandingPage() {
           </Link>
           <Link href="#templates" className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe hidden md:block">Templates</Link>
           <Link href="#pricing"   className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe hidden md:block">Pricing</Link>
-          <Link href="/login"     className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe">Login</Link>
-          <Link href="/login"
-            className="text-xs font-semibold bg-[#E8593C] text-white px-5 py-2.5 tracking-widest uppercase hover:bg-[#d44e33] transition-all">
-            Start Free →
-          </Link>
+          {user ? (
+            <Link href="/dashboard"
+              className="text-xs font-semibold bg-[#E8593C] text-white px-5 py-2.5 tracking-widest uppercase hover:bg-[#d44e33] transition-colors">
+              Dashboard →
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe">Login</Link>
+              <Link href="/login"
+                className="text-xs font-semibold bg-[#E8593C] text-white px-5 py-2.5 tracking-widest uppercase hover:bg-[#d44e33] transition-colors">
+                Start Free →
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 

@@ -23,9 +23,13 @@ html { font-family: 'DM Sans', sans-serif; }
 .has-custom-cursor * { cursor: none !important; }
 
 /* ── GRAIN OVERLAY ──────────────────────────────────────── */
+/* Expanded 6% beyond viewport on all sides so ±3% translate never exposes edges */
 .grain-overlay {
   position: fixed;
-  inset: 0;
+  top: -6%;
+  left: -6%;
+  width: 112%;
+  height: 112%;
   pointer-events: none;
   z-index: 9999;
   opacity: 0.035;
