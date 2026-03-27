@@ -443,7 +443,7 @@ export default function LandingPage() {
             </h2>
           </div>
           <Link href="/login" className="hidden md:inline-flex items-center gap-3 text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe mb-4">
-            Browse all →
+            Get all 50 free →
           </Link>
         </div>
 
