@@ -1,6 +1,6 @@
 export type LinkType = 'url' | 'upi' | 'whatsapp' | 'instagram' | 'youtube' | 'custom'
 
-export type Template = 'bollywood' | 'streetwear' | 'pastel'
+export type Template = string
 
 export interface User {
   id: string

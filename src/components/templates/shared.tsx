@@ -15,10 +15,12 @@ export interface TemplateProps {
 export function TrackableLink({
   link,
   className,
+  style,
   children,
 }: {
   link: Link
   className?: string
+  style?: React.CSSProperties
   children: React.ReactNode
 }) {
   async function handleClick() {
@@ -39,6 +41,7 @@ export function TrackableLink({
       rel="noopener noreferrer"
       onClick={handleClick}
       className={className}
+      style={style}
     >
       {children}
     </a>

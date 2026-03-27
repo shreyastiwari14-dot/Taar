@@ -61,6 +61,16 @@ html {
   border-radius: 2px;
 }
 
+/* Marquee animation */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+  display: inline-flex;
+}
+
 /* Link connector line */
 .link-connector {
   position: relative;

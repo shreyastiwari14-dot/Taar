@@ -5,6 +5,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 import { createClient } from '@/lib/supabase/client'
 import { Link, Page, User, LinkType, Template } from '@/lib/types'
 import { getLinkIcon, cn } from '@/lib/utils'
+import { TEMPLATES, TEMPLATE_CATEGORIES } from '@/lib/templates'
 import { BioPagePreview } from './BioPagePreview'
 import toast from 'react-hot-toast'
 
@@ -220,30 +221,7 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
           </div>
 
           {/* Template Picker */}
-          <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
-            <h2 className="font-semibold text-white mb-4">Template</h2>
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { id: 'bollywood', label: 'Bollywood', color: '#F5C842' },
-                { id: 'streetwear', label: 'Streetwear', color: '#ffffff' },
-                { id: 'pastel', label: 'Pastel', color: '#F9C784' },
-              ].map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setTemplate(t.id)}
-                  className={cn(
-                    'p-3 rounded-xl border-2 transition-all text-center',
-                    activeTemplate === t.id
-                      ? 'border-[#E8593C] bg-[#E8593C]/10'
-                      : 'border-[#333] hover:border-[#444]'
-                  )}
-                >
-                  <div className="w-6 h-6 rounded-full mx-auto mb-2" style={{ background: t.color }} />
-                  <div className="text-xs text-gray-400">{t.label}</div>
-                </button>
-              ))}
-            </div>
-          </div>
+          <TemplatePicker activeTemplate={activeTemplate} onSelect={setTemplate} />
 
           {/* Links */}
           <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
@@ -477,3 +455,68 @@ function EditLinkForm({
   )
 }
 
+
+function TemplatePicker({
+  activeTemplate,
+  onSelect,
+}: {
+  activeTemplate: string
+  onSelect: (id: string) => void
+}) {
+  const [activeCategory, setActiveCategory] = useState('All')
+
+  const categories = ['All', ...TEMPLATE_CATEGORIES]
+  const filtered = activeCategory === 'All'
+    ? TEMPLATES
+    : TEMPLATES.filter((t) => t.category === activeCategory)
+
+  return (
+    <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
+      <h2 className="font-semibold text-white mb-3">Template <span className="text-gray-600 font-normal text-sm">{TEMPLATES.length} designs</span></h2>
+
+      <div className="flex gap-2 overflow-x-auto pb-3 mb-4" style={{scrollbarWidth:'none'}}>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={cn(
+              'px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-colors shrink-0',
+              activeCategory === cat
+                ? 'bg-[#E8593C] text-white'
+                : 'bg-[#222] text-gray-400 hover:text-white'
+            )}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-1">
+        {filtered.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => onSelect(t.id)}
+            title={t.name}
+            className={cn(
+              'p-2.5 rounded-xl border-2 transition-all text-center',
+              activeTemplate === t.id
+                ? 'border-[#E8593C] bg-[#E8593C]/10'
+                : 'border-[#2a2a2a] hover:border-[#444]'
+            )}
+          >
+            <div
+              className="w-7 h-7 rounded-full mx-auto mb-1.5 flex items-center justify-center text-sm"
+              style={{ background: t.bgGradient || (t.bg.startsWith('linear') ? t.bg : t.bg), border: '1px solid #333' }}
+            >
+              {t.emoji}
+            </div>
+            <div className="text-[10px] text-gray-400 leading-tight truncate">{t.name}</div>
+            {activeTemplate === t.id && (
+              <div className="text-[9px] text-[#E8593C] mt-0.5">Active</div>
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}

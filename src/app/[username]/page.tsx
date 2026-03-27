@@ -1,9 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { BollywoodTemplate } from '@/components/templates/BollywoodTemplate'
-import { StreetwearTemplate } from '@/components/templates/StreetwearTemplate'
-import { PastelTemplate } from '@/components/templates/PastelTemplate'
+import { TemplateRenderer } from '@/components/templates/TemplateRenderer'
 
 export const revalidate = 60
 
@@ -15,7 +13,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const supabase = createClient()
   const { data: user } = await supabase
     .from('users')
-    .select('username')
+    .select('id')
     .eq('username', params.username)
     .single()
 
@@ -24,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { data: page } = await supabase
     .from('pages')
     .select('title, bio')
-    .eq('user_id', user ? (await supabase.from('users').select('id').eq('username', params.username).single()).data?.id : '')
+    .eq('user_id', user.id)
     .eq('is_published', true)
     .single()
 
@@ -62,28 +60,17 @@ export default async function UserBioPage({ params }: Props) {
     .order('position')
 
   const { data: products } = user.is_pro
-    ? await supabase
-        .from('products')
-        .select('*')
-        .eq('page_id', page.id)
-        .eq('is_active', true)
+    ? await supabase.from('products').select('*').eq('page_id', page.id).eq('is_active', true)
     : { data: null }
 
-  const props = {
-    page,
-    links: links || [],
-    products: products || [],
-    username: user.username || params.username,
-    isPro: user.is_pro,
-    showWatermark: !user.is_pro,
-  }
-
-  switch (page.template_id) {
-    case 'bollywood':
-      return <BollywoodTemplate {...props} />
-    case 'pastel':
-      return <PastelTemplate {...props} />
-    default:
-      return <StreetwearTemplate {...props} />
-  }
+  return (
+    <TemplateRenderer
+      page={page}
+      links={links || []}
+      products={products || []}
+      username={user.username || params.username}
+      isPro={user.is_pro}
+      showWatermark={!user.is_pro}
+    />
+  )
 }
