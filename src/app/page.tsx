@@ -1,370 +1,354 @@
 import Link from 'next/link'
+import { CursorGlow } from '@/components/landing/CursorGlow'
 
 export default function LandingPage() {
   return (
-    <div className="bg-[#080808] text-white min-h-screen overflow-x-hidden" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+    <div className="bg-[#060606] text-white overflow-x-hidden selection:bg-[#E8593C] selection:text-white" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+      <div className="grain-overlay" />
+      <CursorGlow />
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-[#080808]/90 backdrop-blur-xl border-b border-white/5">
-        <span style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-2xl tracking-wider text-[#E8593C]">TAAR</span>
-        <div className="flex items-center gap-4">
-          <Link href="/login" className="text-sm text-white/50 hover:text-white transition-colors">Login</Link>
-          <Link href="/login" className="text-sm bg-[#E8593C] text-white px-5 py-2.5 rounded-full hover:bg-[#d44e33] transition-all font-semibold hover:scale-105 active:scale-95">
-            Start free →
+      {/* ─────────────────────────────── NAV */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-12 py-6">
+        <span className="font-display text-2xl tracking-[0.15em] text-white anim-fade-in">TAAR</span>
+        <div className="flex items-center gap-8 anim-fade-in delay-200">
+          <Link href="#templates" className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe">Templates</Link>
+          <Link href="#pricing"   className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe">Pricing</Link>
+          <Link href="/login"     className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe">Login</Link>
+          <Link href="/login"
+            className="text-xs font-semibold bg-[#E8593C] text-white px-6 py-3 tracking-widest uppercase hover:bg-[#d44e33] transition-all">
+            Start Free →
           </Link>
         </div>
       </nav>
 
-      {/* ── HERO ──────────────────────────────────────────────────── */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-4 pt-16 relative overflow-hidden">
-        {/* Background glow orbs */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full opacity-20 blur-3xl pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #E8593C 0%, transparent 70%)' }} />
-        <div className="absolute top-2/3 left-1/4 w-[400px] h-[400px] rounded-full opacity-10 blur-3xl pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #F5C842 0%, transparent 70%)' }} />
+      {/* ─────────────────────────────── HERO */}
+      <section className="relative min-h-screen flex flex-col justify-end overflow-hidden pb-16 px-8 md:px-12">
+        {/* Faint grid */}
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)', backgroundSize: '80px 80px' }} />
 
-        {/* Animated thread line */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <svg className="absolute top-0 left-0 w-full h-full opacity-10" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-            <path d="M -100 450 C 200 200, 400 700, 720 450 C 1040 200, 1240 700, 1540 450" stroke="#E8593C" strokeWidth="1" fill="none" strokeDasharray="8 8" />
-            <path d="M -100 500 C 300 250, 500 750, 720 500 C 940 250, 1140 750, 1540 500" stroke="#F5C842" strokeWidth="0.5" fill="none" strokeDasharray="4 12" opacity="0.5" />
+        {/* Vertical thread spine */}
+        <div className="absolute left-8 md:left-12 top-0 bottom-0 w-px pointer-events-none">
+          <svg className="w-full h-full" viewBox="0 0 1 1" preserveAspectRatio="none">
+            <line x1="0.5" y1="0" x2="0.5" y2="1" stroke="#E8593C" strokeWidth="2" strokeDasharray="3 6" opacity="0.3" />
           </svg>
         </div>
 
-        <div className="relative z-10 text-center max-w-5xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-sm text-white/60 mb-8">
-            <span className="w-1.5 h-1.5 bg-[#E8593C] rounded-full animate-pulse" />
-            Built for India&apos;s 100M+ creators
+        {/* Hero wordmark — enormous, bleeds off edge */}
+        <div className="relative z-10 mb-12">
+          {/* Year badge */}
+          <div className="flex items-center gap-3 mb-8 anim-fade-in delay-200">
+            <div className="w-6 h-px bg-[#E8593C]" />
+            <span className="text-[10px] tracking-[0.3em] text-white/30 uppercase">Est. 2024 · Made in India</span>
           </div>
 
-          <h1 style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-[80px] md:text-[120px] lg:text-[140px] leading-none tracking-wider mb-6">
-            <span className="text-white">ONE LINK.</span><br />
-            <span className="text-[#E8593C]">INFINITE</span><br />
-            <span className="text-white">REACH.</span>
-          </h1>
+          {/* Main title */}
+          <div className="relative">
+            <h1 className="font-display leading-[0.85] tracking-tight select-none" style={{ fontSize: 'clamp(96px, 22vw, 320px)' }}>
+              <span className="block text-white anim-slide-r delay-100" style={{ WebkitTextStroke: '0px' }}>YOUR</span>
+              <span className="block anim-slide-r delay-200" style={{ color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.25)' }}>THREAD</span>
+              <span className="block text-[#E8593C] anim-slide-r delay-300">TO ALL.</span>
+            </h1>
 
-          <p className="text-white/50 text-lg md:text-xl mb-4 max-w-2xl mx-auto leading-relaxed">
-            Stop sending 10 links. Start owning one.<br />
-            <span className="text-white/80">UPI. Reels. Products. Analytics. Your whole world — one Taar.</span>
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-            <Link href="/login"
-              className="bg-[#E8593C] text-white px-10 py-4 rounded-full text-lg font-bold hover:bg-[#d44e33] transition-all hover:scale-105 active:scale-95 shadow-lg shadow-[#E8593C]/30">
-              Create your Taar — free →
-            </Link>
-            <a href="#templates"
-              className="border border-white/15 text-white px-10 py-4 rounded-full text-lg font-medium hover:border-white/40 transition-colors hover:bg-white/5">
-              See 50 templates ↓
-            </a>
+            {/* Floating tagline — right-aligned, vertical position */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 text-right max-w-xs anim-fade-up delay-700 hidden md:block">
+              <p className="text-sm text-white/50 leading-relaxed mb-4">
+                One link. Your UPI.<br />Your reels. Your products.<br />Your everything.
+              </p>
+              <div className="flex items-center justify-end gap-2">
+                <span className="text-[10px] text-white/20 tracking-widest uppercase">Built for Bharat</span>
+                <div className="w-4 h-px bg-white/20" />
+              </div>
+            </div>
           </div>
+        </div>
 
-          {/* Stats bar */}
-          <div className="mt-16 flex items-center justify-center gap-8 md:gap-16">
-            {[
-              { n: '50+', label: 'Templates' },
-              { n: '₹0', label: 'To start' },
-              { n: '1 link', label: 'For everything' },
-              { n: '5 min', label: 'Setup time' },
-            ].map((s) => (
-              <div key={s.label} className="text-center">
-                <div style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-3xl md:text-4xl text-[#E8593C] tracking-wider">{s.n}</div>
-                <div className="text-white/40 text-xs mt-1 uppercase tracking-widest">{s.label}</div>
+        {/* Bottom bar */}
+        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-t border-white/8 pt-8">
+          <div className="flex items-center gap-10">
+            {[['50+','Templates'],['₹0','To start'],['5min','Setup']].map(([n,l]) => (
+              <div key={l}>
+                <div className="font-display text-2xl md:text-3xl tracking-wider text-white anim-fade-up delay-800">{n}</div>
+                <div className="text-[10px] text-white/30 tracking-widest uppercase mt-0.5">{l}</div>
               </div>
             ))}
           </div>
+          <Link href="/login"
+            className="group inline-flex items-center gap-4 bg-[#E8593C] text-white px-10 py-5 text-sm font-bold tracking-widest uppercase anim-fade-up delay-900 hover:bg-white hover:text-[#060606] transition-all duration-300">
+            Create your Taar
+            <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+          </Link>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/20">
-          <div className="w-px h-12 bg-gradient-to-b from-[#E8593C] to-transparent" />
-          <div className="text-xs tracking-widest">SCROLL</div>
+        {/* Scroll nudge */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 anim-fade-in delay-1200">
+          <div className="w-px h-10 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+          <div className="text-[9px] text-white/20 tracking-[0.3em] uppercase">Scroll</div>
         </div>
       </section>
 
-      {/* ── USP STRIP ──────────────────────────────────────────────── */}
-      <section className="py-6 border-y border-white/5 bg-[#0D0D0D] overflow-hidden">
-        <div className="flex gap-12 animate-marquee whitespace-nowrap">
+      {/* ─────────────────────────────── TAPE STRIP */}
+      <div className="py-4 bg-[#E8593C] overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap">
+          {Array(3).fill(['UPI PAYMENT LINKS','AUTO INSTAGRAM REELS','CLICK ANALYTICS','SELL DIGITAL PRODUCTS','50 PREMIUM TEMPLATES','BUILT FOR BHARAT']).flat().map((t,i) => (
+            <span key={i} className="inline-flex items-center gap-6 mr-6 text-white font-display tracking-[0.15em] text-sm">
+              {t}
+              <span className="text-white/40">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ─────────────────────────────── STATEMENT */}
+      <section className="bg-[#F2EDE6] text-[#0A0806] py-28 md:py-40 px-8 md:px-12 clip-diagonal-b relative overflow-hidden">
+        <div className="absolute top-6 right-12 text-[9px] tracking-[0.3em] text-[#0A0806]/30 uppercase">01 / 06</div>
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-10 font-semibold">The problem</p>
+          <h2 className="font-display leading-[0.88] tracking-tight" style={{ fontSize: 'clamp(52px, 9vw, 140px)' }}>
+            <span className="block">STOP SENDING</span>
+            <span className="block" style={{ color: 'transparent', WebkitTextStroke: '1.5px #0A0806' }}>10 DIFFERENT</span>
+            <span className="block text-[#E8593C]">LINKS.</span>
+          </h2>
+          <div className="mt-14 flex flex-col md:flex-row md:items-end gap-10 md:gap-24">
+            <p className="text-base md:text-lg text-[#0A0806]/60 leading-relaxed max-w-md">
+              Your audience is on Instagram. Your fans want to pay you UPI. Your customers want to buy your products. They shouldn&apos;t need to DM you for each one.
+            </p>
+            <div className="flex-1 border-t border-[#0A0806]/10 pt-6">
+              <p className="font-display text-5xl md:text-7xl text-[#0A0806] tracking-wider">ONE TAAR.<br/>EVERYTHING.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────── FEATURES */}
+      <section className="bg-[#060606] py-24 md:py-32 relative" style={{ marginTop: '-5vw' }}>
+        <div className="px-8 md:px-12 mb-16 flex items-end justify-between">
+          <div>
+            <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-4 font-semibold">02 / 06 · What you get</p>
+            <h2 className="font-display text-5xl md:text-7xl tracking-wider leading-none">
+              EVERY TOOL<br/><span className="text-white/20">A CREATOR</span><br/>NEEDS.
+            </h2>
+          </div>
+          <div className="hidden md:block text-right">
+            <p className="text-white/30 text-sm max-w-xs">Free tier. Pro tier. Both insane value for what you get.</p>
+          </div>
+        </div>
+
+        {/* Feature rows */}
+        {[
+          { num:'01', icon:'₹', title:'UPI That Converts', body:'Your UPI ID as a link. Fans open it, pay you in one tap via GPay, PhonePe, Paytm. No gateway, no middleman. Money hits your account directly.', tag:'Free', tagColor:'#E8593C' },
+          { num:'02', icon:'📸', title:'Reels on Autopilot', body:'Link your Instagram handle once. Your 3 latest reels auto-populate on your bio page, refreshed every 24h. Your page always looks alive — even when you\'re not.', tag:'Pro', tagColor:'#F5C842' },
+          { num:'03', icon:'📊', title:'Analytics That Matter', body:'7-day click charts. Per-link breakdown. Device split. Know exactly what your audience is clicking and when. Data that actually helps you grow.', tag:'Pro', tagColor:'#F5C842' },
+          { num:'04', icon:'📦', title:'Sell Directly to Fans', body:'Presets, PDFs, courses, music packs. Add a product, set a price, let Razorpay collect. Download links auto-emailed. You earn while you sleep.', tag:'Pro', tagColor:'#F5C842' },
+          { num:'05', icon:'🎨', title:'50 Templates. Zero Cringe.', body:'From Bollywood editorial to cyberpunk neon to pastel food creator — we built for every creator, every vibe, every age. Pick one in under a minute.', tag:'Free', tagColor:'#E8593C' },
+        ].map((f) => (
+          <div key={f.num} className="feature-row px-8 md:px-12 py-8 md:py-10">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center gap-6 md:gap-16">
+              <div className="font-display text-7xl md:text-9xl text-white/5 leading-none w-24 shrink-0">{f.num}</div>
+              <div className="text-4xl shrink-0">{f.icon}</div>
+              <div className="flex-1">
+                <div className="flex items-center gap-4 mb-2">
+                  <h3 className="font-display text-2xl md:text-4xl tracking-wider text-white">{f.title}</h3>
+                  <span className="text-[9px] px-2.5 py-1 font-bold tracking-widest uppercase" style={{ color: f.tagColor, border: `1px solid ${f.tagColor}40`, background: `${f.tagColor}10` }}>{f.tag}</span>
+                </div>
+                <p className="text-white/40 text-sm leading-relaxed max-w-xl">{f.body}</p>
+              </div>
+              <div className="text-white/10 text-2xl shrink-0 hidden md:block">→</div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ─────────────────────────────── TEMPLATES */}
+      <section id="templates" className="bg-[#0A0806] py-24 md:py-36 overflow-hidden">
+        <div className="px-8 md:px-12 mb-12 flex items-end justify-between">
+          <div>
+            <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-4 font-semibold">03 / 06 · Templates</p>
+            <h2 className="font-display leading-none tracking-wider" style={{ fontSize: 'clamp(60px, 12vw, 180px)' }}>
+              50<br/><span className="text-white/15">VIBES.</span>
+            </h2>
+          </div>
+          <Link href="/login" className="hidden md:inline-flex items-center gap-3 text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe mb-4">
+            Browse all →
+          </Link>
+        </div>
+
+        {/* Horizontal scroll row 1 */}
+        <div className="flex gap-4 overflow-x-auto pb-4 px-8 md:px-12 scrollbar-none" style={{ scrollbarWidth: 'none' }}>
           {[
-            '₹ UPI PAYMENT LINKS', '📸 AUTO INSTAGRAM REELS', '📊 CLICK ANALYTICS', '📦 SELL DIGITAL PRODUCTS', '🎨 50 PREMIUM TEMPLATES', '🇮🇳 BUILT FOR BHARAT', '₹ UPI PAYMENT LINKS', '📸 AUTO INSTAGRAM REELS', '📊 CLICK ANALYTICS', '📦 SELL DIGITAL PRODUCTS', '🎨 50 PREMIUM TEMPLATES', '🇮🇳 BUILT FOR BHARAT',
-          ].map((item, i) => (
-            <span key={i} className="text-white/30 text-sm font-medium tracking-widest uppercase">{item}</span>
+            { name:'Bollywood Editorial', cat:'Desi', bg:'#0A0005', text:'#F5C842', emoji:'🎬' },
+            { name:'Cyberpunk', cat:'Neon', bg:'#000', text:'#00FF41', emoji:'🟢' },
+            { name:'Pastel Food', cat:'Aesthetic', bg:'#FDF6EC', text:'#8B5E3C', emoji:'🍰' },
+            { name:'Rose Gold', cat:'Gradient', bg:'linear-gradient(135deg,#B76E79,#F7C59F)', text:'#fff', emoji:'✨' },
+            { name:'Dark Academia', cat:'Retro', bg:'#1A1209', text:'#C8A96E', emoji:'📚' },
+            { name:'Streetwear', cat:'Bold', bg:'#0A0A0A', text:'#fff', emoji:'🖤' },
+            { name:'Vaporwave', cat:'Neon', bg:'linear-gradient(135deg,#1a001a,#001a33)', text:'#FF71CE', emoji:'🌐' },
+          ].map((t) => (
+            <div key={t.name}
+              className="template-card shrink-0 rounded-2xl overflow-hidden border border-white/5 cursor-pointer"
+              style={{ background: t.bg, width: 180, height: 280 }}>
+              <div className="h-full flex flex-col justify-between p-5">
+                <span className="text-2xl">{t.emoji}</span>
+                <div>
+                  <div className="text-[9px] tracking-widest uppercase mb-1" style={{ color: t.text, opacity: 0.5 }}>{t.cat}</div>
+                  <div className="font-display text-lg tracking-wider" style={{ color: t.text }}>{t.name}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <Link href="/login"
+            className="shrink-0 rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-2 text-white/30 hover:text-white hover:border-white/30 transition-all"
+            style={{ width: 180, height: 280 }}>
+            <span className="font-display text-4xl">+43</span>
+            <span className="text-[10px] tracking-widest uppercase">More</span>
+          </Link>
+        </div>
+
+        {/* Row 2 — reversed, different offset */}
+        <div className="flex gap-4 overflow-x-auto pb-4 px-8 md:px-12 mt-4 animate-marquee-r" style={{ scrollbarWidth: 'none' }}>
+          {[
+            { name:'Wellness', cat:'Professional', bg:'#F8F5F0', text:'#3D3020', emoji:'🧘' },
+            { name:'Marigold', cat:'Desi', bg:'#FF6B00', text:'#fff', emoji:'🌼' },
+            { name:'Neon Purple', cat:'Neon', bg:'#0A0015', text:'#BF5FFF', emoji:'🟣' },
+            { name:'Vintage Paper', cat:'Retro', bg:'#F4ECD8', text:'#2C1A0E', emoji:'📜' },
+            { name:'Fitness Mode', cat:'Pro', bg:'#0A0A0A', text:'#FF4500', emoji:'💪' },
+            { name:'Lo-Fi', cat:'Retro', bg:'#2D2B3D', text:'#FF9EAA', emoji:'🎧' },
+            { name:'Art Gallery', cat:'Pro', bg:'#FAFAFA', text:'#000', emoji:'🖼️' },
+            { name:'Aurora', cat:'Gradient', bg:'linear-gradient(135deg,#0A0015,#001A00)', text:'#00FF88', emoji:'🌌' },
+          ].map((t) => (
+            <div key={t.name}
+              className="template-card shrink-0 rounded-2xl overflow-hidden border border-white/5"
+              style={{ background: t.bg, width: 180, height: 180 }}>
+              <div className="h-full flex flex-col justify-between p-4">
+                <span className="text-xl">{t.emoji}</span>
+                <div>
+                  <div className="text-[8px] tracking-widest uppercase mb-0.5" style={{ color: t.text, opacity: 0.4 }}>{t.cat}</div>
+                  <div className="font-display text-sm tracking-wider" style={{ color: t.text }}>{t.name}</div>
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ── WHY TAAR ───────────────────────────────────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="text-[#E8593C] text-sm uppercase tracking-widest mb-3 font-medium">Why Taar?</div>
-            <h2 style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-5xl md:text-7xl tracking-wider">
-              YOUR AUDIENCE PAYS<br />
-              <span className="text-[#E8593C]">ATTENTION.</span><br />
-              MAKE EVERY TAP COUNT.
-            </h2>
-          </div>
+      {/* ─────────────────────────────── AUDIENCE */}
+      <section className="bg-[#060606] py-24 md:py-36 px-8 md:px-12 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-6 font-semibold">04 / 06 · For every creator</p>
+          <h2 className="font-display text-5xl md:text-7xl tracking-wider leading-none mb-16">
+            FROM<br/>FIRST REEL<br/><span className="text-[#E8593C]">TO FULL-TIME.</span>
+          </h2>
 
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5">
             {[
-              {
-                icon: '₹',
-                headline: 'UPI links that actually work on mobile',
-                body: 'One tap. Your fans pay you directly via any UPI app. No payment gateway fees. No redirects. Just money in your account.',
-                accent: '#E8593C',
-              },
-              {
-                icon: '📸',
-                headline: 'Your latest reels, always up to date',
-                body: 'Connect Instagram once. Your 3 newest reels auto-appear on your bio page every 24 hours. Zero effort, max engagement.',
-                accent: '#F5C842',
-                pro: true,
-              },
-              {
-                icon: '📊',
-                headline: 'Know which links your audience loves',
-                body: 'See clicks per link, device types, 7-day trends. Stop guessing. Start knowing what works for your audience.',
-                accent: '#7EC880',
-                pro: true,
-              },
-              {
-                icon: '📦',
-                headline: 'Sell anything. Instantly.',
-                body: 'Presets, PDFs, courses, music. Add a product, set a price. Razorpay collects the money. Resend delivers the file. You sleep.',
-                accent: '#BF5FFF',
-                pro: true,
-              },
-              {
-                icon: '🎨',
-                headline: '50 templates. Zero design skills needed.',
-                body: 'From Bollywood gold to neon cyberpunk to pastel aesthetic — pick a vibe, publish in seconds. Every template is mobile-perfect.',
-                accent: '#FF71CE',
-              },
-              {
-                icon: '⚡',
-                headline: 'Live in 5 minutes. Seriously.',
-                body: 'Magic link login, username, add links, pick template, publish. No app downloads, no credit card, no tech headache.',
-                accent: '#01CDFE',
-              },
-            ].map((f) => (
-              <div key={f.headline} className="bg-[#111] border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all group">
-                <div className="flex items-start justify-between mb-5">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-xl"
-                    style={{ background: `${f.accent}20`, border: `1px solid ${f.accent}40` }}>
-                    {f.icon}
-                  </div>
-                  {f.pro && (
-                    <span className="text-[10px] bg-[#E8593C]/20 text-[#E8593C] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">
-                      Pro
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-bold text-white text-base mb-2 leading-snug">{f.headline}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TEMPLATES SHOWCASE ──────────────────────────────────────── */}
-      <section id="templates" className="py-24 px-4 bg-[#0A0A0A]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <div className="text-[#E8593C] text-sm uppercase tracking-widest mb-3 font-medium">50 Templates</div>
-            <h2 style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-5xl md:text-7xl tracking-wider mb-4">
-              EVERY VIBE.<br />
-              <span className="text-[#E8593C]">EVERY CREATOR.</span>
-            </h2>
-            <p className="text-white/40 max-w-xl mx-auto">From 15 to 60, gamer to chef, artist to entrepreneur — there&apos;s a Taar for everyone.</p>
-          </div>
-
-          {/* Category showcase */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            {[
-              { name: 'Bollywood Editorial', bg: '#0A0005', text: '#F5C842', desc: 'Desi × Cinematic', emoji: '🎬' },
-              { name: 'Cyberpunk', bg: '#000000', text: '#00FF41', desc: 'Neon × Dark', emoji: '🟢' },
-              { name: 'Rose Gold', bg: 'linear-gradient(135deg, #B76E79, #F7C59F)', text: '#FFFFFF', desc: 'Gradient × Luxury', emoji: '✨' },
-              { name: 'Streetwear', bg: '#0A0A0A', text: '#FFFFFF', desc: 'Bold × Minimal', emoji: '🖤' },
-              { name: 'Pastel Food', bg: '#FDF6EC', text: '#8B5E3C', desc: 'Soft × Warm', emoji: '🍰' },
-              { name: 'Dark Academia', bg: '#1A1209', text: '#C8A96E', desc: 'Moody × Literary', emoji: '📚' },
-              { name: 'Y2K Babe', bg: '#FFB6C1', text: '#8B0057', desc: '2000s × Pop', emoji: '💅' },
-              { name: 'Vaporwave', bg: 'linear-gradient(135deg, #1a001a, #001a33)', text: '#FF71CE', desc: 'Retro × Digital', emoji: '🌐' },
-            ].map((t) => (
-              <div key={t.name}
-                className="rounded-2xl overflow-hidden border border-white/5 hover:border-white/15 transition-all hover:scale-[1.02] cursor-pointer group"
-                style={{ background: t.bg }}>
-                <div className="p-5 h-28 flex flex-col justify-between">
-                  <div className="text-xl">{t.emoji}</div>
-                  <div>
-                    <div className="font-bold text-sm" style={{ color: t.text }}>{t.name}</div>
-                    <div className="text-xs mt-0.5 opacity-60" style={{ color: t.text }}>{t.desc}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <p className="text-white/30 text-sm mb-6">+ 42 more: Minimal, Neon, Wellness, Fitness, Lo-Fi, Concert, Retro 90s, Marigold Festival, and more...</p>
-            <Link href="/login"
-              className="inline-block bg-[#E8593C] text-white px-10 py-4 rounded-full font-bold hover:bg-[#d44e33] transition-all hover:scale-105">
-              Browse all 50 templates →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FOR EVERY CREATOR ───────────────────────────────────────── */}
-      <section className="py-24 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-5xl md:text-6xl tracking-wider">
-              FROM <span className="text-[#E8593C]">FIRST REEL</span><br />TO <span className="text-[#F5C842]">FULL-TIME CREATOR</span>
-            </h2>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                age: '15–25',
-                type: 'Gaming / Fashion / Memes',
-                templates: 'Cyberpunk, Streetwear, Y2K, Neon, Hypebeast',
-                useCase: 'Drop your Discord, Insta, YouTube — all in one neon-lit link.',
-                emoji: '🎮',
-              },
-              {
-                age: '20–35',
-                type: 'Food / Lifestyle / Fitness',
-                templates: 'Pastel, Wellness, Gradient, Mint, Peachy',
-                useCase: 'Sell your recipe PDF, share your UPI, show your latest reels.',
-                emoji: '🥗',
-              },
-              {
-                age: '25–45',
-                type: 'Music / Art / Culture',
-                templates: 'Vinyl, Concert, Vaporwave, Lo-Fi, Dark Academia',
-                useCase: 'Link your Spotify, sell your beats, collect fan support via UPI.',
-                emoji: '🎵',
-              },
-              {
-                age: '30–60',
-                type: 'Business / Education / Coaching',
-                templates: 'Executive, Corporate Dark, Cream, Stone, Art Gallery',
-                useCase: 'One professional link for your course, contact, services — in minutes.',
-                emoji: '💼',
-              },
+              { age:'15–25', icon:'🎮', type:'Gaming · Fashion · Memes', pitch:'Drop Discord, Insta, YouTube — all one neon link.', themes:'Cyberpunk, Streetwear, Y2K, Neon Purple' },
+              { age:'20–35', icon:'🥗', type:'Food · Lifestyle · Fitness', pitch:'Sell your recipe PDF, share UPI, show your latest reels.', themes:'Pastel, Wellness, Gradient, Mint' },
+              { age:'25–45', icon:'🎵', type:'Music · Art · Culture', pitch:'Link Spotify, sell beats, collect fan support via UPI.', themes:'Vinyl, Concert, Vaporwave, Lo-Fi' },
+              { age:'30–60', icon:'💼', type:'Business · Education · Coaching', pitch:'One professional link for course, contact, services.', themes:'Executive, Corporate Dark, Cream, Art Gallery' },
             ].map((c) => (
-              <div key={c.age} className="bg-[#111] border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all">
-                <div className="flex items-start gap-4">
-                  <div className="text-3xl shrink-0">{c.emoji}</div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-white font-semibold">{c.type}</span>
-                      <span className="text-[#E8593C] text-xs bg-[#E8593C]/10 px-2 py-0.5 rounded-full">Age {c.age}</span>
-                    </div>
-                    <p className="text-white/40 text-sm mb-3">{c.useCase}</p>
-                    <div className="text-white/30 text-xs">
-                      <span className="text-white/50">Themes: </span>{c.templates}
-                    </div>
-                  </div>
+              <div key={c.age} className="bg-[#060606] p-8 md:p-10 hover:bg-[#0D0D0D] transition-colors group">
+                <div className="flex items-start justify-between mb-6">
+                  <span className="text-3xl">{c.icon}</span>
+                  <span className="font-display text-4xl text-white/5 group-hover:text-[#E8593C]/20 transition-colors">{c.age}</span>
                 </div>
+                <h3 className="font-semibold text-white text-lg mb-2">{c.type}</h3>
+                <p className="text-white/40 text-sm leading-relaxed mb-4">{c.pitch}</p>
+                <p className="text-[10px] text-white/20 tracking-widest uppercase">{c.themes}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── PRICING ─────────────────────────────────────────────────── */}
-      <section className="py-24 px-4 bg-[#0A0A0A]" id="pricing">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-5xl md:text-7xl tracking-wider mb-4">
-              CUT THE NOISE.<br />
-              <span className="text-[#E8593C]">OWN YOUR THREAD.</span>
-            </h2>
-            <p className="text-white/40">Start free. Go Pro when you&apos;re serious.</p>
-          </div>
+      {/* ─────────────────────────────── PRICING */}
+      <section id="pricing" className="bg-[#0E0804] py-24 md:py-36 px-8 md:px-12 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-6 font-semibold">05 / 06 · Pricing</p>
+          <h2 className="font-display text-5xl md:text-8xl tracking-wider leading-none mb-16">
+            CUT THE NOISE.<br/><span className="text-[#E8593C]">OWN YOUR</span><br/>THREAD.
+          </h2>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
             {/* Free */}
-            <div className="bg-[#111] border border-white/8 rounded-2xl p-8">
-              <div style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-3xl tracking-wider text-white mb-1">FREE</div>
-              <div className="text-5xl font-black text-white mb-1">₹0</div>
-              <div className="text-white/30 text-sm mb-8">Forever, no card needed</div>
-              <ul className="space-y-3 mb-8">
-                {['1 bio page', 'Up to 8 links', 'All 50 templates', 'UPI + WhatsApp links', 'Custom username', 'Basic view count'].map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-white/60">
-                    <span className="text-[#E8593C] shrink-0">✓</span>{f}
+            <div className="border border-white/8 p-8 md:p-10 flex flex-col">
+              <div className="font-display text-4xl tracking-wider mb-1">FREE</div>
+              <div className="font-display text-6xl text-[#E8593C] mb-1">₹0</div>
+              <div className="text-white/25 text-xs tracking-widest uppercase mb-10">No card. No catch. Forever.</div>
+              <ul className="space-y-3 mb-10 flex-1">
+                {['1 bio page','8 links','All 50 templates','UPI + WhatsApp links','Custom username','Basic view count'].map(f => (
+                  <li key={f} className="flex items-center gap-3 text-sm text-white/50">
+                    <span className="w-4 h-px bg-[#E8593C]" />{f}
                   </li>
                 ))}
               </ul>
-              <Link href="/login"
-                className="block w-full text-center border border-white/15 text-white py-3.5 rounded-full hover:border-[#E8593C] hover:bg-[#E8593C]/5 transition-colors font-semibold">
-                Get started free
+              <Link href="/login" className="block text-center border border-white/15 text-white py-4 text-xs tracking-[0.2em] uppercase font-semibold hover:border-[#E8593C] hover:bg-[#E8593C]/5 transition-all">
+                Start free
               </Link>
             </div>
 
             {/* Pro */}
-            <div className="bg-[#111] border border-[#E8593C] rounded-2xl p-8 relative overflow-hidden">
-              <div className="absolute top-5 right-5 bg-[#E8593C] text-white text-[10px] px-3 py-1 rounded-full font-bold tracking-widest uppercase">
-                Most popular
-              </div>
-              <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-[#E8593C]/10 blur-2xl" />
-
-              <div style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-3xl tracking-wider text-[#E8593C] mb-1">PRO</div>
-              <div className="text-5xl font-black text-white mb-1">₹399<span className="text-xl font-normal text-white/40">/mo</span></div>
-              <div className="text-white/30 text-sm mb-8">Cancel anytime</div>
-              <ul className="space-y-3 mb-8 relative">
-                {[
-                  'Everything in Free',
-                  'Click analytics + 7-day charts',
-                  'Auto Instagram Reels shelf',
-                  'Sell up to 5 digital products',
-                  'Razorpay payments + auto delivery',
-                  'Remove Taar watermark',
-                ].map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-white/80">
-                    <span className="text-[#E8593C] shrink-0">✓</span>{f}
+            <div className="bg-[#E8593C] p-8 md:p-10 flex flex-col relative overflow-hidden">
+              <div className="absolute top-5 right-5 text-[9px] bg-white/20 text-white px-3 py-1 tracking-widest uppercase">Most popular</div>
+              <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-white/5" />
+              <div className="font-display text-4xl tracking-wider mb-1 relative">PRO</div>
+              <div className="font-display text-6xl text-white mb-0.5 relative">₹399</div>
+              <div className="text-white/60 text-xs tracking-widest uppercase mb-10 relative">/month · Cancel anytime</div>
+              <ul className="space-y-3 mb-10 flex-1 relative">
+                {['Everything in Free','Click analytics + charts','Auto Instagram Reels shelf','Sell up to 5 digital products','Razorpay + auto email delivery','Remove Taar watermark'].map(f => (
+                  <li key={f} className="flex items-center gap-3 text-sm text-white">
+                    <span className="w-4 h-px bg-white" />{f}
                   </li>
                 ))}
               </ul>
-              <Link href="/dashboard/upgrade"
-                className="relative block w-full text-center bg-[#E8593C] text-white py-3.5 rounded-full hover:bg-[#d44e33] transition-all font-bold text-base">
-                Go Pro — ₹399/month →
+              <Link href="/dashboard/upgrade" className="relative block text-center bg-white text-[#E8593C] py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-[#060606] hover:text-white transition-all">
+                Go Pro →
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── FINAL CTA ───────────────────────────────────────────────── */}
-      <section className="py-32 px-4 text-center relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-15 blur-3xl"
-            style={{ background: 'radial-gradient(circle, #E8593C 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative max-w-2xl mx-auto">
-          <div style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-6xl md:text-8xl tracking-wider leading-none mb-6">
-            YOUR THREAD<br />
-            <span className="text-[#E8593C]">STARTS NOW.</span>
+      {/* ─────────────────────────────── FINAL CTA */}
+      <section className="bg-[#060606] py-32 md:py-48 px-8 md:px-12 border-t border-white/5 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
+        <div className="relative max-w-7xl mx-auto">
+          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-8 font-semibold">06 / 06</p>
+          <h2 className="font-display leading-none tracking-tight" style={{ fontSize: 'clamp(72px, 14vw, 220px)' }}>
+            <span className="block text-white">YOUR</span>
+            <span className="block" style={{ color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.15)' }}>THREAD</span>
+            <span className="block text-[#E8593C]">STARTS</span>
+            <span className="block text-white">NOW.</span>
+          </h2>
+          <div className="mt-16 flex flex-col md:flex-row items-start md:items-center gap-6">
+            <Link href="/login"
+              className="group inline-flex items-center gap-4 bg-[#E8593C] text-white px-12 py-6 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-[#060606] transition-all duration-300">
+              Create your Taar — free
+              <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+            </Link>
+            <p className="text-white/20 text-xs tracking-widest uppercase">No card needed · Live in 5 minutes</p>
           </div>
-          <p className="text-white/40 text-lg mb-10">Free forever. 5 minutes to live. No excuses.</p>
-          <Link href="/login"
-            className="inline-block bg-[#E8593C] text-white px-12 py-5 rounded-full text-xl font-bold hover:bg-[#d44e33] transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-[#E8593C]/40">
-            Create your Taar →
-          </Link>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-10 px-4">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span style={{ fontFamily: 'Bebas Neue, sans-serif' }} className="text-2xl tracking-wider text-[#E8593C]">TAAR</span>
-          <p className="text-white/25 text-sm">Your thread to everything.</p>
-          <p className="text-white/25 text-sm">Made in India 🇮🇳 for Indian creators</p>
+      {/* ─────────────────────────────── FOOTER */}
+      <footer className="border-t border-white/5 py-10 px-8 md:px-12">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div>
+            <span className="font-display text-2xl tracking-[0.15em] text-white">TAAR</span>
+            <p className="text-white/20 text-xs mt-1 tracking-widest">Your thread to everything.</p>
+          </div>
+          <div className="flex items-center gap-8">
+            {['Templates','Pricing','Login'].map(l => (
+              <Link key={l} href={l === 'Login' ? '/login' : `#${l.toLowerCase()}`}
+                className="text-[10px] text-white/25 hover:text-white transition-colors tracking-widest uppercase underline-wipe">
+                {l}
+              </Link>
+            ))}
+          </div>
+          <p className="text-white/15 text-xs tracking-wider">Made in India 🇮🇳 for Indian creators</p>
         </div>
       </footer>
-
     </div>
   )
 }
