@@ -39,21 +39,40 @@ const ARTICLES = [
   },
 ]
 
+const BREADCRUMB_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://taar.bio' },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://taar.bio/blog' },
+  ],
+}
+
 export default function BlogPage() {
   return (
     <div style={{ background: '#060606', minHeight: '100vh' }}>
-      {/* Nav */}
-      <nav className="border-b border-white/[0.06] h-16 flex items-center px-6 md:px-12">
-        <Link
-          href="/"
-          className="text-white text-xl tracking-[0.15em] hover:text-[#E8593C] transition-colors"
-          style={{ fontFamily: 'Bebas Neue, sans-serif' }}
-        >
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(BREADCRUMB_JSONLD) }} />
+
+      {/* Nav — same as homepage */}
+      <nav className="sticky top-0 z-50 border-b border-white/[0.06] h-16 flex items-center justify-between px-6 md:px-12" style={{ background: 'rgba(6,6,6,0.92)', backdropFilter: 'blur(12px)' }}>
+        <Link href="/" className="text-white text-xl tracking-[0.15em] hover:text-[#E8593C] transition-colors" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
           TAAR
         </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/#pricing" className="text-white/40 text-xs font-mono hover:text-white transition-colors">Pricing</Link>
+          <Link href="/login" className="bg-[#E8593C] text-white text-xs px-4 py-2 rounded-full hover:bg-[#d44e33] transition-colors" style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.08em' }}>Get Started →</Link>
+        </div>
       </nav>
 
       <main className="max-w-3xl mx-auto px-6 py-20">
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="mb-8">
+          <ol className="flex items-center gap-2 text-xs font-mono text-white/25">
+            <li><Link href="/" className="hover:text-white/50 transition-colors">Home</Link></li>
+            <li aria-hidden="true">›</li>
+            <li className="text-[#E8593C]">Blog</li>
+          </ol>
+        </nav>
         <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">
           Creator guides
         </p>

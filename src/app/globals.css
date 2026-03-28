@@ -144,6 +144,11 @@ html { font-family: 'DM Sans', sans-serif; }
   animation: marquee-reverse 32s linear infinite;
   display: inline-flex;
 }
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee, .animate-marquee-r {
+    animation-play-state: paused;
+  }
+}
 
 /* ── CLIP DIAGONAL ──────────────────────────────────────── */
 .clip-diagonal-b {
@@ -287,6 +292,35 @@ html { font-family: 'DM Sans', sans-serif; }
 .reveal.d2 { transition-delay: 0.2s; }
 .reveal.d3 { transition-delay: 0.35s; }
 .reveal.d4 { transition-delay: 0.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── FAQ ACCORDION ───────────────────────────────────────── */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.faq-answer.open {
+  grid-template-rows: 1fr;
+}
+.faq-answer > div {
+  overflow: hidden;
+}
+
+/* ── TEMPLATE SWITCHER ───────────────────────────────────── */
+.template-preview-frame {
+  transition: opacity 0.2s ease;
+}
+.template-preview-frame.switching {
+  opacity: 0;
+}
 
 /* ── NAV SCROLL STATE ────────────────────────────────────────────────────── */
 nav { transition: background 0.3s ease, backdrop-filter 0.3s ease; }

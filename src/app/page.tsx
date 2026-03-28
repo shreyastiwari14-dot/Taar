@@ -3,9 +3,10 @@ import { CursorGlow } from '@/components/landing/CursorGlow'
 import { LandingNav } from '@/components/landing/LandingNav'
 import { PageEffects } from '@/components/landing/PageEffects'
 import { UsernameInput } from '@/components/landing/UsernameInput'
-import { PricingProCard } from '@/components/landing/PricingProCard'
+import { FAQSection } from '@/components/landing/FAQSection'
+import { PricingSection } from '@/components/landing/PricingSection'
+import { HeroTemplateSwitcher } from '@/components/landing/HeroTemplateSwitcher'
 import { createClient } from '@/lib/supabase/server'
-import { PRO_PRICE_INR } from '@/lib/constants'
 
 const TEMPLATES = [
   { name: 'Bollywood Editorial', bg: '#0A0005', accent: '#F5C842', textColor: '#F5C842', nameFontFamily: "'Cinzel', serif", tag: 'Cinematic' },
@@ -44,7 +45,7 @@ const COMPARE = [
   { feature: 'Sell digital products', taar: '✓ Pro', linktree: 'Paid only' },
   { feature: 'Email capture', taar: '✓ Pro', linktree: '✗ Not available' },
   { feature: 'Media Kit page', taar: '✓ Pro', linktree: '✗ Not available' },
-  { feature: 'Price of paid plan', taar: `₹${PRO_PRICE_INR}/mo`, linktree: '₹800+/mo' },
+  { feature: 'Price of paid plan', taar: '₹399/mo', linktree: '₹800+/mo' },
   { feature: 'Made in India', taar: '✓', linktree: '✗' },
 ]
 
@@ -120,20 +121,8 @@ export default async function HomePage() {
             </p>
           </div>
 
-          {/* Right col — phone frame */}
-          <div className="hidden md:flex flex-1 items-center justify-center pr-8 py-16 relative z-10" aria-hidden="true">
-            <div className="flex flex-col items-center">
-              <div style={{ width: 260, height: 520, borderRadius: 40, border: '6px solid rgba(255,255,255,0.08)', background: '#111', boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)', overflow: 'hidden' }}>
-                <iframe src="/demo" title="Taar demo preview" style={{ width: '100%', height: '100%', border: 'none', pointerEvents: 'none', display: 'block' }} />
-              </div>
-              <div className="flex gap-1.5 justify-center mt-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#E8593C]" />
-                <div className="w-1 h-1 rounded-full bg-white/20 self-center" />
-                <div className="w-1 h-1 rounded-full bg-white/20 self-center" />
-              </div>
-              <p className="font-mono text-xs text-white/30 mt-2">taar.bio/priya</p>
-            </div>
-          </div>
+          {/* Right col — template switcher */}
+          <HeroTemplateSwitcher />
         </section>
 
         {/* ── 2. TRUST BAR ─────────────────────────────────── */}
@@ -284,10 +273,11 @@ export default async function HomePage() {
         </section>
 
         {/* ── 6. MARQUEE TAPE ──────────────────────────────── */}
-        <div className="overflow-hidden border-y border-white/[0.06] py-4" style={{ background: '#0A0A0A' }} aria-hidden="true">
-          <div className="animate-marquee whitespace-nowrap">
+        <div className="overflow-hidden border-y border-white/[0.06] py-4" style={{ background: '#0A0A0A' }}>
+          <span className="sr-only">Features: UPI Payments, Instagram Reels, 50 Templates, Custom Domain, Digital Products, Analytics, Free Forever</span>
+          <div className="animate-marquee whitespace-nowrap" aria-hidden="true">
             {Array(2).fill(null).map((_, i) => (
-              <span key={i} className="inline-flex items-center gap-8 mr-8">
+              <span key={i} aria-hidden="true" className="inline-flex items-center gap-8 mr-8">
                 {['UPI Payments', 'Instagram Reels', '50 Templates', 'Custom Domain', 'Digital Products', 'Analytics', 'Free Forever'].map((item) => (
                   <span key={item} className="inline-flex items-center gap-3">
                     <span className="w-1 h-1 rounded-full bg-[#E8593C] shrink-0" />
@@ -314,11 +304,11 @@ export default async function HomePage() {
               {TESTIMONIALS.map(({ quote, name, handle, initial }, i) => (
                 <figure
                   key={name}
-                  className="reveal border border-white/[0.07] rounded-2xl p-7 flex flex-col gap-5 hover:border-white/[0.12] transition-colors"
+                  className="reveal border border-white/[0.10] rounded-2xl p-7 flex flex-col gap-5 hover:border-white/[0.18] transition-colors"
                   data-delay={String(i * 80)}
-                  style={{ background: 'rgba(255,255,255,0.02)' }}
+                  style={{ background: 'rgba(255,255,255,0.05)' }}
                 >
-                  <blockquote className="text-white/70 text-sm leading-relaxed flex-1">&ldquo;{quote}&rdquo;</blockquote>
+                  <blockquote className="text-white/90 text-sm leading-relaxed flex-1">&ldquo;{quote}&rdquo;</blockquote>
                   <figcaption className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0" style={{ background: 'rgba(232,89,60,0.15)', color: '#E8593C' }} aria-hidden="true">{initial}</div>
                     <div>
@@ -333,46 +323,7 @@ export default async function HomePage() {
         </section>
 
         {/* ── 8. PRICING ───────────────────────────────────── */}
-        <section id="pricing" aria-labelledby="pricing-heading" className="bg-[#060606] py-24 px-6">
-          <div className="max-w-4xl mx-auto">
-            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 text-center uppercase">Simple pricing</p>
-            <h2
-              id="pricing-heading"
-              className="text-white text-center mb-16"
-              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
-            >
-              Free. Forever.<br />Seriously.
-            </h2>
-
-            <div className="flex flex-col md:flex-row gap-6">
-              {/* Free */}
-              <div id="pricing-free" className="reveal flex-1 border border-white/[0.08] rounded-2xl p-8" style={{ background: 'rgba(255,255,255,0.02)' }}>
-                <p className="font-mono text-xs text-white/40 tracking-wide mb-3">FREE</p>
-                <p className="text-white mb-1" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, lineHeight: 1 }}>₹0</p>
-                <p className="text-white/30 text-xs mb-8">forever · no credit card</p>
-                <ul className="space-y-3 mb-10" aria-label="Free plan features">
-                  {[
-                    'All 50 templates',
-                    'Up to 8 links',
-                    'UPI payment links',
-                    'Analytics (7-day history)',
-                    'Taar watermark shown',
-                  ].map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-sm text-white/60">
-                      <span className="text-[#E8593C] shrink-0" aria-hidden="true">✓</span>{f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/login" className="block text-center py-3.5 rounded-full border border-white/20 text-white text-sm hover:border-white/40 transition-colors" style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.1em' }}>
-                  Start for free →
-                </Link>
-              </div>
-
-              {/* Pro */}
-              <PricingProCard price={PRO_PRICE_INR} />
-            </div>
-          </div>
-        </section>
+        <PricingSection />
 
         {/* ── 9. COMPARISON TABLE ──────────────────────────── */}
         <section aria-labelledby="compare-heading" className="bg-[#060606] py-24 px-6">
@@ -413,7 +364,10 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* ── 10. FINAL CTA ────────────────────────────────── */}
+        {/* ── 10. FAQ ──────────────────────────────────────── */}
+        <FAQSection />
+
+        {/* ── 11. FINAL CTA ────────────────────────────────── */}
         <section aria-labelledby="cta-heading" className="bg-[#060606] py-32 px-6 relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0" aria-hidden="true" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(232,89,60,0.08) 0%, transparent 70%)' }} />
           <div className="max-w-2xl mx-auto text-center relative z-10">
