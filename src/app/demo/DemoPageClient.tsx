@@ -29,6 +29,13 @@ export function DemoPageClient() {
         <Link href="/" className="text-white text-xl tracking-[0.15em] hover:text-[#E8593C] transition-colors" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>TAAR</Link>
       </nav>
 
+      {/* Example banner */}
+      <div className="flex justify-center py-3 px-4" style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <p className="text-white/60 text-xs font-mono text-center">
+          👆 This is an example page. Yours will look just like this.
+        </p>
+      </div>
+
       <div className="flex flex-col items-center py-12 px-4">
         {/* Phone frame */}
         <div style={{ width: 300, borderRadius: 40, border: '6px solid rgba(255,255,255,0.08)', background: '#0A0005', boxShadow: '0 40px 80px rgba(0,0,0,0.6)', overflow: 'hidden' }}>
@@ -38,7 +45,7 @@ export function DemoPageClient() {
               <span style={{ fontFamily: 'Cinzel, serif', color: '#F5C842', fontSize: 28, fontWeight: 700 }}>P</span>
             </div>
             <h1 style={{ fontFamily: 'Cinzel, serif', color: '#F5C842', fontSize: 20, margin: '0 0 6px', letterSpacing: '0.06em' }}>Priya Sharma</h1>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '0 0 24px', textAlign: 'center' }}>Food creator · Mumbai · 47K followers</p>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '0 0 24px', textAlign: 'center' }}>Food creator · Mumbai</p>
 
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {LINKS.map((l) => (

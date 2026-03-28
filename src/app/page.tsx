@@ -32,11 +32,6 @@ const HOW_IT_WORKS = [
   { step: '03', icon: '🔗', title: 'Share your link', sub: 'Add your UPI, Reels, links — go live.' },
 ]
 
-const TESTIMONIALS = [
-  { quote: 'Set up in 10 minutes, my audience can now tip me directly in UPI. Linktree never had this.', name: 'Priya S.', handle: 'Food Creator, Mumbai · 47K followers', initial: 'P' },
-  { quote: 'The Bollywood template matches my brand perfectly. My link-in-bio finally looks like me.', name: 'Arjun M.', handle: 'Music Producer, Delhi · 82K followers', initial: 'A' },
-  { quote: 'My Reels shelf updates automatically — I never have to manually add new content.', name: 'Sneha K.', handle: 'Travel Creator, Bangalore · 31K followers', initial: 'S' },
-]
 
 const COMPARE = [
   { feature: 'UPI Payments (GPay, PhonePe)', taar: '✓ Free', linktree: '✗ Not available' },
@@ -117,7 +112,7 @@ export default async function HomePage() {
               👉 See what your page looks like →
             </Link>
             <p className="mt-8 text-white/25 text-xs font-mono reveal" data-delay="480">
-              🧵 2,400+ Indian creators · ₹3.2L+ collected via UPI
+              🚀 Just launched · Free forever · Built for Bharat
             </p>
           </div>
 
@@ -125,13 +120,13 @@ export default async function HomePage() {
           <HeroTemplateSwitcher />
         </section>
 
-        {/* ── 2. TRUST BAR ─────────────────────────────────── */}
-        <section aria-label="Social proof" className="border-y border-white/[0.06] bg-[#060606] py-10">
+        {/* ── 2. VALUE PROPS BAR ───────────────────────────── */}
+        <section aria-label="Key facts" className="border-y border-white/[0.06] bg-[#060606] py-10">
           <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-6 text-center">
             {[
-              { num: '2,400+', label: 'Creators' },
-              { num: '₹3.2L+', label: 'Collected via UPI' },
-              { num: '50', label: 'Free Templates' },
+              { num: '₹0', label: 'Forever free plan' },
+              { num: '5 min', label: 'Setup time' },
+              { num: '50', label: 'India-built templates' },
             ].map(({ num, label }) => (
               <div key={label} className="reveal">
                 <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>{num}</p>
@@ -289,36 +284,28 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* ── 7. TESTIMONIALS ──────────────────────────────── */}
-        <section aria-labelledby="testimonials-heading" className="bg-[#060606] py-24 px-6">
-          <div className="max-w-5xl mx-auto">
-            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Creators love Taar</p>
+        {/* ── 7. FOUNDER NOTE ──────────────────────────────── */}
+        <section aria-labelledby="founder-heading" className="bg-[#060606] py-24 px-6">
+          <div className="max-w-2xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase reveal">From the founder</p>
             <h2
-              id="testimonials-heading"
-              className="text-white mb-16"
-              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+              id="founder-heading"
+              className="text-white mb-8 reveal"
+              data-delay="80"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 0.95 }}
             >
-              Real creators,<br />real results.
+              Built because we were<br />frustrated too.
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {TESTIMONIALS.map(({ quote, name, handle, initial }, i) => (
-                <figure
-                  key={name}
-                  className="reveal border border-white/[0.10] rounded-2xl p-7 flex flex-col gap-5 hover:border-white/[0.18] transition-colors"
-                  data-delay={String(i * 80)}
-                  style={{ background: 'rgba(255,255,255,0.05)' }}
-                >
-                  <blockquote className="text-white/90 text-sm leading-relaxed flex-1">&ldquo;{quote}&rdquo;</blockquote>
-                  <figcaption className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0" style={{ background: 'rgba(232,89,60,0.15)', color: '#E8593C' }} aria-hidden="true">{initial}</div>
-                    <div>
-                      <p className="text-white text-sm font-semibold">{name}</p>
-                      <p className="text-white/30 text-xs mt-0.5">{handle}</p>
-                    </div>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+            <p className="text-white/40 text-base leading-relaxed mb-8 reveal" data-delay="160">
+              Every Indian creator we knew was losing tips, fans, and collabs because their bio link didn&apos;t speak Indian. No UPI. No Reels shelf. Templates that looked copy-pasted from a Western product. So we built Taar — the link in bio we always wanted. We just launched. Come build with us.
+            </p>
+            <Link
+              href="/blog"
+              className="reveal inline-flex items-center gap-2 text-sm text-[#E8593C] hover:text-white transition-colors underline underline-offset-4"
+              data-delay="240"
+            >
+              Read why we built Taar →
+            </Link>
           </div>
         </section>
 
@@ -371,14 +358,14 @@ export default async function HomePage() {
         <section aria-labelledby="cta-heading" className="bg-[#060606] py-32 px-6 relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0" aria-hidden="true" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(232,89,60,0.08) 0%, transparent 70%)' }} />
           <div className="max-w-2xl mx-auto text-center relative z-10">
-            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-6 reveal uppercase">Get started in 5 minutes</p>
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-6 reveal uppercase">Early access — free forever</p>
             <h2
               id="cta-heading"
               className="text-white mb-4 reveal"
               data-delay="80"
               style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(48px, 7vw, 88px)', lineHeight: 0.92 }}
             >
-              Claim your<br /><span className="text-[#E8593C]">taar.bio</span> link.
+              Be one of the first.<br /><span className="text-[#E8593C]">taar.bio</span>/yourname.
             </h2>
             <p className="text-white/40 text-base mb-10 reveal" data-delay="160">Free forever. No credit card. Set up in 5 minutes.</p>
             <div className="max-w-sm mx-auto reveal" data-delay="240">
