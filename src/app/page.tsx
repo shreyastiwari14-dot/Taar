@@ -1,7 +1,4 @@
-import React from 'react'
 import Link from 'next/link'
-import { ProductPreview } from '@/components/landing/ProductPreview'
-import { SocialProofStrip } from '@/components/landing/SocialProofStrip'
 import { CursorGlow } from '@/components/landing/CursorGlow'
 import { LandingNav } from '@/components/landing/LandingNav'
 import { PageEffects } from '@/components/landing/PageEffects'
@@ -27,13 +24,13 @@ const TEMPLATES = [
   { name: 'Rose Gold', bg: 'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', accent: '#fff', textColor: '#fff', nameFontFamily: "'Cormorant Garamond', serif", tag: 'Elegant' },
 ]
 
-const FEATURES: { icon: React.ReactNode; title: string; desc: string }[] = [
-  { icon: <svg viewBox="0 0 24 24" fill="none" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={24} height={24}><circle cx="12" cy="12" r="9"/><path d="M9 8h6M9 12h6"/><path d="M14.5 12c0 1.66-1.34 3-3 3H9"/><path d="M9 8c0 2.2 2 4 4 4"/></svg>, title: 'UPI Payment Links', desc: 'Accept tips, donations, and payments via GPay, PhonePe, Paytm — directly on your page. No gateway setup.' },
-  { icon: <svg viewBox="0 0 24 24" fill="none" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={24} height={24}><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>, title: '50 Designer Templates', desc: 'Bollywood editorial, Rajasthani royal, cyberpunk, pastel — built for Indian aesthetics, not generic global ones.' },
-  { icon: <svg viewBox="0 0 24 24" fill="none" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={24} height={24}><polyline points="5,20 9,14 13,17 17,9 21,12"/><line x1="3" y1="20" x2="22" y2="20"/></svg>, title: 'Real Analytics', desc: 'See who visits your page, which links they click, where they come from — updated daily. No guessing.' },
-  { icon: <svg viewBox="0 0 24 24" fill="none" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={24} height={24}><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 9l10 6 10-6"/></svg>, title: 'Email Capture', desc: 'Add a subscribe form to your page. Build your mailing list directly from your Taar link.' },
-  { icon: <svg viewBox="0 0 24 24" fill="none" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={24} height={24}><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>, title: 'Sell Digital Products', desc: 'Sell presets, PDFs, courses, or anything digital. Payments via Razorpay, delivered instantly.' },
-  { icon: <svg viewBox="0 0 24 24" fill="none" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width={24} height={24}><rect x="2" y="7" width="20" height="14" rx="2"/><circle cx="8" cy="13" r="2"/><path d="M14 12h4M14 15h3"/><path d="M8 7V3M16 7V3"/></svg>, title: 'Media Kit', desc: 'A shareable page with your live stats — page views, CTR, active channels. Built for brand pitches.' },
+const FEATURES = [
+  { icon: '₹', title: 'UPI Payment Links', desc: 'Accept tips, donations, and payments via GPay, PhonePe, Paytm — directly on your page. No gateway setup.' },
+  { icon: '🎨', title: '50 Designer Templates', desc: 'Bollywood editorial, Rajasthani royal, cyberpunk, pastel — built for Indian aesthetics, not generic global ones.' },
+  { icon: '📊', title: 'Real Analytics', desc: 'See who visits your page, which links they click, where they come from — updated daily. No guessing.' },
+  { icon: '📬', title: 'Email Capture', desc: 'Add a subscribe form to your page. Build your mailing list directly from your Taar link.' },
+  { icon: '🛒', title: 'Sell Digital Products', desc: 'Sell presets, PDFs, courses, or anything digital. Payments via Razorpay, delivered instantly.' },
+  { icon: '📋', title: 'Media Kit', desc: 'A shareable page with your live stats — page views, CTR, active channels. Built for brand pitches.' },
 ]
 
 const HOW_IT_WORKS = [
@@ -133,12 +130,6 @@ export default async function HomePage() {
           {/* Right col — template switcher */}
           <HeroTemplateSwitcher />
         </section>
-
-        {/* ── 1b. PRODUCT PREVIEW ──────────────────────────── */}
-        <ProductPreview />
-
-        {/* ── 2b. SOCIAL PROOF ─────────────────────────────── */}
-        <SocialProofStrip />
 
         {/* ── 2. VALUE PROPS BAR ───────────────────────────── */}
         <section aria-label="Key facts" className="border-y border-white/[0.06] bg-[#060606] py-10">
@@ -348,7 +339,8 @@ export default async function HomePage() {
                   {COMPARE.map(({ feature, taar, linktree }, i) => (
                     <tr
                       key={feature}
-                      className={`compare-row border-b border-white/[0.04] last:border-0 transition-colors hover:bg-white/[0.03] ${i % 2 === 0 ? '' : 'bg-white/[0.01]'}`}
+                      className="compare-row border-b border-white/[0.04] last:border-0"
+                      style={{ background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}
                     >
                       <td className="px-6 py-4 text-white/60">{feature}</td>
                       <td className="px-6 py-4 text-center font-semibold" style={{ color: '#E8593C' }}>{taar}</td>
@@ -392,7 +384,7 @@ export default async function HomePage() {
             >
               Be one of the first.<br /><span className="text-[#E8593C]">taar.bio</span>/yourname.
             </h2>
-            <p className="text-white/65 text-base mb-10 reveal" data-delay="160">Free forever. No credit card. Set up in 5 minutes.</p>
+            <p className="text-white/40 text-base mb-10 reveal" data-delay="160">Free forever. No credit card. Set up in 5 minutes.</p>
             <div className="max-w-sm mx-auto reveal" data-delay="240">
               <UsernameInput />
             </div>
@@ -407,7 +399,7 @@ export default async function HomePage() {
           {/* Left col */}
           <div>
             <p className="text-white/80 text-2xl tracking-[0.15em] mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>TAAR</p>
-            <p className="text-white/25 text-xs font-mono mb-6">Taar means wire. Your links, strung together.</p>
+            <p className="text-white/25 text-xs font-mono mb-6">Made by creators, for creators.</p>
             {/* Social icons */}
             <div className="flex items-center gap-4 mb-8">
               <a href="https://twitter.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Twitter / X" className="text-white/25 hover:text-white/60 transition-colors">

@@ -8,7 +8,7 @@ export function LandingNav({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-14 md:h-16">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 h-16">
         <Link
           href="/"
           className="font-display text-xl tracking-[0.15em] text-white hover:text-[#E8593C] transition-colors"
