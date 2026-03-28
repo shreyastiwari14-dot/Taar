@@ -25,6 +25,7 @@ export function DashboardNav({ user }: { user: User | null }) {
     { href: '/dashboard/analytics', label: 'Analytics' },
     { href: '/dashboard/products', label: 'Products', pro: true },
     { href: '/dashboard/subscribers', label: 'Subscribers' },
+    { href: '/dashboard/mediakit', label: 'Media Kit', pro: true },
   ]
 
   return (

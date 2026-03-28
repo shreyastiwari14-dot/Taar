@@ -82,17 +82,19 @@ export function UpgradeClient({ email, userId }: Props) {
 
             <ul className="space-y-3 mb-8 text-sm text-gray-300 relative">
               {[
-                '✓  Click analytics with 7-day charts',
-                '✓  Auto Instagram Reels shelf',
-                '✓  Sell up to 5 digital products',
-                '✓  All templates (Bollywood, Streetwear, Pastel)',
-                '✓  Remove Taar watermark',
-                '✓  Priority support',
-                '✓  Everything in Free',
+                'Unlimited links (free plan: 8 max)',
+                'Analytics: 30-day history, traffic sources, city-level data',
+                'Sell digital products via Razorpay',
+                'Email capture — grow your subscriber list',
+                'UPI QR code shown on your page',
+                'Page QR code — download & share anywhere',
+                'Remove Taar watermark',
+                'All 50 templates unlocked',
+                'Priority support',
               ].map((f) => (
                 <li key={f} className="flex items-center gap-2">
-                  <span className="text-[#E8593C]">{f.split('  ')[0]}</span>
-                  <span>{f.split('  ')[1]}</span>
+                  <span className="text-[#E8593C] shrink-0">✓</span>
+                  <span>{f}</span>
                 </li>
               ))}
             </ul>
