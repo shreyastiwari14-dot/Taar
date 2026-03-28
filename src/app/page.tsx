@@ -17,9 +17,12 @@ const TEMPLATES = [
 ]
 
 const FEATURES = [
-  { icon: '₹', title: 'UPI Payment Links', desc: 'Accept tips, donations, and service payments directly on your page. No payment gateway setup needed.' },
-  { icon: '🎬', title: 'Instagram Reels Shelf', desc: 'Your latest Reels auto-sync to your Taar page. Visitors see your content without leaving.' },
-  { icon: '🎨', title: '50 Designer Templates', desc: 'From Bollywood editorial to minimalist clean — every template is built for Indian aesthetics.' },
+  { icon: '₹', title: 'UPI Payment Links', desc: 'Accept tips, donations, and payments via GPay, PhonePe, Paytm — directly on your page. No gateway setup.' },
+  { icon: '🎨', title: '50 Designer Templates', desc: 'Bollywood editorial, Rajasthani royal, cyberpunk, pastel — built for Indian aesthetics, not generic global ones.' },
+  { icon: '📊', title: 'Real Analytics', desc: 'See who visits your page, which links they click, where they come from — updated daily. No guessing.' },
+  { icon: '📬', title: 'Email Capture', desc: 'Add a subscribe form to your page. Build your mailing list directly from your Taar link.' },
+  { icon: '🛒', title: 'Sell Digital Products', desc: 'Sell presets, PDFs, courses, or anything digital. Payments via Razorpay, delivered instantly.' },
+  { icon: '📋', title: 'Media Kit', desc: 'A shareable page with your live stats — page views, CTR, active channels. Built for brand pitches.' },
 ]
 
 const HOW_IT_WORKS = [
@@ -36,9 +39,11 @@ const TESTIMONIALS = [
 
 const COMPARE = [
   { feature: 'UPI Payments (GPay, PhonePe)', taar: '✓ Free', linktree: '✗ Not available' },
-  { feature: 'Instagram Reels auto-sync', taar: '✓ Free', linktree: '✗ Not available' },
   { feature: 'Indian-built templates', taar: '✓ 50 templates', linktree: '✗ Generic only' },
-  { feature: 'Free plan templates', taar: '✓ All 50', linktree: '1 only' },
+  { feature: 'Analytics dashboard', taar: '✓ Built-in', linktree: 'Paid only' },
+  { feature: 'Sell digital products', taar: '✓ Pro', linktree: 'Paid only' },
+  { feature: 'Email capture', taar: '✓ Pro', linktree: '✗ Not available' },
+  { feature: 'Media Kit page', taar: '✓ Pro', linktree: '✗ Not available' },
   { feature: 'Price of paid plan', taar: `₹${PRO_PRICE_INR}/mo`, linktree: '₹800+/mo' },
   { feature: 'Made in India', taar: '✓', linktree: '✗' },
 ]
@@ -158,16 +163,16 @@ export default async function HomePage() {
             >
               Built for how<br />Indian creators work.
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {FEATURES.map(({ icon, title, desc }, i) => (
                 <div
                   key={title}
                   className="reveal border border-white/[0.07] rounded-2xl p-8 hover:border-white/[0.14] transition-colors"
-                  data-delay={String(i * 100)}
+                  data-delay={String(i * 80)}
                   style={{ background: 'rgba(255,255,255,0.02)' }}
                 >
-                  <div className="text-3xl mb-6 w-12 h-12 flex items-center justify-center rounded-xl" style={{ background: 'rgba(232,89,60,0.1)', color: '#E8593C' }}>{icon}</div>
-                  <h3 className="text-white mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 24, letterSpacing: '0.05em' }}>{title}</h3>
+                  <div className="text-2xl mb-6 w-12 h-12 flex items-center justify-center rounded-xl" style={{ background: 'rgba(232,89,60,0.1)', color: '#E8593C' }}>{icon}</div>
+                  <h3 className="text-white mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: '0.05em' }}>{title}</h3>
                   <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
                 </div>
               ))}
@@ -346,7 +351,13 @@ export default async function HomePage() {
                 <p className="text-white mb-1" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, lineHeight: 1 }}>₹0</p>
                 <p className="text-white/30 text-xs mb-8">forever · no credit card</p>
                 <ul className="space-y-3 mb-10" aria-label="Free plan features">
-                  {['All 50 templates', 'UPI payment links', 'Instagram Reels shelf', 'Unlimited links', 'Basic analytics'].map((f) => (
+                  {[
+                    'All 50 templates',
+                    'Up to 8 links',
+                    'UPI payment links',
+                    'Analytics (7-day history)',
+                    'Taar watermark shown',
+                  ].map((f) => (
                     <li key={f} className="flex items-center gap-3 text-sm text-white/60">
                       <span className="text-[#E8593C] shrink-0" aria-hidden="true">✓</span>{f}
                     </li>
