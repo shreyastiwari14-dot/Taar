@@ -18,8 +18,10 @@ export async function POST(request: Request) {
       key_secret: keySecret,
     })
 
+    const planId = (process.env.RAZORPAY_PLAN_ID || '').trim()
+    console.log('[razorpay/subscription] plan_id:', planId, 'length:', planId.length)
     const subscription = await razorpay.subscriptions.create({
-      plan_id: process.env.RAZORPAY_PLAN_ID || 'plan_taar_pro',
+      plan_id: planId,
       customer_notify: 1,
       total_count: 12,
       notes: { user_id, email },
