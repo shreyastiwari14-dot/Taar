@@ -149,10 +149,7 @@ export function ProGate({ feature }: { feature: string }) {
 
           <Link
             href="/dashboard/upgrade"
-            className="block w-full text-white py-4 font-semibold transition-colors text-base tracking-wide"
-            style={{ background: '#E8593C' }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = '#d44e33')}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = '#E8593C')}
+            className="block w-full text-white py-4 font-semibold text-base tracking-wide bg-[#E8593C] hover:bg-[#d44e33] transition-colors"
           >
             Go Pro. Own your thread. →
           </Link>
