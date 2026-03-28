@@ -7,9 +7,9 @@ export default function ProductsError({ reset }: { reset: () => void }) {
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4">
       <div className="text-center max-w-sm">
         <p className="font-mono text-xs text-[#E8593C] tracking-widest uppercase mb-4">Digital Products</p>
-        <h2 className="text-white text-2xl font-semibold mb-3">Coming soon for Pro users</h2>
+        <h2 className="text-white text-2xl font-semibold mb-3">Something went wrong</h2>
         <p className="text-white/40 text-sm mb-8">
-          Sell presets, e-books, and courses directly from your Taar page. Upgrade to Pro to unlock.
+          Failed to load digital products. Please retry.
         </p>
         <div className="flex gap-3 justify-center">
           <Link
