@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: "Taar — Free Link in Bio for Indian Creators | UPI, Reels, 50 Templates",
@@ -152,6 +153,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased font-body bg-[#0A0A0A]">
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
         {children}
         <Toaster
           position="bottom-center"

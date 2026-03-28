@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Component, ReactNode } from 'react'
 import toast from 'react-hot-toast'
-import Script from 'next/script'
 
 interface Props {
   email: string
@@ -62,6 +61,17 @@ function UpgradeInner({ email, userId }: Props) {
 
       const { subscription_id } = data
 
+      // Wait up to 5s for Razorpay script to load
+      if (!(window as any).Razorpay) {
+        await new Promise<void>((resolve, reject) => {
+          let attempts = 0
+          const interval = setInterval(() => {
+            if ((window as any).Razorpay) { clearInterval(interval); resolve() }
+            if (++attempts > 50) { clearInterval(interval); reject(new Error('Razorpay failed to load')) }
+          }, 100)
+        })
+      }
+
       const rzp = new (window as any).Razorpay({
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id,
@@ -91,7 +101,6 @@ function UpgradeInner({ email, userId }: Props) {
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4">
         <div className="max-w-lg w-full">
           <div className="text-center mb-10">
