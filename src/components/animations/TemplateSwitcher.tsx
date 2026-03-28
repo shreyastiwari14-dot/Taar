@@ -60,7 +60,7 @@ export function TemplateSwitcher({ templates }: Props) {
     <section
       ref={sectionRef}
       aria-label="Template showcase"
-      className="bg-[#0A0805] relative overflow-hidden"
+      className="bg-[#0A0A0A] relative overflow-hidden"
       style={{ height: '100vh' }}
     >
       {/* Section label */}
@@ -181,7 +181,7 @@ export function TemplateSwitcher({ templates }: Props) {
                 width:       i === activeIdx ? 22 : 5,
                 height:      5,
                 borderRadius: 3,
-                background:  i === activeIdx ? '#BFA07A' : 'rgba(191,160,122,0.15)',
+                background:  i === activeIdx ? '#E8533A' : 'rgba(255,255,255,0.12)',
                 transition:  'width 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s ease',
               }}
             />

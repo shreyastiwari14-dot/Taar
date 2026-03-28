@@ -29,41 +29,60 @@ const FAQS = [
   },
 ]
 
-
 export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
-    <section aria-labelledby="faq-heading" className="bg-[#060606] py-24 px-6">
+    <section aria-labelledby="faq-heading" className="py-24 px-6" style={{ background: '#0A0A0A' }}>
       <div className="max-w-3xl mx-auto">
-        <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Got questions?</p>
+        <p
+          className="uppercase mb-5"
+          style={{ fontSize: 11, letterSpacing: '0.08em', color: '#6E6E73', fontWeight: 500 }}
+        >
+          Got questions?
+        </p>
         <h2
           id="faq-heading"
-          className="text-white mb-12"
-          style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+          className="mb-14"
+          style={{
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+            fontWeight: 700,
+            fontSize: 'clamp(32px, 4vw, 48px)',
+            lineHeight: 1.06,
+            letterSpacing: '-0.03em',
+            color: '#F5F5F7',
+          }}
         >
           Frequently asked.
         </h2>
 
-        <div className="divide-y divide-white/[0.06]">
+        <div>
           {FAQS.map(({ q, a }, i) => {
             const isOpen = open === i
             return (
-              <div key={q}>
+              <div key={q} style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 <button
-                  className="w-full flex items-center justify-between py-5 text-left gap-4 group"
+                  className="w-full flex items-center justify-between py-5 text-left gap-6"
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${i}`}
                 >
-                  <span className="text-white text-sm font-medium group-hover:text-white/80 transition-colors">{q}</span>
-                  <svg
-                    width="16" height="16" viewBox="0 0 16 16" fill="none"
-                    className="shrink-0 transition-transform duration-300"
-                    style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', color: isOpen ? '#E8593C' : 'rgba(255,255,255,0.3)' }}
+                  <span style={{ color: '#F5F5F7', fontSize: 17, fontWeight: 500, lineHeight: 1.4 }}>{q}</span>
+                  <span
+                    style={{
+                      color: '#6E6E73',
+                      fontSize: 22,
+                      fontWeight: 300,
+                      lineHeight: 1,
+                      transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease, color 0.2s ease',
+                      display: 'block',
+                      flexShrink: 0,
+                      color: isOpen ? '#E8533A' : '#6E6E73',
+                    } as React.CSSProperties}
                   >
-                    <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                    +
+                  </span>
                 </button>
                 <div
                   id={`faq-answer-${i}`}
@@ -71,7 +90,7 @@ export function FAQSection() {
                   role="region"
                 >
                   <div>
-                    <p className="text-white/50 text-sm leading-relaxed pb-5">{a}</p>
+                    <p style={{ color: '#A1A1A6', fontSize: 15, lineHeight: 1.65, paddingBottom: 20 }}>{a}</p>
                   </div>
                 </div>
               </div>
