@@ -24,14 +24,19 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ subscription_id: subscription.id })
   } catch (err: unknown) {
+    console.error('[razorpay/subscription] raw error:', JSON.stringify(err))
     let message = 'Failed to create subscription'
     if (err instanceof Error) {
       message = err.message
     } else if (typeof err === 'object' && err !== null) {
       const e = err as Record<string, unknown>
-      message = (e.description as string) || (e.error as string) || JSON.stringify(e)
+      // Razorpay Node SDK: { statusCode, error: { code, description } }
+      const inner = e.error as Record<string, unknown> | undefined
+      message = (inner?.description as string)
+        || (inner?.code as string)
+        || (e.description as string)
+        || JSON.stringify(err)
     }
-    console.error('[razorpay/subscription]', err)
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }
