@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Component, ReactNode } from 'react'
 import toast from 'react-hot-toast'
 import Script from 'next/script'
 
@@ -9,7 +10,38 @@ interface Props {
   userId: string
 }
 
-export function UpgradeClient({ email, userId }: Props) {
+class UpgradeErrorBoundary extends Component<{ children: ReactNode }, { crashed: boolean }> {
+  state = { crashed: false }
+  static getDerivedStateFromError() { return { crashed: true } }
+  render() {
+    if (this.state.crashed) {
+      return (
+        <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4">
+          <div className="text-center max-w-sm">
+            <p className="text-white/60 text-sm mb-4">Something went wrong with the payment. Please try again.</p>
+            <button onClick={() => this.setState({ crashed: false })} className="bg-[#E8593C] text-white px-6 py-2.5 rounded-full text-sm hover:bg-[#d44e33] transition-colors">Try again</button>
+          </div>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
+function extractRazorpayError(err: unknown): string {
+  if (typeof err === 'string') return err
+  if (err && typeof err === 'object') {
+    const e = err as Record<string, unknown>
+    // Razorpay error callback shape: { error: { description, code } }
+    const inner = e.error as Record<string, unknown> | undefined
+    if (inner?.description) return String(inner.description)
+    if (e.description) return String(e.description)
+    if (e.message) return String(e.message)
+  }
+  return 'Payment failed. Please try again.'
+}
+
+function UpgradeInner({ email, userId }: Props) {
   const [loading, setLoading] = useState(false)
 
   async function handleUpgrade() {
@@ -23,7 +55,7 @@ export function UpgradeClient({ email, userId }: Props) {
       const data = await res.json()
 
       if (data.error) {
-        toast.error(data.error)
+        toast.error(typeof data.error === 'string' ? data.error : 'Failed to create subscription')
         setLoading(false)
         return
       }
@@ -34,7 +66,7 @@ export function UpgradeClient({ email, userId }: Props) {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id,
         name: 'Taar',
-        description: `Taar Pro — ₹399/month`,
+        description: 'Taar Pro — ₹399/month',
         prefill: { email },
         theme: { color: '#E8593C' },
         handler: async (_response: unknown) => {
@@ -43,6 +75,11 @@ export function UpgradeClient({ email, userId }: Props) {
         },
         modal: {
           ondismiss: () => setLoading(false),
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        error: (err: unknown) => {
+          toast.error(extractRazorpayError(err))
+          setLoading(false)
         },
       })
       rzp.open()
@@ -54,7 +91,7 @@ export function UpgradeClient({ email, userId }: Props) {
 
   return (
     <>
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="beforeInteractive" />
       <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4">
         <div className="max-w-lg w-full">
           <div className="text-center mb-10">
@@ -114,5 +151,13 @@ export function UpgradeClient({ email, userId }: Props) {
         </div>
       </div>
     </>
+  )
+}
+
+export function UpgradeClient(props: Props) {
+  return (
+    <UpgradeErrorBoundary>
+      <UpgradeInner {...props} />
+    </UpgradeErrorBoundary>
   )
 }
