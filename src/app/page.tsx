@@ -7,6 +7,13 @@ import { FAQSection } from '@/components/landing/FAQSection'
 import { PricingSection } from '@/components/landing/PricingSection'
 import { HeroTemplateSwitcher } from '@/components/landing/HeroTemplateSwitcher'
 import { createClient } from '@/lib/supabase/server'
+import { ScrollProgressBar } from '@/components/animations/ScrollProgressBar'
+import { ScrollCanvas } from '@/components/ScrollCanvas'
+import { ScrollCounter } from '@/components/animations/ScrollCounter'
+import { ScrollReveal } from '@/components/animations/ScrollReveal'
+import { HorizontalScrollFeatures } from '@/components/animations/HorizontalScrollFeatures'
+import { TemplateSwitcher } from '@/components/animations/TemplateSwitcher'
+import { ScrubText } from '@/components/animations/ScrubText'
 
 const TEMPLATES = [
   { name: 'Bollywood Editorial', bg: '#0A0005', accent: '#F5C842', textColor: '#F5C842', nameFontFamily: "'Cinzel', serif", tag: 'Cinematic' },
@@ -59,6 +66,7 @@ export default async function HomePage() {
         Skip to main content
       </a>
 
+      <ScrollProgressBar />
       <div className="grain-overlay" />
       <CursorGlow />
       <PageEffects />
@@ -70,6 +78,9 @@ export default async function HomePage() {
 
       {/* ── MAIN ───────────────────────────────────────────── */}
       <main id="main-content">
+
+        {/* ── 0. SCROLL CANVAS (decorative mandala) ────────── */}
+        <ScrollCanvas />
 
         {/* ── 1. HERO ──────────────────────────────────────── */}
         <section
@@ -123,46 +134,31 @@ export default async function HomePage() {
         {/* ── 2. VALUE PROPS BAR ───────────────────────────── */}
         <section aria-label="Key facts" className="border-y border-white/[0.06] bg-[#060606] py-10">
           <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-6 text-center">
-            {[
-              { num: '₹0', label: 'Forever free plan' },
-              { num: '5 min', label: 'Setup time' },
-              { num: '50', label: 'India-built templates' },
-            ].map(({ num, label }) => (
-              <div key={label} className="reveal">
-                <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>{num}</p>
-                <p className="text-white/30 text-xs font-mono tracking-wide mt-1">{label}</p>
-              </div>
-            ))}
+            <div className="reveal">
+              <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>₹0</p>
+              <p className="text-white/30 text-xs font-mono tracking-wide mt-1">Forever free plan</p>
+            </div>
+            <div className="reveal">
+              <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>
+                <ScrollCounter from={0} to={5} suffix=" min">5 min</ScrollCounter>
+              </p>
+              <p className="text-white/30 text-xs font-mono tracking-wide mt-1">Setup time</p>
+            </div>
+            <div className="reveal">
+              <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>
+                <ScrollCounter from={0} to={50}>50</ScrollCounter>
+              </p>
+              <p className="text-white/30 text-xs font-mono tracking-wide mt-1">India-built templates</p>
+            </div>
           </div>
         </section>
 
         {/* ── 3. FEATURES ──────────────────────────────────── */}
-        <section aria-labelledby="features-heading" className="bg-[#060606] py-24 px-6">
-          <div className="max-w-5xl mx-auto">
-            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Everything you need</p>
-            <h2
-              id="features-heading"
-              className="text-white mb-16"
-              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
-            >
-              Built for how<br />Indian creators work.
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {FEATURES.map(({ icon, title, desc }, i) => (
-                <div
-                  key={title}
-                  className="reveal border border-white/[0.07] rounded-2xl p-8 hover:border-white/[0.14] transition-colors"
-                  data-delay={String(i * 80)}
-                  style={{ background: 'rgba(255,255,255,0.02)' }}
-                >
-                  <div className="text-2xl mb-6 w-12 h-12 flex items-center justify-center rounded-xl" style={{ background: 'rgba(232,89,60,0.1)', color: '#E8593C' }}>{icon}</div>
-                  <h3 className="text-white mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 22, letterSpacing: '0.05em' }}>{title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        <HorizontalScrollFeatures
+          features={FEATURES}
+          label="Everything you need"
+          heading={<>Built for how<br />Indian creators work.</>}
+        />
 
         {/* ── 4. HOW IT WORKS ──────────────────────────────── */}
         <section aria-labelledby="how-heading" className="bg-[#060606] py-24 px-6 border-t border-white/[0.06]">
@@ -211,6 +207,9 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── 4b. TEMPLATE SWITCHER (scroll-driven showcase) ── */}
+        <TemplateSwitcher templates={TEMPLATES} />
 
         {/* ── 5. TEMPLATES ─────────────────────────────────── */}
         <section id="templates" aria-labelledby="templates-heading" className="bg-[#060606] py-24 px-6">
@@ -288,14 +287,15 @@ export default async function HomePage() {
         <section aria-labelledby="founder-heading" className="bg-[#060606] py-24 px-6">
           <div className="max-w-2xl mx-auto">
             <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase reveal">From the founder</p>
-            <h2
-              id="founder-heading"
-              className="text-white mb-8 reveal"
-              data-delay="80"
+            {/* Visually hidden h2 preserves aria-labelledby for screen readers */}
+            <h2 id="founder-heading" className="sr-only">Built because we were frustrated too.</h2>
+            <div
+              className="text-white mb-8"
               style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 0.95 }}
+              aria-hidden="true"
             >
-              Built because we were<br />frustrated too.
-            </h2>
+              <ScrubText text="Built because we were frustrated too." />
+            </div>
             <p className="text-white/40 text-base leading-relaxed mb-8 reveal" data-delay="160">
               Every Indian creator we knew was losing tips, fans, and collabs because their bio link didn&apos;t speak Indian. No UPI. No Reels shelf. Templates that looked copy-pasted from a Western product. So we built Taar — the link in bio we always wanted. We just launched. Come build with us.
             </p>
@@ -310,7 +310,9 @@ export default async function HomePage() {
         </section>
 
         {/* ── 8. PRICING ───────────────────────────────────── */}
-        <PricingSection />
+        <ScrollReveal fromY={40}>
+          <PricingSection />
+        </ScrollReveal>
 
         {/* ── 9. COMPARISON TABLE ──────────────────────────── */}
         <section aria-labelledby="compare-heading" className="bg-[#060606] py-24 px-6">
