@@ -118,7 +118,7 @@ export function HorizontalScrollFeatures({ features, label, heading }: Props) {
               >
                 {title}
               </h3>
-              <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
+              <p className="text-white/60 text-sm leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
@@ -145,7 +145,7 @@ export function HorizontalScrollFeatures({ features, label, heading }: Props) {
                 >
                   {title}
                 </h3>
-                <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
+                <p className="text-white/60 text-sm leading-relaxed">{desc}</p>
               </div>
             </ScrollReveal>
           ))}

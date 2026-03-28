@@ -115,14 +115,14 @@ export default async function HomePage() {
               >
                 Create your Taar &mdash; it&apos;s free →
               </Link>
-              <Link href="/demo" target="_blank" className="hidden md:inline text-white/40 text-sm hover:text-white/70 transition-colors underline underline-offset-4">
+              <Link href="/demo" target="_blank" className="hidden md:inline text-white/55 text-sm hover:text-white transition-colors underline underline-offset-4">
                 See an example ↗
               </Link>
             </div>
-            <Link href="/demo" target="_blank" className="mt-4 text-white/30 text-sm md:hidden inline-block">
+            <Link href="/demo" target="_blank" className="mt-4 text-white/50 text-sm md:hidden inline-block">
               👉 See what your page looks like →
             </Link>
-            <p className="mt-8 text-white/25 text-xs font-mono reveal" data-delay="480">
+            <p className="mt-8 text-white/45 text-xs font-mono reveal" data-delay="480">
               🚀 Just launched · Free forever · Built for Bharat
             </p>
           </div>
@@ -136,19 +136,19 @@ export default async function HomePage() {
           <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-6 text-center">
             <div className="reveal">
               <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>₹0</p>
-              <p className="text-white/30 text-xs font-mono tracking-wide mt-1">Forever free plan</p>
+              <p className="text-white/50 text-xs font-mono tracking-wide mt-1">Forever free plan</p>
             </div>
             <div className="reveal">
               <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>
                 <ScrollCounter from={0} to={5} suffix=" min">5 min</ScrollCounter>
               </p>
-              <p className="text-white/30 text-xs font-mono tracking-wide mt-1">Setup time</p>
+              <p className="text-white/50 text-xs font-mono tracking-wide mt-1">Setup time</p>
             </div>
             <div className="reveal">
               <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>
                 <ScrollCounter from={0} to={50}>50</ScrollCounter>
               </p>
-              <p className="text-white/30 text-xs font-mono tracking-wide mt-1">India-built templates</p>
+              <p className="text-white/50 text-xs font-mono tracking-wide mt-1">India-built templates</p>
             </div>
           </div>
         </section>
@@ -166,7 +166,7 @@ export default async function HomePage() {
             <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Quick setup</p>
             <h2
               id="how-heading"
-              className="text-white mb-16"
+              className="text-white mb-10"
               style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
             >
               Set up in 5 minutes.
@@ -191,7 +191,7 @@ export default async function HomePage() {
                     <span aria-hidden="true">{icon}</span>
                   </div>
                   <h3 className="text-white font-semibold text-lg mb-2">{title}</h3>
-                  <p className="text-white/40 text-sm leading-relaxed max-w-[180px]">{sub}</p>
+                  <p className="text-white/60 text-sm leading-relaxed max-w-[180px]">{sub}</p>
                 </div>
               ))}
             </div>
@@ -212,10 +212,10 @@ export default async function HomePage() {
         <TemplateSwitcher templates={TEMPLATES} />
 
         {/* ── 5. TEMPLATES ─────────────────────────────────── */}
-        <section id="templates" aria-labelledby="templates-heading" className="bg-[#060606] py-24 px-6">
+        <section id="templates" aria-labelledby="templates-heading" className="bg-[#060606] pt-10 pb-16 px-6">
           <div className="max-w-5xl mx-auto">
             <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">50 templates</p>
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
               <h2
                 id="templates-heading"
                 className="text-white"
@@ -223,7 +223,7 @@ export default async function HomePage() {
               >
                 Your page,<br />your aesthetic.
               </h2>
-              <Link href="/login" className="shrink-0 text-xs text-white/40 hover:text-white transition-colors underline underline-offset-4">
+              <Link href="/login" className="shrink-0 text-xs text-white/60 hover:text-white transition-colors underline underline-offset-4">
                 Browse all 50 templates →
               </Link>
             </div>
@@ -275,7 +275,7 @@ export default async function HomePage() {
                 {['UPI Payments', 'Instagram Reels', '50 Templates', 'Custom Domain', 'Digital Products', 'Analytics', 'Free Forever'].map((item) => (
                   <span key={item} className="inline-flex items-center gap-3">
                     <span className="w-1 h-1 rounded-full bg-[#E8593C] shrink-0" />
-                    <span className="font-mono text-xs tracking-[0.15em] text-white/30 uppercase">{item}</span>
+                    <span className="font-mono text-xs tracking-[0.15em] text-white/45 uppercase">{item}</span>
                   </span>
                 ))}
               </span>
@@ -296,7 +296,7 @@ export default async function HomePage() {
             >
               <ScrubText text="Built because we were frustrated too." />
             </div>
-            <p className="text-white/40 text-base leading-relaxed mb-8 reveal" data-delay="160">
+            <p className="text-white/60 text-base leading-relaxed mb-8 reveal" data-delay="160">
               Every Indian creator we knew was losing tips, fans, and collabs because their bio link didn&apos;t speak Indian. No UPI. No Reels shelf. Templates that looked copy-pasted from a Western product. So we built Taar — the link in bio we always wanted. We just launched. Come build with us.
             </p>
             <Link
@@ -332,7 +332,7 @@ export default async function HomePage() {
                   <tr className="border-b border-white/[0.07]" style={{ background: 'rgba(255,255,255,0.02)' }}>
                     <th className="text-left px-6 py-4 text-white/40 font-mono text-xs tracking-widest uppercase" scope="col">Feature</th>
                     <th className="px-6 py-4 text-[#E8593C] font-mono text-xs tracking-widest uppercase text-center" scope="col">Taar</th>
-                    <th className="px-6 py-4 text-white/25 font-mono text-xs tracking-widest uppercase text-center" scope="col">Linktree</th>
+                    <th className="px-6 py-4 text-white/45 font-mono text-xs tracking-widest uppercase text-center" scope="col">Linktree</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -344,7 +344,7 @@ export default async function HomePage() {
                     >
                       <td className="px-6 py-4 text-white/60">{feature}</td>
                       <td className="px-6 py-4 text-center font-semibold" style={{ color: '#E8593C' }}>{taar}</td>
-                      <td className="px-6 py-4 text-center text-white/30">{linktree}</td>
+                      <td className="px-6 py-4 text-center text-white/45">{linktree}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -372,7 +372,7 @@ export default async function HomePage() {
         <FAQSection />
 
         {/* ── 11. FINAL CTA ────────────────────────────────── */}
-        <section aria-labelledby="cta-heading" className="bg-[#060606] py-32 px-6 relative overflow-hidden">
+        <section aria-labelledby="cta-heading" className="bg-[#060606] py-24 px-6 relative overflow-hidden">
           <div className="pointer-events-none absolute inset-0" aria-hidden="true" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(232,89,60,0.08) 0%, transparent 70%)' }} />
           <div className="max-w-2xl mx-auto text-center relative z-10">
             <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-6 reveal uppercase">Early access — free forever</p>
@@ -384,7 +384,7 @@ export default async function HomePage() {
             >
               Be one of the first.<br /><span className="text-[#E8593C]">taar.bio</span>/yourname.
             </h2>
-            <p className="text-white/40 text-base mb-10 reveal" data-delay="160">Free forever. No credit card. Set up in 5 minutes.</p>
+            <p className="text-white/65 text-base mb-10 reveal" data-delay="160">Free forever. No credit card. Set up in 5 minutes.</p>
             <div className="max-w-sm mx-auto reveal" data-delay="240">
               <UsernameInput />
             </div>
@@ -399,21 +399,21 @@ export default async function HomePage() {
           {/* Left col */}
           <div>
             <p className="text-white/80 text-2xl tracking-[0.15em] mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>TAAR</p>
-            <p className="text-white/25 text-xs font-mono mb-6">Made by creators, for creators.</p>
+            <p className="text-white/45 text-xs font-mono mb-6">Made by creators, for creators.</p>
             {/* Social icons */}
             <div className="flex items-center gap-4 mb-8">
-              <a href="https://twitter.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Twitter / X" className="text-white/25 hover:text-white/60 transition-colors">
+              <a href="https://twitter.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Twitter / X" className="text-white/40 hover:text-white/70 transition-colors">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L2.25 2.25h6.952l4.26 5.635L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
                 </svg>
               </a>
-              <a href="https://instagram.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Instagram" className="text-white/25 hover:text-white/60 transition-colors">
+              <a href="https://instagram.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Instagram" className="text-white/40 hover:text-white/70 transition-colors">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162S8.597 18.163 12 18.163s6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
                 </svg>
               </a>
             </div>
-            <p className="text-white/15 text-xs font-mono">
+            <p className="text-white/35 text-xs font-mono">
               © {new Date().getFullYear()} Taar · Made with ♥ in India
             </p>
           </div>
@@ -421,7 +421,7 @@ export default async function HomePage() {
           {/* Right col — nav */}
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="text-white/40 text-xs font-mono tracking-widest uppercase mb-4">Product</p>
+              <p className="text-white/55 text-xs font-mono tracking-widest uppercase mb-4">Product</p>
               <nav aria-label="Product footer navigation">
                 <ul className="space-y-3">
                   {[
@@ -432,14 +432,14 @@ export default async function HomePage() {
                     { label: 'Blog', href: '/blog' },
                   ].map(({ label, href }) => (
                     <li key={label}>
-                      <Link href={href} className="text-white/30 text-xs hover:text-white/60 transition-colors font-mono">{label}</Link>
+                      <Link href={href} className="text-white/50 text-xs hover:text-white/80 transition-colors font-mono">{label}</Link>
                     </li>
                   ))}
                 </ul>
               </nav>
             </div>
             <div>
-              <p className="text-white/40 text-xs font-mono tracking-widest uppercase mb-4">Company</p>
+              <p className="text-white/55 text-xs font-mono tracking-widest uppercase mb-4">Company</p>
               <nav aria-label="Company footer navigation">
                 <ul className="space-y-3">
                   {[
@@ -448,7 +448,7 @@ export default async function HomePage() {
                     { label: 'Contact', href: 'mailto:hello@taar.bio' },
                   ].map(({ label, href }) => (
                     <li key={label}>
-                      <Link href={href} className="text-white/30 text-xs hover:text-white/60 transition-colors font-mono">{label}</Link>
+                      <Link href={href} className="text-white/50 text-xs hover:text-white/80 transition-colors font-mono">{label}</Link>
                     </li>
                   ))}
                 </ul>
