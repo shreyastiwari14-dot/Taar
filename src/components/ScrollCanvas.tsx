@@ -20,6 +20,8 @@ export function ScrollCanvas() {
   const textRef       = useRef<HTMLDivElement>(null)
   const bgRef         = useRef<HTMLDivElement>(null)
   const decRefs       = useRef<(SVGGElement | null)[]>([])
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const scrollHintRef  = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -27,7 +29,7 @@ export function ScrollCanvas() {
     const isMobile = window.innerWidth < 768
     const isSmall  = window.innerWidth < 480
 
-    // Store all ST instances so we can kill them on cleanup
+    // Store all ST instances / timelines so we can kill them on cleanup
     const triggers: { kill: () => void }[] = []
 
     async function init() {
@@ -38,17 +40,103 @@ export function ScrollCanvas() {
       const section = sectionRef.current
       if (!section) return
 
+      // ── MOBILE PATH: timed animation, no ScrollTrigger ──────
+      if (isMobile) {
+        // Hide scroll hint on mobile
+        if (scrollHintRef.current) {
+          gsap.set(scrollHintRef.current, { opacity: 0 })
+        }
+
+        const mobileTl = gsap.timeline({ duration: 3.5 })
+
+        if (!isSmall && outerRingRef.current) {
+          mobileTl.to(outerRingRef.current, {
+            rotation: 90,
+            transformOrigin: '200px 200px',
+            ease: 'power2.inOut',
+            duration: 3.5,
+          }, 0)
+        }
+
+        if (!isSmall && innerManRef.current) {
+          mobileTl.to(innerManRef.current, {
+            rotation: -45,
+            transformOrigin: '200px 200px',
+            ease: 'power2.inOut',
+            duration: 3.5,
+          }, 0)
+        }
+
+        if (centerRef.current) {
+          mobileTl.fromTo(centerRef.current,
+            { opacity: 0.4 },
+            { opacity: 1, ease: 'power2.inOut', duration: 3.5 },
+            0,
+          )
+        }
+
+        if (threadRef.current) {
+          Array.from(threadRef.current.children).forEach((el, i) => {
+            mobileTl.fromTo(
+              el,
+              { scale: 0.8, transformOrigin: '50% 50%' },
+              { scale: 1.1, transformOrigin: '50% 50%', ease: 'power2.inOut', duration: 2.5 },
+              i * 0.18,
+            )
+          })
+        }
+
+        if (textRef.current) {
+          mobileTl.to(textRef.current, {
+            opacity: 0.8,
+            ease: 'power2.inOut',
+            duration: 2,
+          }, 0.5)
+        }
+
+        triggers.push(mobileTl)
+        return
+      }
+
+      // ── DESKTOP PATH ─────────────────────────────────────────
+
+      // Show scroll hint at start, hide after progress > 0.05
+      if (scrollHintRef.current) {
+        gsap.set(scrollHintRef.current, { opacity: 1 })
+      }
+
       // ── Main pinned timeline ──────────────────────────────
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start:   'top top',
-          end:     '+=300%',
+          end:     '+=200%',
           pin:     true,
           scrub:   1,
           anticipatePin: 1,
           markers: false,
           id: 'scroll-canvas-pin',
+          onUpdate(self) {
+            // Progress bar
+            if (progressBarRef.current) {
+              progressBarRef.current.style.width   = self.progress * 100 + '%'
+              progressBarRef.current.style.opacity = '0.8'
+            }
+            // Scroll hint — fade out past 5% progress
+            if (scrollHintRef.current) {
+              scrollHintRef.current.style.opacity = self.progress > 0.05 ? '0' : '1'
+            }
+          },
+          onLeave() {
+            if (progressBarRef.current) {
+              progressBarRef.current.style.opacity = '0'
+            }
+          },
+          onEnterBack() {
+            if (progressBarRef.current) {
+              progressBarRef.current.style.opacity = '0.8'
+            }
+          },
         },
       })
       if (tl.scrollTrigger) triggers.push(tl.scrollTrigger)
@@ -56,7 +144,7 @@ export function ScrollCanvas() {
       // Outer ring rotation (disabled on < 480px to prevent motion sickness)
       if (!isSmall && outerRingRef.current) {
         tl.to(outerRingRef.current, {
-          rotation: isMobile ? 180 : 360,
+          rotation: 360,
           transformOrigin: '200px 200px',
           ease: 'none',
         }, 0)
@@ -65,7 +153,7 @@ export function ScrollCanvas() {
       // Inner mandala counter-rotation
       if (!isSmall && innerManRef.current) {
         tl.to(innerManRef.current, {
-          rotation: isMobile ? -90 : -180,
+          rotation: -180,
           transformOrigin: '200px 200px',
           ease: 'none',
         }, 0)
@@ -88,13 +176,17 @@ export function ScrollCanvas() {
         })
       }
 
-      // Parallax text — moves upward at 0.3x scroll speed (like Oda Nobunaga text)
+      // Parallax text — moves upward at 0.3x scroll speed
       if (textRef.current) {
         tl.fromTo(textRef.current,
           { y: '60vh' },
           { y: '-40vh', ease: 'none' },
           0,
         )
+        // Ramp opacity 0→1 by 40% of scroll
+        tl.to(textRef.current, { opacity: 1.0, ease: 'none', duration: 0.4 }, 0)
+        // Fade out in phase 4 (60%→100%)
+        tl.to(textRef.current, { opacity: 0, ease: 'none', duration: 0.4 }, 0.6)
       }
 
       // Background color shift: #060606 → #1a0800 → #060606
@@ -110,7 +202,7 @@ export function ScrollCanvas() {
         const st = ScrollTrigger.create({
           trigger: section,
           start:   'top top',
-          end:     '+=300%',
+          end:     '+=200%',
           scrub:   1,
           markers: false,
           id:      `scroll-canvas-dec-${i}`,
@@ -128,7 +220,7 @@ export function ScrollCanvas() {
 
     init()
 
-    // Cleanup: kill all ScrollTrigger instances we created
+    // Cleanup: kill all ScrollTrigger instances / timelines we created
     return () => {
       triggers.forEach(t => t.kill())
     }
@@ -147,6 +239,24 @@ export function ScrollCanvas() {
       }}
       aria-hidden="true"
     >
+      {/* Progress bar — fixed coral bar at top of viewport */}
+      <div
+        ref={progressBarRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: 2,
+          width: '0%',
+          background: '#E8593C',
+          zIndex: 10001,
+          opacity: 0,
+          pointerEvents: 'none',
+          willChange: 'width',
+          transition: 'opacity 0.3s ease',
+        }}
+      />
+
       {/* Animated background layer */}
       <div
         ref={bgRef}
@@ -166,12 +276,13 @@ export function ScrollCanvas() {
           pointerEvents: 'none',
           userSelect: 'none',
           overflow: 'hidden',
+          opacity: 0,
         }}
       >
         <p style={{
           fontFamily: 'Bebas Neue, sans-serif',
           fontSize: 'clamp(12vw, 15vw, 180px)',
-          color: 'rgba(255,255,255,0.04)',
+          color: 'rgba(255,255,255,0.9)',
           textAlign: 'center',
           lineHeight: 0.88,
           letterSpacing: '0.02em',
@@ -342,6 +453,37 @@ export function ScrollCanvas() {
               <circle cx="0" cy="0" r="2.5" fill="#E8593C" opacity="0.6" />
             </g>
           ))}
+        </svg>
+      </div>
+
+      {/* Scroll hint — bottom center */}
+      <div
+        ref={scrollHintRef}
+        style={{
+          position: 'absolute',
+          bottom: 32,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 6,
+          transition: 'opacity 0.3s ease',
+        }}
+      >
+        <span style={{ fontFamily: 'monospace', fontSize: 10, color: '#E8593C', letterSpacing: '0.2em' }}>
+          SCROLL
+        </span>
+        <svg
+          className="scroll-hint-chevron"
+          width="16"
+          height="10"
+          viewBox="0 0 16 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M1 1L8 8L15 1" stroke="#E8593C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
     </div>

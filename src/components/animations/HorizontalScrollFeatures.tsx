@@ -1,9 +1,9 @@
 'use client'
-import { useEffect, useRef, ReactNode } from 'react'
+import React, { useEffect, useRef, ReactNode } from 'react'
 import { ScrollReveal } from './ScrollReveal'
 
 interface Feature {
-  icon: string
+  icon: React.ReactNode
   title: string
   desc: string
 }
@@ -107,7 +107,7 @@ export function HorizontalScrollFeatures({ features, label, heading }: Props) {
               data-active="false"
             >
               <div
-                className="text-2xl mb-6 w-12 h-12 flex items-center justify-center rounded-xl"
+                className="feature-icon-wrap mb-4 w-12 h-12 flex items-center justify-center rounded-xl"
                 style={{ background: 'rgba(232,89,60,0.1)', color: '#E8593C' }}
               >
                 {icon}
@@ -134,7 +134,7 @@ export function HorizontalScrollFeatures({ features, label, heading }: Props) {
                 style={{ background: 'rgba(255,255,255,0.02)' }}
               >
                 <div
-                  className="text-2xl mb-6 w-12 h-12 flex items-center justify-center rounded-xl"
+                  className="feature-icon-wrap mb-4 w-12 h-12 flex items-center justify-center rounded-xl"
                   style={{ background: 'rgba(232,89,60,0.1)', color: '#E8593C' }}
                 >
                   {icon}
