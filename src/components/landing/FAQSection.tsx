@@ -70,7 +70,6 @@ export function FAQSection() {
                   <span style={{ color: '#F5F5F7', fontSize: 17, fontWeight: 500, lineHeight: 1.4 }}>{q}</span>
                   <span
                     style={{
-                      color: '#6E6E73',
                       fontSize: 22,
                       fontWeight: 300,
                       lineHeight: 1,
