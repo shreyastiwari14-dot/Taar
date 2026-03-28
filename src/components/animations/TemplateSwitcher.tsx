@@ -60,7 +60,7 @@ export function TemplateSwitcher({ templates }: Props) {
     <section
       ref={sectionRef}
       aria-label="Template showcase"
-      className="bg-[#060606] relative overflow-hidden"
+      className="bg-[#0A0805] relative overflow-hidden"
       style={{ height: '100vh' }}
     >
       {/* Section label */}
@@ -68,9 +68,11 @@ export function TemplateSwitcher({ templates }: Props) {
         className="absolute top-20 left-1/2 z-10 text-center w-full px-6 pointer-events-none"
         style={{ transform: 'translateX(-50%)' }}
       >
-        <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] uppercase">
-          Scroll through templates
-        </p>
+        <div className="flex items-center justify-center gap-3">
+          <div className="w-6 h-px bg-[#BFA07A]" />
+          <p className="font-mono text-[10px] tracking-[0.25em] text-[#BFA07A] uppercase">Scroll through templates</p>
+          <div className="w-6 h-px bg-[#BFA07A]" />
+        </div>
       </div>
 
       {/* Ghosted template name */}
@@ -179,7 +181,7 @@ export function TemplateSwitcher({ templates }: Props) {
                 width:       i === activeIdx ? 22 : 5,
                 height:      5,
                 borderRadius: 3,
-                background:  i === activeIdx ? '#E8593C' : 'rgba(255,255,255,0.15)',
+                background:  i === activeIdx ? '#BFA07A' : 'rgba(191,160,122,0.15)',
                 transition:  'width 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s ease',
               }}
             />
