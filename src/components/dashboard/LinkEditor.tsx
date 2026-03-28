@@ -7,6 +7,7 @@ import { Link, Page, User, LinkType, Template } from '@/lib/types'
 import { getLinkIcon, cn } from '@/lib/utils'
 import { TEMPLATES, TEMPLATE_CATEGORIES } from '@/lib/templates'
 import { BioPagePreview } from './BioPagePreview'
+import { PageQRModal } from './PageQRModal'
 import toast from 'react-hot-toast'
 
 const LINK_TYPES: { value: LinkType; label: string; placeholder: string }[] = [
@@ -31,6 +32,7 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
   const [links, setLinks] = useState<Link[]>(initialLinks)
   const [pageData, setPageData] = useState<Page | null>(page)
   const [saving, setSaving] = useState(false)
+  const [showMobilePreview, setShowMobilePreview] = useState(false)
   const [showAddForm, setShowAddForm] = useState(false)
   const [newLink, setNewLink] = useState({ type: 'url' as LinkType, label: '', url: '' })
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -41,6 +43,8 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
     username: user?.username || '',
   })
   const [activeTemplate, setActiveTemplate] = useState<Template>(page?.template_id || 'streetwear')
+  const [emailCapture, setEmailCapture] = useState<boolean>(page?.email_capture_enabled ?? false)
+  const [showQR, setShowQR] = useState(false)
 
   const canAddLink = !user?.is_pro ? links.length < FREE_LINK_LIMIT : true
 
@@ -139,6 +143,14 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
     setSaving(false)
   }
 
+  async function toggleEmailCapture() {
+    if (!pageData) return
+    const newVal = !emailCapture
+    setEmailCapture(newVal)
+    await supabase.from('pages').update({ email_capture_enabled: newVal }).eq('id', pageData.id)
+    toast.success(newVal ? 'Email capture enabled.' : 'Email capture disabled.')
+  }
+
   async function setTemplate(templateId: string) {
     if (!pageData) return
     setActiveTemplate(templateId as Template)
@@ -167,24 +179,44 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
       <div className="flex-1 overflow-y-auto bg-[#0A0A0A] px-4 md:px-8 py-6">
         <div className="max-w-xl mx-auto space-y-6">
 
-          {/* Mobile Live Preview — visible only on mobile */}
-          <div className="block lg:hidden bg-[#0D0D0D] border border-[#222] rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-[#222]">
-              <span className="text-gray-500 text-xs">Live preview</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-[#E8593C] animate-pulse" />
-            </div>
-            <div className="overflow-y-auto flex justify-center py-4 px-4" style={{ maxHeight: 240 }}>
-              <div className="w-full max-w-xs">
-                <BioPagePreview
-                  page={pageData ? { ...pageData, template_id: activeTemplate as any } : null}
-                  links={links}
-                  username={profileData.username}
-                  title={profileData.title}
-                  bio={profileData.bio}
-                />
+          {/* Mobile Live Preview — toggled via floating button */}
+          {showMobilePreview && (
+            <div
+              className="fixed inset-0 z-40 flex flex-col lg:hidden"
+              style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(4px)' }}
+              onClick={() => setShowMobilePreview(false)}
+            >
+              <div
+                className="mt-auto bg-[#0D0D0D] border-t border-[#333] rounded-t-2xl overflow-hidden"
+                style={{ maxHeight: '85dvh' }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between px-4 py-3 border-b border-[#222]">
+                  <span className="text-gray-400 text-xs font-medium">Live preview</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#E8593C] animate-pulse" />
+                    <button
+                      onClick={() => setShowMobilePreview(false)}
+                      className="text-gray-500 hover:text-white text-xs"
+                    >
+                      Close ✕
+                    </button>
+                  </div>
+                </div>
+                <div className="overflow-y-auto flex justify-center py-6 px-4">
+                  <div className="w-full max-w-xs">
+                    <BioPagePreview
+                      page={pageData ? { ...pageData, template_id: activeTemplate as any } : null}
+                      links={links}
+                      username={profileData.username}
+                      title={profileData.title}
+                      bio={profileData.bio}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           {/* Profile Section */}
           <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
             <div className="flex items-center justify-between mb-4">
@@ -376,7 +408,7 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
 
           {/* Publish */}
           <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
               <div>
                 <h2 className="font-semibold text-white">Publish</h2>
                 <p className="text-gray-500 text-sm">
@@ -385,23 +417,77 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
                     : 'Your page is not live yet'}
                 </p>
               </div>
-              <button
-                onClick={publishPage}
-                className={cn(
-                  'px-5 py-2 rounded-full text-sm font-semibold transition-colors',
-                  pageData?.is_published
-                    ? 'bg-[#222] text-gray-400 hover:bg-[#333]'
-                    : 'bg-[#E8593C] text-white hover:bg-[#d44e33]'
+              <div className="flex items-center gap-2">
+                {pageData?.is_published && profileData.username && (
+                  <button
+                    onClick={() => setShowQR(true)}
+                    className="w-9 h-9 flex items-center justify-center border border-[#333] text-gray-400 hover:text-white hover:border-[#555] rounded-xl transition-colors"
+                    title="Get QR code"
+                    aria-label="Show QR code"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <rect x="1" y="1" width="5" height="5" rx="0.5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                      <rect x="10" y="1" width="5" height="5" rx="0.5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                      <rect x="1" y="10" width="5" height="5" rx="0.5" stroke="currentColor" strokeWidth="1.2" fill="none"/>
+                      <rect x="3" y="3" width="1.5" height="1.5" fill="currentColor"/>
+                      <rect x="12" y="3" width="1.5" height="1.5" fill="currentColor"/>
+                      <rect x="3" y="12" width="1.5" height="1.5" fill="currentColor"/>
+                      <path d="M10 10h1.5v1.5H10zM12.5 10H14v1.5h-1.5zM10 12.5h1.5V14H10zM12.5 12.5H14V14h-1.5z" fill="currentColor"/>
+                    </svg>
+                  </button>
                 )}
+                <button
+                  onClick={publishPage}
+                  className={cn(
+                    'px-5 py-2 rounded-full text-sm font-semibold transition-colors',
+                    pageData?.is_published
+                      ? 'bg-[#222] text-gray-400 hover:bg-[#333]'
+                      : 'bg-[#E8593C] text-white hover:bg-[#d44e33]'
+                  )}
+                >
+                  {pageData?.is_published ? 'Unpublish' : 'Publish →'}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {showQR && profileData.username && (
+            <PageQRModal username={profileData.username} onClose={() => setShowQR(false)} />
+          )}
+
+          {/* Settings */}
+          <div className="bg-[#141414] border border-[#222] rounded-2xl p-5">
+            <h2 className="font-semibold text-white mb-4">Settings</h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-white text-sm font-medium">Email capture</p>
+                <p className="text-gray-500 text-xs mt-0.5">
+                  Show a subscribe form on your page.{' '}
+                  {emailCapture && (
+                    <a href="/dashboard/subscribers" className="text-[#E8593C] hover:underline">View subscribers →</a>
+                  )}
+                </p>
+              </div>
+              <button
+                onClick={toggleEmailCapture}
+                className={cn(
+                  'w-11 h-6 rounded-full transition-colors relative shrink-0',
+                  emailCapture ? 'bg-[#E8593C]' : 'bg-[#333]'
+                )}
+                role="switch"
+                aria-checked={emailCapture}
               >
-                {pageData?.is_published ? 'Unpublish' : 'Publish →'}
+                <span className={cn(
+                  'absolute top-1 w-4 h-4 rounded-full bg-white transition-transform',
+                  emailCapture ? 'translate-x-6' : 'translate-x-1'
+                )} />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Live Preview Panel */}
+      {/* Live Preview Panel — desktop only */}
       <div className="hidden lg:flex w-80 xl:w-96 bg-[#0D0D0D] border-l border-[#222] flex-col">
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#222]">
           <span className="text-gray-500 text-sm">Live preview</span>
@@ -419,6 +505,22 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Mobile floating preview toggle */}
+      <button
+        onClick={() => setShowMobilePreview((v) => !v)}
+        className="lg:hidden fixed bottom-20 right-5 z-30 flex items-center gap-2 text-white text-xs font-semibold px-4 py-3 rounded-full shadow-lg transition-colors"
+        style={{ background: '#E8593C', boxShadow: '0 4px 24px rgba(232,89,60,0.4)' }}
+        aria-label={showMobilePreview ? 'Close preview' : 'Preview your page'}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          {showMobilePreview
+            ? <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>
+            : <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></>
+          }
+        </svg>
+        {showMobilePreview ? 'Close' : 'Preview'}
+      </button>
     </div>
   )
 }

@@ -34,7 +34,7 @@ export function UpgradeClient({ email, userId }: Props) {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         subscription_id,
         name: 'Taar',
-        description: 'Taar Pro — ₹399/month',
+        description: `Taar Pro — ₹399/month`,
         prefill: { email },
         theme: { color: '#E8593C' },
         handler: async (_response: unknown) => {

@@ -1,7 +1,10 @@
 'use client'
 
+import Script from 'next/script'
+import { useState } from 'react'
 import { Link, Page, Product } from '@/lib/types'
 import { getLinkUrl, getDeviceType } from '@/lib/utils'
+import { UpiModal } from './UpiModal'
 
 export interface TemplateProps {
   page: Page
@@ -23,28 +26,50 @@ export function TrackableLink({
   style?: React.CSSProperties
   children: React.ReactNode
 }) {
-  async function handleClick() {
-    await fetch('/api/track-click', {
+  const [showUpi, setShowUpi] = useState(false)
+
+  function handleClick(e: React.MouseEvent) {
+    // Fire analytics (fire-and-forget)
+    fetch('/api/track-click', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         link_id: link.id,
         device_type: getDeviceType(),
+        referrer: document.referrer || null,
       }),
-    })
+    }).catch(() => {})
+
+    // UPI links: intercept and show QR modal
+    if (link.type === 'upi') {
+      e.preventDefault()
+      setShowUpi(true)
+    }
   }
 
+  const upiUrl = getLinkUrl(link.type, link.url)
+
   return (
-    <a
-      href={getLinkUrl(link.type, link.url)}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={handleClick}
-      className={className}
-      style={style}
-    >
-      {children}
-    </a>
+    <>
+      <a
+        href={upiUrl}
+        target={link.type === 'upi' ? undefined : '_blank'}
+        rel="noopener noreferrer"
+        onClick={handleClick}
+        className={className}
+        style={style}
+      >
+        {children}
+      </a>
+      {showUpi && (
+        <UpiModal
+          upiUrl={upiUrl}
+          upiId={link.url}
+          name={link.label}
+          onClose={() => setShowUpi(false)}
+        />
+      )}
+    </>
   )
 }
 
@@ -121,21 +146,20 @@ function BuyButton({ product, theme }: { product: Product; theme: string }) {
         rzp.open()
       }
     } catch {
-      // Silent — user will see no response change; could toast here if toast is imported
+      // Silent
     }
   }
 
   return (
-    <button
-      onClick={handleBuy}
-      className={`text-xs px-3 py-1.5 rounded-full font-semibold transition-colors ${
-        theme === 'dark'
-          ? 'bg-[#E8593C] text-white hover:bg-[#d44e33]'
-          : 'bg-[#E8593C] text-white hover:bg-[#d44e33]'
-      }`}
-    >
-      Buy →
-    </button>
+    <>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      <button
+        onClick={handleBuy}
+        className="text-xs px-3 py-1.5 rounded-full font-semibold transition-colors bg-[#E8593C] text-white hover:bg-[#d44e33]"
+      >
+        Buy →
+      </button>
+    </>
   )
 }
 

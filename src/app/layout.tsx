@@ -3,16 +3,22 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
-  title: "Taar — Free Link in Bio for Indian Creators | UPI, Reels, Sell Digital Products",
-  description: "Taar is a free Linktree alternative built for Indian creators. Add UPI payment links, auto Instagram Reels, sell digital products, and pick from 50 templates. Pro plan at ₹399/month.",
-  keywords: "link in bio India, linktree alternative India, UPI link in bio, Indian creator tools, bio link Indian creators, linktree India free, taar bio",
+  title: "Taar — Free Link in Bio for Indian Creators | UPI, Reels, 50 Templates",
+  description: "Free UPI link in bio built for Indian creators. 50 templates, Instagram Reels auto-sync, digital products. Pro plan at ₹399/month. No credit card.",
+  keywords: "link in bio India, linktree alternative India, UPI link in bio, Indian creators, bio link Indian creators, linktree India free, taar bio",
   authors: [{ name: "Taar" }],
   creator: "Taar",
   metadataBase: new URL("https://taar.bio"),
-  alternates: { canonical: "https://taar.bio" },
+  alternates: {
+    canonical: "https://taar.bio",
+    languages: {
+      'en-IN': 'https://taar.bio',
+      'hi': 'https://taar.bio',
+    },
+  },
   openGraph: {
     title: "Taar — Free Link in Bio for Indian Creators",
-    description: "UPI links, Auto Reels, 50 templates, sell digital products. Built for Bharat. Free forever.",
+    description: "UPI links, Auto Reels, 50 templates, sell digital products. Built for Bharat. Free forever. Pro at ₹399/month.",
     url: "https://taar.bio",
     siteName: "Taar",
     locale: "en_IN",
@@ -42,7 +48,7 @@ const jsonLd = {
       "@type": "SoftwareApplication",
       "name": "Taar",
       "applicationCategory": "BusinessApplication",
-      "description": "Free link in bio tool for Indian creators. Supports UPI payment links, auto Instagram Reels, digital product sales, and 50 templates. Built for Bharat.",
+      "description": "Free UPI link in bio for Indian creators. 50 templates, auto Instagram Reels, digital product sales.",
       "url": "https://taar.bio",
       "offers": [
         {
@@ -100,7 +106,7 @@ const jsonLd = {
         {
           "@type": "Question",
           "name": "How is Taar different from Linktree?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Taar is built specifically for India. It supports UPI payment links (GPay, PhonePe, Paytm) which Linktree does not. Taar uses Razorpay for Indian payments, has Indian-specific templates, costs ₹399/month vs Linktree's ~₹750/month, and has auto Instagram Reels shelf." }
+          "acceptedAnswer": { "@type": "Answer", "text": "Taar is built specifically for India. It supports UPI payment links (GPay, PhonePe, Paytm) which Linktree does not. Taar has Indian-specific templates and costs ₹399/month vs Linktree's ~₹800+/month." }
         },
         {
           "@type": "Question",
@@ -125,6 +131,19 @@ export default function RootLayout({
   return (
     <html lang="en-IN" className="bg-[#0A0A0A]" suppressHydrationWarning>
       <head>
+        {/* Performance: DNS prefetch + preconnect for third-party origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+        <link rel="dns-prefetch" href="https://api.razorpay.com" />
+
+        {/* Preload display font used in hero heading */}
+        <link
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+        />
+
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script

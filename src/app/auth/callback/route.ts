@@ -35,7 +35,10 @@ export async function GET(request: Request) {
         })
       }
 
-      return NextResponse.redirect(`${origin}/dashboard`)
+      // Respect post-login redirect if present (e.g. ?redirect=/dashboard/analytics)
+      const redirectTo = requestUrl.searchParams.get('redirect')
+      const destination = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/dashboard'
+      return NextResponse.redirect(`${origin}${destination}`)
     } catch {
       return NextResponse.redirect(`${origin}/login?error=auth_failed`)
     }

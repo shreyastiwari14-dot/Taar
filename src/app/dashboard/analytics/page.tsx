@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ProGate } from '@/components/dashboard/ProGate'
 import { AnalyticsDashboard } from '@/components/dashboard/AnalyticsDashboard'
 
 export default async function AnalyticsPage() {
@@ -10,13 +9,12 @@ export default async function AnalyticsPage() {
 
   const { data: userData } = await supabase
     .from('users')
-    .select('*')
+    .select('is_pro')
     .eq('id', user.id)
     .single()
 
-  if (!userData?.is_pro) {
-    return <ProGate feature="Analytics" />
-  }
+  const isPro = userData?.is_pro ?? false
+  const days = isPro ? 30 : 7
 
   const { data: page } = await supabase
     .from('pages')
@@ -31,14 +29,30 @@ export default async function AnalyticsPage() {
     .select('id, label, type')
     .eq('page_id', page.id)
 
-  // Get clicks for last 7 days
-  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-  const { data: clicks } = await supabase
-    .from('link_clicks')
-    .select('id, link_id, clicked_at, device_type')
-    .in('link_id', (links || []).map((l) => l.id))
-    .gte('clicked_at', sevenDaysAgo)
-    .order('clicked_at', { ascending: false })
+  const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
 
-  return <AnalyticsDashboard links={links || []} clicks={clicks || []} />
+  const [{ data: clicks }, { data: views }] = await Promise.all([
+    supabase
+      .from('link_clicks')
+      .select('id, link_id, clicked_at, device_type, referrer_source')
+      .in('link_id', (links || []).map((l) => l.id))
+      .gte('clicked_at', since)
+      .order('clicked_at', { ascending: false }),
+    supabase
+      .from('page_views')
+      .select('id, viewed_at, referrer_source, device_type, country, city')
+      .eq('page_id', page.id)
+      .gte('viewed_at', since)
+      .order('viewed_at', { ascending: false }),
+  ])
+
+  return (
+    <AnalyticsDashboard
+      links={links || []}
+      clicks={clicks || []}
+      views={views || []}
+      isPro={isPro}
+      days={days}
+    />
+  )
 }

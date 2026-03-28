@@ -1,16 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState, startTransition } from 'react'
-import dynamic from 'next/dynamic'
-
-const PhoneMockup = dynamic(() => import('@/components/PhoneMockup'), { ssr: false })
-
-type PhoneState = 'default' | 'upi' | 'reels' | 'analytics' | 'products'
+import { useEffect, useRef } from 'react'
 
 export function LandingAnimations() {
-  const [phoneState, setPhoneState] = useState<PhoneState>('default')
   const threadRef = useRef<HTMLDivElement>(null)
-  const lenisRef = useRef<any>(null)
   const gsapRef = useRef<any>(null)
   const STRef = useRef<any>(null)
   const tickerFnRef = useRef<((t: number) => void) | null>(null)
@@ -19,10 +12,9 @@ export function LandingAnimations() {
     let cancelled = false
 
     const init = async () => {
-      const [gsapMod, stMod, LenisMod] = await Promise.all([
+      const [gsapMod, stMod] = await Promise.all([
         import('gsap'),
         import('gsap/ScrollTrigger'),
-        import('@studio-freight/lenis'),
       ])
       if (cancelled) return
 
@@ -30,24 +22,8 @@ export function LandingAnimations() {
       gsapRef.current = gsap
       const { ScrollTrigger } = stMod
       STRef.current = ScrollTrigger
-      const Lenis = LenisMod.default
 
       gsap.registerPlugin(ScrollTrigger)
-
-      // ── Lenis ─────────────────────────────────────────────────
-      const lenis = new Lenis({
-        duration: 1.5,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-        touchMultiplier: 1.2,
-      })
-      lenisRef.current = lenis
-
-      const tickerFn = (time: number) => lenis.raf(time * 1000)
-      tickerFnRef.current = tickerFn
-      gsap.ticker.add(tickerFn)
-      gsap.ticker.lagSmoothing(0)
-      lenis.on('scroll', () => ScrollTrigger.update())
 
       // ── GPU promote all animated elements ────────────────────
       // This prevents jitter by keeping transforms on compositor thread
@@ -124,25 +100,6 @@ export function LandingAnimations() {
           { opacity: 0, y: 60, rotationX: 10 },
           { opacity: 1, y: 0, rotationX: 0, duration: 1.2, ease: 'expo.out', delay: 0.1 + i * 0.18, force3D: true }
         )
-      })
-
-      // ── Phone state — use startTransition to avoid scroll jitter ──
-      const phoneSections: { id: string; state: PhoneState }[] = [
-        { id: 'feature-upi', state: 'upi' },
-        { id: 'feature-reels', state: 'reels' },
-        { id: 'feature-analytics', state: 'analytics' },
-        { id: 'feature-products', state: 'products' },
-      ]
-      phoneSections.forEach(({ id, state }) => {
-        const el = document.getElementById(id)
-        if (!el) return
-        ScrollTrigger.create({
-          trigger: el, start: 'top 55%', end: 'bottom 45%',
-          onEnter: () => startTransition(() => setPhoneState(state)),
-          onEnterBack: () => startTransition(() => setPhoneState(state)),
-          onLeave: () => startTransition(() => setPhoneState('default')),
-          onLeaveBack: () => startTransition(() => setPhoneState('default')),
-        })
       })
 
       // ── Helper: reactive entry animation ─────────────────────
@@ -256,34 +213,43 @@ export function LandingAnimations() {
     return () => {
       cancelled = true
       if (tickerFnRef.current && gsapRef.current) gsapRef.current.ticker.remove(tickerFnRef.current)
-      if (lenisRef.current) { lenisRef.current.destroy(); lenisRef.current = null }
       if (STRef.current) STRef.current.getAll().forEach((st: any) => st.kill())
     }
   }, [])
 
-  return (
-    <>
-      {/* Scroll progress thread */}
-      <div
-        ref={threadRef}
-        className="hidden md:block"
-        style={{
-          position: 'fixed', left: 14, top: 0, width: 1, height: '100vh',
-          background: 'linear-gradient(to bottom, transparent 0%, #E8593C 10%, #E8593C 90%, transparent 100%)',
-          transformOrigin: 'top center', zIndex: 100, pointerEvents: 'none', willChange: 'transform',
-        }}
-      />
+  // ── IntersectionObserver for .reveal elements + nav scroll ──────────────
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target) }
+      }),
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    )
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el))
 
-      {/* Fixed phone — xl+ only */}
-      <div
-        className="hidden xl:flex"
-        style={{
-          position: 'fixed', right: 48, top: '50%', transform: 'translateY(-50%)',
-          zIndex: 40, pointerEvents: 'none', flexDirection: 'column', alignItems: 'center',
-        }}
-      >
-        <PhoneMockup state={phoneState} />
-      </div>
-    </>
+    const onScroll = () => {
+      const nav = document.querySelector('nav')
+      if (nav) nav.classList.toggle('scrolled', window.scrollY > 60)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+
+    return () => {
+      io.disconnect()
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [])
+
+  return (
+    /* Scroll progress thread */
+    <div
+      ref={threadRef}
+      className="hidden md:block"
+      style={{
+        position: 'fixed', left: 14, top: 0, width: 1, height: '100vh',
+        background: 'linear-gradient(to bottom, transparent 0%, #E8593C 10%, #E8593C 90%, transparent 100%)',
+        transformOrigin: 'top center', zIndex: 100, pointerEvents: 'none', willChange: 'transform',
+      }}
+    />
   )
 }

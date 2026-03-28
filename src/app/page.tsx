@@ -1,905 +1,496 @@
 import Link from 'next/link'
 import { CursorGlow } from '@/components/landing/CursorGlow'
-import { LandingAnimations } from '@/components/landing/LandingAnimations'
-import { PageTurnEffect } from '@/components/landing/PageTurnEffect'
+import { LandingNav } from '@/components/landing/LandingNav'
+import { PageEffects } from '@/components/landing/PageEffects'
+import { UsernameInput } from '@/components/landing/UsernameInput'
+import { PricingProCard } from '@/components/landing/PricingProCard'
 import { createClient } from '@/lib/supabase/server'
+import { PRO_PRICE_INR } from '@/lib/constants'
 
-const _jsonLd = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@type': 'Organization',
-      '@id': 'https://taar.bio/#organization',
-      name: 'Taar',
-      url: 'https://taar.bio',
-      description: 'Free link in bio tool for Indian creators with UPI payment links, Instagram Reels shelf, digital products, and 50 premium templates.',
-      foundingDate: '2024',
-      foundingLocation: { '@type': 'Country', name: 'India' },
-      areaServed: 'IN',
-    },
-    {
-      '@type': 'WebSite',
-      '@id': 'https://taar.bio/#website',
-      url: 'https://taar.bio',
-      name: 'Taar',
-      description: 'Free link in bio for Indian creators',
-      publisher: { '@id': 'https://taar.bio/#organization' },
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: { '@type': 'EntryPoint', urlTemplate: 'https://taar.bio/{username}' },
-        'query-input': 'required name=username',
-      },
-    },
-    {
-      '@type': 'SoftwareApplication',
-      name: 'Taar',
-      applicationCategory: 'WebApplication',
-      operatingSystem: 'Web',
-      description: 'Taar is a free link in bio tool built for Indian creators. It supports UPI payment links, auto Instagram Reels, digital product sales via Razorpay, click analytics, and 50 premium templates.',
-      offers: [
-        {
-          '@type': 'Offer',
-          name: 'Free',
-          price: '0',
-          priceCurrency: 'INR',
-          description: '1 bio page, 8 links, all 50 templates, UPI links, custom username',
-        },
-        {
-          '@type': 'Offer',
-          name: 'Pro',
-          price: '399',
-          priceCurrency: 'INR',
-          billingIncrement: 'P1M',
-          description: 'Click analytics, Instagram Reels shelf, sell digital products, remove watermark',
-        },
-      ],
-      featureList: [
-        'UPI payment links',
-        'Auto Instagram Reels shelf',
-        'Click analytics',
-        'Sell digital products',
-        '50 premium templates',
-        'Custom username',
-        'Razorpay integration',
-        'Built for Indian creators',
-      ],
-      url: 'https://taar.bio',
-      publisher: { '@id': 'https://taar.bio/#organization' },
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'What is Taar?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Taar is a free link in bio tool built specifically for Indian creators. It lets you put all your important links — UPI payment, Instagram, YouTube, WhatsApp, digital products — on one custom page. You share that one link in your Instagram bio.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Is Taar free?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Taar has a free plan that is free forever — no credit card, no trial period. The free plan includes 1 bio page, 8 links, all 50 templates, UPI payment links, WhatsApp links, and a custom username. The Pro plan is ₹399/month and adds click analytics, Instagram Reels auto-sync, and digital product sales.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How is Taar different from Linktree?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Taar is built specifically for India where Linktree is not. Key differences: Taar supports UPI payment links (GPay, PhonePe, Paytm) which Linktree does not. Taar uses Razorpay for Indian payments. Taar has Indian-specific templates (Bollywood, Desi, Marigold). Taar Pro costs ₹399/month vs Linktree\'s $9/month (~₹750). Taar has an auto Instagram Reels shelf. Taar is built and supported by an Indian company.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Does Taar support UPI payments?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes. Taar supports UPI payment links as a first-class feature — free on all plans. You add your UPI ID and fans can pay you directly via GPay, PhonePe, Paytm, or any UPI app. No payment gateway fee, no middleman. The money goes directly to your bank account.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'Can I sell digital products on Taar?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes, on the Pro plan. You can upload up to 5 digital products (PDFs, presets, music, courses) and set a price. Razorpay handles payment collection and the buyer automatically receives the download link by email. You earn while you sleep.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'What is the best Linktree alternative for India?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Taar is the best Linktree alternative for India because it is built specifically for Indian creators. It has UPI payment link support, Indian-specific templates, Razorpay integration for digital product sales, and pricing in INR (₹399/month for Pro vs Linktree\'s ~₹750/month). The free plan is genuinely free forever.',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'How do I create a Taar page?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Sign up at taar-five.vercel.app with your email. You will receive a magic link — no password needed. Pick a username, choose one of 50 templates, add your links and UPI ID. Your page is live in under 5 minutes. Share your taar link in your Instagram bio.',
-          },
-        },
-      ],
-    },
-  ],
-}
+const TEMPLATES = [
+  { name: 'Bollywood Editorial', bg: '#0A0005', accent: '#F5C842', textColor: '#F5C842', nameFontFamily: "'Cinzel', serif", tag: 'Cinematic' },
+  { name: 'Desi Marigold', bg: 'linear-gradient(160deg,#FF6500,#c8500a)', accent: '#FFD700', textColor: '#fff', nameFontFamily: "'Raleway', sans-serif", tag: 'Vibrant' },
+  { name: 'Mumbai Noir', bg: '#08080F', accent: '#9B59B6', textColor: '#E0D0F8', nameFontFamily: "'Josefin Sans', sans-serif", tag: 'Dark' },
+  { name: 'Rajasthani Royal', bg: '#1A0800', accent: '#D4AF37', textColor: '#D4AF37', nameFontFamily: "'Cinzel', serif", tag: 'Regal' },
+  { name: 'Cyberpunk', bg: '#000', accent: '#00FF41', textColor: '#00FF41', nameFontFamily: 'monospace', tag: 'Futuristic' },
+  { name: 'Rose Gold', bg: 'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', accent: '#fff', textColor: '#fff', nameFontFamily: "'Cormorant Garamond', serif", tag: 'Elegant' },
+]
 
-export default async function LandingPage() {
-  const supabase = createClient()
+const FEATURES = [
+  { icon: '₹', title: 'UPI Payment Links', desc: 'Accept tips, donations, and service payments directly on your page. No payment gateway setup needed.' },
+  { icon: '🎬', title: 'Instagram Reels Shelf', desc: 'Your latest Reels auto-sync to your Taar page. Visitors see your content without leaving.' },
+  { icon: '🎨', title: '50 Designer Templates', desc: 'From Bollywood editorial to minimalist clean — every template is built for Indian aesthetics.' },
+]
+
+const HOW_IT_WORKS = [
+  { step: '01', icon: '👤', title: 'Sign up free', sub: 'No credit card. Just your name.' },
+  { step: '02', icon: '🎨', title: 'Pick your template', sub: 'Choose from 50 India-built designs.' },
+  { step: '03', icon: '🔗', title: 'Share your link', sub: 'Add your UPI, Reels, links — go live.' },
+]
+
+const TESTIMONIALS = [
+  { quote: 'Set up in 10 minutes, my audience can now tip me directly in UPI. Linktree never had this.', name: 'Priya S.', handle: 'Food Creator, Mumbai · 47K followers', initial: 'P' },
+  { quote: 'The Bollywood template matches my brand perfectly. My link-in-bio finally looks like me.', name: 'Arjun M.', handle: 'Music Producer, Delhi · 82K followers', initial: 'A' },
+  { quote: 'My Reels shelf updates automatically — I never have to manually add new content.', name: 'Sneha K.', handle: 'Travel Creator, Bangalore · 31K followers', initial: 'S' },
+]
+
+const COMPARE = [
+  { feature: 'UPI Payments (GPay, PhonePe)', taar: '✓ Free', linktree: '✗ Not available' },
+  { feature: 'Instagram Reels auto-sync', taar: '✓ Free', linktree: '✗ Not available' },
+  { feature: 'Indian-built templates', taar: '✓ 50 templates', linktree: '✗ Generic only' },
+  { feature: 'Free plan templates', taar: '✓ All 50', linktree: '1 only' },
+  { feature: 'Price of paid plan', taar: `₹${PRO_PRICE_INR}/mo`, linktree: '₹800+/mo' },
+  { feature: 'Made in India', taar: '✓', linktree: '✗' },
+]
+
+export default async function HomePage() {
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const isLoggedIn = !!user
 
   return (
-    <div className="bg-[#060606] text-white overflow-x-hidden selection:bg-[#E8593C] selection:text-white" style={{ fontFamily: 'DM Sans, sans-serif' }}>
+    <div style={{ background: '#060606', minHeight: '100vh' }}>
+      {/* ── Skip to content (A11y) ─────────────────────────── */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:bg-[#E8593C] focus:text-white focus:px-4 focus:py-2 focus:rounded-full focus:text-sm focus:font-semibold"
+      >
+        Skip to main content
+      </a>
+
       <div className="grain-overlay" />
       <CursorGlow />
-      <LandingAnimations />
-      <PageTurnEffect />
+      <PageEffects />
 
-      {/* ─────────────────────────────── NAV */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5">
-        <span className="font-display text-2xl tracking-[0.15em] text-white anim-fade-in">TAAR</span>
-        <div className="flex items-center gap-4 md:gap-8 anim-fade-in delay-200">
-          <Link href="/demo" target="_blank"
-            className="text-xs text-[#E8593C] hover:text-white transition-colors tracking-widest uppercase underline-wipe hidden md:block">
-            See example ↗
-          </Link>
-          <Link href="#templates" className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe hidden md:block">Templates</Link>
-          <Link href="#pricing"   className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe hidden md:block">Pricing</Link>
-          {user ? (
-            <Link href="/dashboard"
-              className="text-xs font-semibold bg-[#E8593C] text-white px-5 py-2.5 tracking-widest uppercase hover:bg-[#d44e33] transition-colors">
-              Dashboard →
-            </Link>
-          ) : (
-            <>
-              <Link href="/login" className="text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe">Login</Link>
-              <Link href="/login"
-                className="text-xs font-semibold bg-[#E8593C] text-white px-5 py-2.5 tracking-widest uppercase hover:bg-[#d44e33] transition-colors">
-                Start Free →
-              </Link>
-            </>
-          )}
-        </div>
-      </nav>
+      {/* ── NAV ────────────────────────────────────────────── */}
+      <header>
+        <LandingNav isLoggedIn={isLoggedIn} />
+      </header>
 
-      {/* ─────────────────────────────── HERO */}
-      <section id="hero-section" aria-label="Hero" className="relative min-h-screen flex flex-col justify-end overflow-hidden pb-16 px-6 md:px-12">
-        {/* SEO: visually hidden primary heading */}
-        <h1 className="sr-only">Free Link in Bio for Indian Creators</h1>
-        <h2 className="sr-only">The Linktree Alternative Built for Bharat</h2>
-        {/* Faint grid */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)', backgroundSize: '80px 80px' }} />
+      {/* ── MAIN ───────────────────────────────────────────── */}
+      <main id="main-content">
 
-        {/* Vertical thread spine */}
-        <div className="absolute left-6 md:left-12 top-0 bottom-0 w-px pointer-events-none">
-          <svg className="w-full h-full" viewBox="0 0 1 1" preserveAspectRatio="none">
-            <line x1="0.5" y1="0" x2="0.5" y2="1" stroke="#E8593C" strokeWidth="2" strokeDasharray="3 6" opacity="0.3" />
-          </svg>
-        </div>
+        {/* ── 1. HERO ──────────────────────────────────────── */}
+        <section
+          id="hero-section"
+          aria-label="Hero"
+          className="min-h-[100svh] flex flex-col md:flex-row bg-[#060606] relative pt-16 overflow-hidden"
+        >
+          <div
+            className="pointer-events-none absolute top-0 left-0 w-full h-full"
+            aria-hidden="true"
+            style={{ background: 'radial-gradient(ellipse 60% 50% at 30% 50%, rgba(232,89,60,0.07) 0%, transparent 70%)' }}
+          />
 
-        {/* Phone mockup — right side (visible only when fixed phone not active: < xl) */}
-        <div className="absolute right-6 md:right-16 top-1/2 -translate-y-1/2 anim-fade-up delay-500 hidden lg:block xl:hidden" style={{ zIndex: 5 }}>
-          <div style={{
-            width: 220,
-            height: 440,
-            borderRadius: 36,
-            border: '2px solid rgba(255,255,255,0.12)',
-            background: '#0A0A0A',
-            boxShadow: '0 40px 120px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.04), inset 0 0 0 1px rgba(255,255,255,0.06)',
-            overflow: 'hidden',
-            position: 'relative',
-          }}>
-            {/* Phone notch */}
-            <div style={{ position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)', width: 60, height: 6, borderRadius: 3, background: '#1A1A1A', zIndex: 10 }} />
-
-            {/* Bio page inside phone */}
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(160deg, #1a0010 0%, #0A0020 60%, #001A10 100%)' }}>
-              {/* Glow */}
-              <div style={{ position: 'absolute', top: -40, left: '50%', transform: 'translateX(-50%)', width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,89,60,0.25) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-              {/* Content */}
-              <div style={{ padding: '40px 20px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, height: '100%' }}>
-                {/* Avatar */}
-                <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg, #E8593C, #F5C842)', border: '2px solid rgba(255,255,255,0.2)', flexShrink: 0 }} />
-
-                {/* Name */}
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 16, letterSpacing: 3, color: '#fff' }}>PRIYA SHARMA</div>
-                  <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>Mumbai · Creator · Chef</div>
-                </div>
-
-                {/* Reels row */}
-                <div style={{ display: 'flex', gap: 4, width: '100%' }}>
-                  {['#E8593C22', '#F5C84222', '#00FF4122'].map((bg, i) => (
-                    <div key={i} style={{ flex: 1, height: 48, borderRadius: 6, background: bg, border: '1px solid rgba(255,255,255,0.08)' }} />
-                  ))}
-                </div>
-
-                {/* Links */}
-                {[
-                  { label: 'Pay me via UPI ₹', bg: '#E8593C', color: '#fff' },
-                  { label: 'My Recipe eBook', bg: 'rgba(255,255,255,0.07)', color: '#fff' },
-                  { label: 'YouTube Channel', bg: 'rgba(255,255,255,0.07)', color: '#fff' },
-                  { label: 'Join My Telegram', bg: 'rgba(255,255,255,0.07)', color: '#fff' },
-                ].map((link) => (
-                  <div key={link.label} style={{
-                    width: '100%',
-                    padding: '8px 12px',
-                    borderRadius: 8,
-                    background: link.bg,
-                    color: link.color,
-                    fontSize: 9,
-                    fontWeight: 600,
-                    letterSpacing: 0.5,
-                    textAlign: 'center',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                  }}>
-                    {link.label}
-                  </div>
-                ))}
-
-                {/* Watermark */}
-                <div style={{ marginTop: 'auto', fontSize: 8, color: 'rgba(255,255,255,0.15)', letterSpacing: 2, fontFamily: 'Bebas Neue, sans-serif' }}>
-                  TAAR
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Label under phone */}
-          <div style={{ textAlign: 'center', marginTop: 12 }}>
-            <Link href="/demo" target="_blank"
-              className="text-[9px] text-white/30 tracking-widest uppercase hover:text-[#E8593C] transition-colors">
-              See live example ↗
-            </Link>
-          </div>
-        </div>
-
-        {/* Hero wordmark */}
-        <div className="relative z-10 mb-12">
-          {/* Year badge */}
-          <div id="hero-badge" className="flex items-center gap-3 mb-8 anim-fade-in delay-200">
-            <div className="w-6 h-px bg-[#E8593C]" />
-            <span className="text-[10px] tracking-[0.3em] text-white/30 uppercase">Est. 2024 · Made in India</span>
-          </div>
-
-          {/* Main title */}
-          <div id="hero-title" className="relative">
-            <h1 className="font-display leading-[0.85] tracking-tight select-none" style={{ fontSize: 'clamp(72px, 18vw, 280px)', perspective: '800px' }}>
-              <span className="block text-white" data-hero-word style={{ display: 'block', opacity: 0 }}>YOUR</span>
-              <span className="block" data-hero-word style={{ display: 'block', opacity: 0, color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.25)' }}>THREAD</span>
-              <span className="block text-[#E8593C]" data-hero-word style={{ display: 'block', opacity: 0 }}>TO ALL.</span>
-            </h1>
-
-            {/* Tagline — visible on all sizes */}
-            <div className="mt-6 md:mt-0 md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2 text-left md:text-right max-w-xs anim-fade-up delay-700">
-              <p className="text-sm text-white/50 leading-relaxed mb-4">
-                One link. Your UPI.<br />Your reels. Your products.<br />Your everything.
-              </p>
-              <div className="flex items-center gap-2 md:justify-end">
-                <span className="text-[10px] text-white/20 tracking-widest uppercase">Built for Bharat</span>
-                <div className="w-4 h-px bg-white/20" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div id="hero-bottom" className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-t border-white/8 pt-8">
-          <div className="flex items-center gap-8 md:gap-10">
-            {[['50+','Templates'],['₹0','To start'],['5 min','Setup']].map(([n,l]) => (
-              <div key={l}>
-                <div className="font-display text-2xl md:text-3xl tracking-wider text-white anim-fade-up delay-800">{n}</div>
-                <div className="text-[10px] text-white/30 tracking-widest uppercase mt-0.5">{l}</div>
-              </div>
-            ))}
-          </div>
-          <Link href="/login"
-            className="group inline-flex items-center gap-4 bg-[#E8593C] text-white px-8 md:px-10 py-4 md:py-5 text-sm font-bold tracking-widest uppercase anim-fade-up delay-900 hover:bg-white hover:text-[#060606] transition-all duration-300">
-            Create your Taar
-            <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
-          </Link>
-        </div>
-
-        {/* Scroll nudge */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 anim-fade-in delay-1200">
-          <div className="w-px h-10 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
-          <div className="text-[9px] text-white/20 tracking-[0.3em] uppercase">Scroll</div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────── TAPE STRIP */}
-      <div className="py-4 bg-[#E8593C] overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap">
-          {Array(3).fill(['UPI PAYMENT LINKS','AUTO INSTAGRAM REELS','CLICK ANALYTICS','SELL DIGITAL PRODUCTS','50 PREMIUM TEMPLATES','BUILT FOR BHARAT']).flat().map((t,i) => (
-            <span key={i} className="inline-flex items-center gap-6 mr-6 text-white font-display tracking-[0.15em] text-sm">
-              {t}
-              <span className="text-white/40">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ─────────────────────────────── WHY TAAR */}
-      <section className="bg-[#080808] py-14 md:py-20 px-6 md:px-12 border-b border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5">
-            {[
-              { icon: '🇮🇳', title: 'Built for India', body: 'UPI-first. Hindi-friendly templates. Razorpay payments. No dollar pricing, no foreign gateways — designed ground-up for how Indian creators actually work.' },
-              { icon: '⚡', title: 'Live in 5 minutes', body: 'Sign up, pick a template, add your links. Share your taar.link/username anywhere. No tech knowledge needed. No design skills needed.' },
-              { icon: '₹', title: 'Free. Really.', body: 'All 50 templates, UPI links, WhatsApp links, custom username — free forever. No credit card, no trial period, no hidden limit that kicks in on day 7.' },
-            ].map((c) => (
-              <div key={c.title} className="why-card bg-[#080808] p-8 md:p-10">
-                <div className="text-2xl mb-4">{c.icon}</div>
-                <h3 className="font-semibold text-white text-base mb-2">{c.title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{c.body}</p>
-              </div>
-            ))}
-          </div>
-          {/* See example link */}
-          <div className="mt-8 pt-8 border-t border-white/5 flex items-center gap-4">
-            <Link href="/demo" target="_blank"
-              className="text-sm font-semibold text-[#E8593C] hover:text-white transition-colors tracking-wide">
-              See what a Taar page looks like ↗
-            </Link>
-            <span className="text-white/20 text-xs">— a live example, no signup needed</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────── STATEMENT */}
-      <section id="statement-section" className="bg-[#F2EDE6] text-[#0A0806] py-28 md:py-40 px-6 md:px-12 clip-diagonal-b relative overflow-hidden">
-        <div className="absolute top-6 right-12 text-[9px] tracking-[0.3em] text-[#0A0806]/30 uppercase">01 / 06</div>
-        <div className="max-w-7xl mx-auto">
-          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-10 font-semibold">The problem</p>
-          <h2 id="statement-headline" className="font-display leading-[0.88] tracking-tight" style={{ fontSize: 'clamp(52px, 9vw, 140px)' }}>
-            <span className="block">STOP SENDING</span>
-            <span className="block" style={{ color: 'transparent', WebkitTextStroke: '1.5px #0A0806' }}>10 DIFFERENT</span>
-            <span className="block text-[#E8593C]">LINKS.</span>
-          </h2>
-          <div className="mt-14 flex flex-col md:flex-row md:items-end gap-10 md:gap-24">
-            <p className="text-base md:text-lg text-[#0A0806]/60 leading-relaxed max-w-md">
-              Your audience is on Instagram. Your fans want to pay you UPI. Your customers want to buy your products. They shouldn&apos;t need to DM you for each one.
+          {/* Left col */}
+          <div className="flex-1 flex flex-col justify-center px-6 md:pl-16 md:pr-8 py-16 md:py-20 relative z-10">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-6 uppercase reveal">
+              Free link in bio · Built for India
             </p>
-            <div className="flex-1 border-t border-[#0A0806]/10 pt-6">
-              <p className="font-display text-5xl md:text-7xl text-[#0A0806] tracking-wider">ONE TAAR.<br/>EVERYTHING.</p>
+            <h1 className="leading-[0.92] tracking-tight" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>
+              <span className="block text-white reveal" data-delay="80" style={{ fontSize: 'clamp(52px, 7vw, 96px)' }}>Your link.</span>
+              <span className="block text-white reveal" data-delay="160" style={{ fontSize: 'clamp(52px, 7vw, 96px)' }}>Your UPI.</span>
+              <span className="block text-[#E8593C] reveal" data-delay="240" style={{ fontSize: 'clamp(52px, 7vw, 96px)' }}>Your page.</span>
+            </h1>
+            <p className="mt-6 text-white/50 text-base md:text-lg leading-relaxed max-w-sm reveal" data-delay="320">
+              50 templates. UPI payments. Instagram Reels. All free.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4 items-center reveal" data-delay="400">
+              <Link
+                href="/login"
+                className="bg-[#E8593C] text-white text-sm px-7 py-4 rounded-full hover:bg-[#d44a2b] transition-colors"
+                style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.1em' }}
+              >
+                Create your Taar &mdash; it&apos;s free →
+              </Link>
+              <Link href="/demo" target="_blank" className="hidden md:inline text-white/40 text-sm hover:text-white/70 transition-colors underline underline-offset-4">
+                See an example ↗
+              </Link>
+            </div>
+            <Link href="/demo" target="_blank" className="mt-4 text-white/30 text-sm md:hidden inline-block">
+              👉 See what your page looks like →
+            </Link>
+            <p className="mt-8 text-white/25 text-xs font-mono reveal" data-delay="480">
+              🧵 2,400+ Indian creators · ₹3.2L+ collected via UPI
+            </p>
+          </div>
+
+          {/* Right col — phone frame */}
+          <div className="hidden md:flex flex-1 items-center justify-center pr-8 py-16 relative z-10" aria-hidden="true">
+            <div className="flex flex-col items-center">
+              <div style={{ width: 260, height: 520, borderRadius: 40, border: '6px solid rgba(255,255,255,0.08)', background: '#111', boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04)', overflow: 'hidden' }}>
+                <iframe src="/demo" title="Taar demo preview" style={{ width: '100%', height: '100%', border: 'none', pointerEvents: 'none', display: 'block' }} />
+              </div>
+              <div className="flex gap-1.5 justify-center mt-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#E8593C]" />
+                <div className="w-1 h-1 rounded-full bg-white/20 self-center" />
+                <div className="w-1 h-1 rounded-full bg-white/20 self-center" />
+              </div>
+              <p className="font-mono text-xs text-white/30 mt-2">taar.bio/priya</p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ─────────────────────────────── FEATURES */}
-      <section aria-label="Features" className="bg-[#060606] py-24 md:py-32 relative" style={{ marginTop: '-5vw' }}>
-        <div className="px-6 md:px-12 mb-16 flex items-end justify-between">
-          <div>
-            <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-4 font-semibold">02 / 06 · What you get</p>
-            <h2 className="font-display text-5xl md:text-7xl tracking-wider leading-none" data-anim-heading>
-              EVERY TOOL<br/><span className="text-white/20">A CREATOR</span><br/>NEEDS.
-            </h2>
-          </div>
-          <div className="hidden md:block text-right">
-            <p className="text-white/30 text-sm max-w-xs">Free tier. Pro tier. Both insane value for what you get.</p>
-          </div>
-        </div>
-
-        {/* Feature rows */}
-        {[
-          {
-            num:'01', id:'feature-upi', icon:'₹', title:'UPI That Converts',
-            body:'Your UPI ID as a link. A fan sees it, taps, pays you via GPay or PhonePe in 10 seconds. No payment gateway. No 2% cut. Every rupee goes straight to your account.',
-            proof:'Creators collect ₹500–₹5000/day in fan support',
-            tag:'Free', tagColor:'#E8593C',
-            mobileIllustration: <div className="flex lg:hidden items-center justify-center w-12 h-12 shrink-0 text-3xl font-bold text-[#E8593C]" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>₹</div>
-          },
-          {
-            num:'02', id:'feature-reels', icon:'📸', title:'Your Reels, Always Fresh',
-            body:'Link your Instagram once. Your 3 latest reels show up on your bio page automatically, updated every 24h. Your page stays alive even when you\'re deep in a shoot.',
-            proof:'Fans watch your latest content without leaving your page',
-            tag:'Pro', tagColor:'#F5C842',
-            mobileIllustration: <div className="flex lg:hidden gap-1 shrink-0">{[0,1,2].map(i=><div key={i} style={{width:8,height:28,background:'rgba(245,200,66,0.3)',border:'1px solid rgba(245,200,66,0.4)',borderRadius:1}}/>)}</div>
-          },
-          {
-            num:'03', id:'feature-analytics', icon:'📊', title:'Know What Makes You Money',
-            body:'See exactly which link your fans click after each reel drops. Post more of what works, drop what doesn\'t. Real data — not guesses — to grow your income.',
-            proof:'7-day charts · per-link clicks · device breakdown',
-            tag:'Pro', tagColor:'#F5C842',
-            mobileIllustration: <div className="flex lg:hidden items-end gap-0.5 shrink-0 h-8">{[40,65,50,80,55].map((h,i)=><div key={i} style={{width:5,height:`${h}%`,background:'rgba(245,200,66,0.5)',borderRadius:'1px 1px 0 0'}}/>)}</div>
-          },
-          {
-            num:'04', id:'feature-products', icon:'📦', title:'Wake Up to New Sales',
-            body:'Upload your preset pack, recipe PDF, or music loop. Set a price. Razorpay collects the money, and your buyer gets the download link by email — all automatic. You earn while you sleep.',
-            proof:'Sell up to 5 digital products · instant delivery',
-            tag:'Pro', tagColor:'#F5C842',
-            mobileIllustration: <div className="flex lg:hidden items-center justify-center shrink-0" style={{width:28,height:28,background:'rgba(245,200,66,0.15)',border:'1px solid rgba(245,200,66,0.3)',borderRadius:2}}><span style={{fontSize:14}}>₹</span></div>
-          },
-          {
-            num:'05', id:'feature-templates', icon:'🎨', title:'50 Templates. Zero Cringe.',
-            body:'From Bollywood editorial to Y2K to pastel food creator — we built for every creator, every vibe, every age. All 50 free. Switch anytime. Your personality, not a generic blue page.',
-            proof:'50 templates · instant preview · 1-click change',
-            tag:'Free', tagColor:'#E8593C',
-            mobileIllustration: null
-          },
-        ].map((f) => (
-          <div key={f.num} id={f.id} className="feature-row px-6 md:px-12 py-8 md:py-10">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center gap-4 md:gap-16">
-              <div className="section-num font-display text-7xl md:text-9xl text-white/5 leading-none w-24 shrink-0 hidden md:block">{f.num}</div>
-              {/* Mobile illustration or emoji */}
-              {f.mobileIllustration ?? <div className="text-3xl shrink-0 hidden md:block">{f.icon}</div>}
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-2">
-                  <h3 className="font-display text-2xl md:text-3xl tracking-wider text-white">{f.title}</h3>
-                  <span className="text-[9px] px-2.5 py-1 font-bold tracking-widest uppercase shrink-0" style={{ color: f.tagColor, border: `1px solid ${f.tagColor}40`, background: `${f.tagColor}10` }}>{f.tag}</span>
-                </div>
-                <p className="text-white/50 text-sm leading-relaxed max-w-xl mb-3">{f.body}</p>
-                <p className="text-[10px] text-white/20 tracking-wider">{f.proof}</p>
-              </div>
-              <div className="text-white/10 text-2xl shrink-0 hidden md:block">→</div>
-            </div>
-          </div>
-        ))}
-      </section>
-
-      {/* ─────────────────────────────── TEMPLATES */}
-      <section id="templates" className="bg-[#0A0806] py-24 md:py-36 overflow-hidden">
-        <div className="px-6 md:px-12 mb-12 flex items-end justify-between">
-          <div>
-            <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-4 font-semibold">03 / 06 · Templates</p>
-            <h2 className="font-display leading-none tracking-wider" data-anim-heading style={{ fontSize: 'clamp(60px, 12vw, 180px)' }}>
-              50<br/><span className="text-white/15">VIBES.</span>
-            </h2>
-          </div>
-          <Link href="/login" className="hidden md:inline-flex items-center gap-3 text-xs text-white/40 hover:text-white transition-colors tracking-widest uppercase underline-wipe mb-4">
-            Get all 50 free →
-          </Link>
-        </div>
-
-        {/* 6 hero templates at phone scale — horizontal scroll mobile, 6-col desktop */}
-        <div className="flex gap-5 overflow-x-auto pb-4 px-6 md:px-12 md:grid md:grid-cols-6" style={{ scrollbarWidth: 'none' }}>
-          {/* ── Bollywood Editorial ── */}
-          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#0A0005', width: 150, minWidth: 150, height: 280 }}>
-            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
-              {/* Diamond grid decoration */}
-              <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-                {[['20%','15%'],['65%','45%'],['35%','70%']].map(([l,t],i) => (
-                  <div key={i} style={{ position:'absolute', left:l, top:t, width:18, height:18, border:'1px solid #F5C84226', transform:'rotate(45deg)' }} />
-                ))}
-              </div>
-              {/* Corner brackets */}
-              <div style={{ position:'absolute', top:8, left:8, width:8, height:8, borderTop:'1px solid #F5C842', borderLeft:'1px solid #F5C842' }} />
-              <div style={{ position:'absolute', bottom:8, right:8, width:8, height:8, borderBottom:'1px solid #F5C842', borderRight:'1px solid #F5C842' }} />
-              {/* Avatar */}
-              <div style={{ width:36, height:36, borderRadius:'50%', background:'#F5C84222', border:'2px solid #F5C842', flexShrink:0, marginTop:8 }} />
-              {/* Name */}
-              <div style={{ fontFamily:'sans-serif', fontWeight:700, fontSize:11, letterSpacing:2, color:'#F5C842', textAlign:'center', textTransform:'uppercase', lineHeight:1.2 }}>YOUR NAME</div>
-              <div style={{ fontSize:7, color:'#8B7320', textAlign:'center', letterSpacing:1 }}>Creator · Mumbai</div>
-              {/* Buttons */}
-              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
-                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
-                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:700, letterSpacing:0.5, color:'#F5C842', background:'transparent', border:'1px solid #F5C84266', borderRadius:0, opacity: i===0?1:0.7 }}>{lbl}</div>
-                ))}
-              </div>
-              <div style={{ marginTop:'auto', textAlign:'center' }}>
-                <div style={{ fontSize:7, color:'#8B7320', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Indian Culture</div>
-                <div style={{ fontSize:9, color:'#F5C842', marginTop:2, fontWeight:600 }}>Bollywood Editorial</div>
-              </div>
-            </div>
-          </Link>
-
-          {/* ── Streetwear ── */}
-          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#0A0A0A', width: 150, minWidth: 150, height: 280 }}>
-            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
-              {/* Horizontal rule above name */}
-              <div style={{ width:'80%', height:1, background:'#FFFFFF33', marginTop:8, flexShrink:0 }} />
-              {/* Avatar — square */}
-              <div style={{ width:36, height:36, borderRadius:0, background:'#FFFFFF22', border:'1px solid #FFFFFF', flexShrink:0 }} />
-              {/* Name */}
-              <div style={{ fontFamily:'sans-serif', fontWeight:700, fontSize:11, letterSpacing:3, color:'#FFFFFF', textAlign:'center', textTransform:'uppercase', lineHeight:1.2 }}>YOUR NAME</div>
-              <div style={{ fontSize:7, color:'#555555', textAlign:'center', letterSpacing:1 }}>Creator · Mumbai</div>
-              {/* Buttons — solid white/black */}
-              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
-                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
-                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:700, letterSpacing:0.5, color:'#000000', background:'#FFFFFF', borderRadius:0, opacity: i===0?1:0.7 }}>{lbl}</div>
-                ))}
-              </div>
-              <div style={{ marginTop:'auto', textAlign:'center' }}>
-                <div style={{ fontSize:7, color:'#555', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
-                <div style={{ fontSize:9, color:'#FFFFFF', marginTop:2, fontWeight:600 }}>Streetwear</div>
-              </div>
-            </div>
-          </Link>
-
-          {/* ── Cyberpunk ── */}
-          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#000000', width: 150, minWidth: 150, height: 280 }}>
-            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
-              {/* Scan-line stripes */}
-              <div style={{ position:'absolute', inset:0, backgroundImage:'repeating-linear-gradient(0deg, #00FF4108 0px, #00FF4108 1px, transparent 1px, transparent 6px)', pointerEvents:'none' }} />
-              {/* Avatar with neon glow */}
-              <div style={{ width:36, height:36, borderRadius:'50%', background:'#00FF4115', border:'1.5px solid #00FF41', boxShadow:'0 0 8px #00FF41', flexShrink:0, marginTop:8 }} />
-              {/* Name */}
-              <div style={{ fontFamily:'monospace', fontWeight:700, fontSize:10, letterSpacing:1, color:'#00FF41', textAlign:'center', lineHeight:1.2 }}>YOUR NAME</div>
-              <div style={{ fontSize:7, color:'#006B11', textAlign:'center', fontFamily:'monospace' }}>Creator · Mumbai</div>
-              {/* Buttons */}
-              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
-                {['UPI_PAY ₹','INSTAGRAM','YOUTUBE'].map((lbl,i) => (
-                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:700, letterSpacing:0.5, color:'#00FF41', background:'transparent', border:'1px solid #00FF4166', borderRadius:0, fontFamily:'monospace', opacity: i===0?1:0.7 }}>{lbl}</div>
-                ))}
-              </div>
-              <div style={{ marginTop:'auto', textAlign:'center' }}>
-                <div style={{ fontSize:7, color:'#006B11', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
-                <div style={{ fontSize:9, color:'#00FF41', marginTop:2, fontWeight:600 }}>Cyberpunk</div>
-              </div>
-            </div>
-          </Link>
-
-          {/* ── Pastel Food ── */}
-          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#FDF6EC', width: 150, minWidth: 150, height: 280 }}>
-            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
-              {/* Avatar */}
-              <div style={{ width:36, height:36, borderRadius:'50%', background:'#E8593C22', border:'2px solid #E8593C', flexShrink:0, marginTop:8 }} />
-              {/* Name — italic serif */}
-              <div style={{ fontFamily:'serif', fontStyle:'italic', fontWeight:700, fontSize:11, letterSpacing:0.5, color:'#5C2D0E', textAlign:'center', lineHeight:1.2 }}>Your Name</div>
-              <div style={{ fontSize:7, color:'#C89B7B', textAlign:'center' }}>Creator · Mumbai</div>
-              {/* Buttons — pill outline coral */}
-              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
-                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
-                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:600, letterSpacing:0.3, color:'#E8593C', background:'transparent', border:'1px solid #E8593C88', borderRadius:999, opacity: i===0?1:0.7 }}>{lbl}</div>
-                ))}
-              </div>
-              <div style={{ marginTop:'auto', textAlign:'center' }}>
-                <div style={{ fontSize:7, color:'#C89B7B', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
-                <div style={{ fontSize:9, color:'#5C2D0E', marginTop:2, fontWeight:600 }}>Pastel Food</div>
-              </div>
-            </div>
-          </Link>
-
-          {/* ── Dark Academia ── */}
-          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: '#1A1209', width: 150, minWidth: 150, height: 280 }}>
-            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
-              {/* Avatar */}
-              <div style={{ width:36, height:36, borderRadius:'50%', background:'#C8A96E22', border:'1.5px solid #C8A96E', flexShrink:0, marginTop:8 }} />
-              {/* Name — serif amber */}
-              <div style={{ fontFamily:'serif', fontWeight:400, fontSize:11, letterSpacing:1, color:'#C8A96E', textAlign:'center', lineHeight:1.2 }}>Your Name</div>
-              <div style={{ fontSize:7, color:'#7A5C2A', textAlign:'center' }}>Creator · Mumbai</div>
-              {/* Buttons — outline amber */}
-              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
-                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
-                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:500, letterSpacing:0.3, color:'#C8A96E', background:'transparent', border:'1px solid #C8A96E55', borderRadius:2, opacity: i===0?1:0.7 }}>{lbl}</div>
-                ))}
-              </div>
-              <div style={{ marginTop:'auto', textAlign:'center' }}>
-                <div style={{ fontSize:7, color:'#7A5C2A', letterSpacing:2, textTransform:'uppercase', opacity:0.5 }}>Creator</div>
-                <div style={{ fontSize:9, color:'#C8A96E', marginTop:2, fontWeight:600 }}>Dark Academia</div>
-              </div>
-            </div>
-          </Link>
-
-          {/* ── Rose Gold ── */}
-          <Link href="/login" className="template-card shrink-0 md:shrink rounded-2xl overflow-hidden border border-white/8 cursor-pointer block" style={{ background: 'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', width: 150, minWidth: 150, height: 280 }}>
-            <div style={{ padding: '16px 12px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, position: 'relative' }}>
-              {/* Avatar */}
-              <div style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,255,255,0.3)', border:'2px solid #FFFFFF', flexShrink:0, marginTop:8 }} />
-              {/* Name — italic serif white */}
-              <div style={{ fontFamily:'serif', fontStyle:'italic', fontWeight:400, fontSize:11, letterSpacing:0.5, color:'#FFFFFF', textAlign:'center', lineHeight:1.2 }}>Your Name</div>
-              <div style={{ fontSize:7, color:'rgba(255,255,255,0.7)', textAlign:'center' }}>Creator · Mumbai</div>
-              {/* Buttons — pill outline white */}
-              <div style={{ display:'flex', flexDirection:'column', gap:5, width:'100%', marginTop:4 }}>
-                {['UPI Payment ₹','Instagram','YouTube'].map((lbl,i) => (
-                  <div key={i} style={{ padding:'5px 8px', textAlign:'center', fontSize:7, fontWeight:500, letterSpacing:0.3, color:'#FFFFFF', background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.6)', borderRadius:999, opacity: i===0?1:0.7 }}>{lbl}</div>
-                ))}
-              </div>
-              <div style={{ marginTop:'auto', textAlign:'center' }}>
-                <div style={{ fontSize:7, color:'rgba(255,255,255,0.6)', letterSpacing:2, textTransform:'uppercase', opacity:0.7 }}>Creator</div>
-                <div style={{ fontSize:9, color:'#FFFFFF', marginTop:2, fontWeight:600 }}>Rose Gold</div>
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        {/* Row 2 — more templates */}
-        <div className="flex gap-4 overflow-x-auto pb-4 px-6 md:px-12 mt-5" style={{ scrollbarWidth: 'none' }}>
-          {[
-            { name:'Desi Marigold', cat:'Indian Culture', bg:'#FF6500', accent:'#FFD700', text:'#FFFFFF' },
-            { name:'Vaporwave', cat:'Creator', bg:'linear-gradient(135deg,#1a001a,#0d0033)', accent:'#FF71CE', text:'#FF71CE' },
-            { name:'Executive', cat:'Professional', bg:'#0F172A', accent:'#6366F1', text:'#F8FAFC' },
-            { name:'Concert Poster', cat:'Music & Arts', bg:'#000000', accent:'#FFD700', text:'#FFD700' },
-            { name:'Fitness Mode', cat:'Lifestyle', bg:'#0A0A0A', accent:'#FF4500', text:'#FFFFFF' },
-            { name:'Lo-Fi Beats', cat:'Creator', bg:'#2D2B3D', accent:'#FF9EAA', text:'#E8D5B7' },
-            { name:'Wellness', cat:'Lifestyle', bg:'#F5F0E8', accent:'#6B8F6B', text:'#3D3020' },
-            { name:'Neon Purple', cat:'Niche', bg:'#0A0015', accent:'#BF5FFF', text:'#BF5FFF' },
-            { name:'Astrology', cat:'Niche', bg:'#080018', accent:'#D4AF37', text:'#D4AF37' },
-            { name:'Vintage Retro', cat:'Niche', bg:'#F0E6D3', accent:'#8B3A00', text:'#2C1A0A' },
-          ].map((t) => (
-            <div key={t.name}
-              className="template-card shrink-0 rounded-2xl overflow-hidden border border-white/8"
-              style={{ background: t.bg, width: 140, height: 200 }}>
-              <div style={{ padding: '14px 12px', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${t.accent}33`, border: `1px solid ${t.accent}66` }} />
-                <div style={{ fontSize: 9, color: t.text, letterSpacing: 1, fontWeight: 700 }}>CREATOR</div>
-                {[100,80,90].map((w,i) => (
-                  <div key={i} style={{ width:`${w}%`, height:14, borderRadius:4, background:`${t.accent}18`, border:`1px solid ${t.accent}25` }}/>
-                ))}
-                <div style={{ marginTop:'auto', textAlign:'center' }}>
-                  <div style={{ fontSize:7, color:t.text, opacity:0.4, letterSpacing:2, textTransform:'uppercase' }}>{t.cat}</div>
-                  <div style={{ fontSize:9, color:t.text, marginTop:2, fontWeight:600 }}>{t.name}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-          <Link href="/login"
-            className="shrink-0 rounded-2xl border border-white/10 flex flex-col items-center justify-center gap-2 text-white/30 hover:text-white hover:border-white/30 transition-all"
-            style={{ width: 140, height: 200 }}>
-            <span className="font-display text-3xl">+34</span>
-            <span className="text-[9px] tracking-widest uppercase">More inside</span>
-          </Link>
-        </div>
-
-        <div className="px-6 md:px-12 mt-10 text-center md:text-left">
-          <Link href="/login"
-            className="inline-flex items-center gap-3 text-sm font-semibold text-white border border-white/15 px-8 py-4 tracking-widest uppercase hover:border-[#E8593C] hover:bg-[#E8593C]/5 transition-all">
-            Browse all 50 templates free →
-          </Link>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────── AUDIENCE */}
-      <section className="bg-[#060606] py-24 md:py-36 px-6 md:px-12 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-6 font-semibold">04 / 06 · For every creator</p>
-          <h2 className="font-display text-5xl md:text-7xl tracking-wider leading-none mb-16" data-anim-heading>
-            FROM<br/>FIRST REEL<br/><span className="text-[#E8593C]">TO FULL-TIME.</span>
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5">
+        {/* ── 2. TRUST BAR ─────────────────────────────────── */}
+        <section aria-label="Social proof" className="border-y border-white/[0.06] bg-[#060606] py-10">
+          <div className="max-w-4xl mx-auto px-6 grid grid-cols-3 gap-6 text-center">
             {[
-              { age:'15–25', icon:'🎮', type:'Gaming · Fashion · Memes', pitch:'Drop one neon link in your bio. Fans find your Discord, Insta, YouTube — all at once. No more "link in story" every time.', themes:'Cyberpunk, Streetwear, Y2K, Neon Purple' },
-              { age:'20–35', icon:'🥗', type:'Food · Lifestyle · Fitness', pitch:'Sell your recipe PDF. Share your UPI for fan support. Show your latest reels. All from one page your followers actually visit.', themes:'Pastel, Wellness, Gradient, Mint' },
-              { age:'25–45', icon:'🎵', type:'Music · Art · Culture', pitch:'Link Spotify, sell your beat pack, collect fan support via UPI direct to your account. Your music career on one page.', themes:'Vinyl, Concert, Vaporwave, Lo-Fi' },
-              { age:'30–60', icon:'💼', type:'Business · Education · Coaching', pitch:'One sharp link for your course, consultation booking, and WhatsApp. Clients get what they need without 10 DMs.', themes:'Executive, Corporate Dark, Cream, Art Gallery' },
-            ].map((c) => (
-              <div key={c.age} className="audience-card bg-[#060606] p-8 md:p-10 hover:bg-[#0D0D0D] transition-colors group">
-                <div className="flex items-start justify-between mb-6">
-                  <span className="text-3xl">{c.icon}</span>
-                  <span className="font-display text-4xl text-white/5 group-hover:text-[#E8593C]/20 transition-colors">{c.age}</span>
-                </div>
-                <h3 className="font-semibold text-white text-lg mb-2">{c.type}</h3>
-                <p className="text-white/50 text-sm leading-relaxed mb-4">{c.pitch}</p>
-                <p className="text-[10px] text-white/20 tracking-widest uppercase">{c.themes}</p>
+              { num: '2,400+', label: 'Creators' },
+              { num: '₹3.2L+', label: 'Collected via UPI' },
+              { num: '50', label: 'Free Templates' },
+            ].map(({ num, label }) => (
+              <div key={label} className="reveal">
+                <p className="text-white" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(32px, 5vw, 56px)' }}>{num}</p>
+                <p className="text-white/30 text-xs font-mono tracking-wide mt-1">{label}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ─────────────────────────────── PRICING */}
-      <section id="pricing" aria-label="Pricing" className="bg-[#0E0804] py-24 md:py-36 px-6 md:px-12 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-6 font-semibold">05 / 06 · Pricing</p>
-          <h2 className="font-display text-5xl md:text-8xl tracking-wider leading-none mb-16" data-anim-heading>
-            CUT THE NOISE.<br/><span className="text-[#E8593C]">OWN YOUR</span><br/>THREAD.
-          </h2>
+        {/* ── 3. FEATURES ──────────────────────────────────── */}
+        <section aria-labelledby="features-heading" className="bg-[#060606] py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Everything you need</p>
+            <h2
+              id="features-heading"
+              className="text-white mb-16"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+            >
+              Built for how<br />Indian creators work.
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {FEATURES.map(({ icon, title, desc }, i) => (
+                <div
+                  key={title}
+                  className="reveal border border-white/[0.07] rounded-2xl p-8 hover:border-white/[0.14] transition-colors"
+                  data-delay={String(i * 100)}
+                  style={{ background: 'rgba(255,255,255,0.02)' }}
+                >
+                  <div className="text-3xl mb-6 w-12 h-12 flex items-center justify-center rounded-xl" style={{ background: 'rgba(232,89,60,0.1)', color: '#E8593C' }}>{icon}</div>
+                  <h3 className="text-white mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 24, letterSpacing: '0.05em' }}>{title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-4xl">
-            {/* Free */}
-            <div id="pricing-free" className="border border-white/8 p-8 md:p-10 flex flex-col">
-              <div className="font-display text-4xl tracking-wider mb-1">FREE</div>
-              <div className="font-display text-6xl text-[#E8593C] mb-1">₹0</div>
-              <div className="text-white/25 text-xs tracking-widest uppercase mb-8">No card. No catch. Forever.</div>
-              <ul className="space-y-3 mb-10 flex-1">
-                {[
-                  ['1 bio page', true],
-                  ['8 links', true],
-                  ['All 50 templates', true],
-                  ['UPI + WhatsApp links', true],
-                  ['Custom username', true],
-                  ['Basic view count', true],
-                ].map(([f, ok]) => (
-                  <li key={String(f)} className="flex items-center gap-3 text-sm text-white/50">
-                    <span className={`w-4 h-px ${ok ? 'bg-[#E8593C]' : 'bg-white/20'}`} />{f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/login" className="block text-center border border-white/15 text-white py-4 text-xs tracking-[0.2em] uppercase font-semibold hover:border-[#E8593C] hover:bg-[#E8593C]/5 transition-all">
-                Start free — no card needed
-              </Link>
+        {/* ── 4. HOW IT WORKS ──────────────────────────────── */}
+        <section aria-labelledby="how-heading" className="bg-[#060606] py-24 px-6 border-t border-white/[0.06]">
+          <div className="max-w-5xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Quick setup</p>
+            <h2
+              id="how-heading"
+              className="text-white mb-16"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+            >
+              Set up in 5 minutes.
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-0 relative">
+              {/* Desktop connecting line */}
+              <div
+                className="hidden md:block absolute top-8 left-[16.66%] right-[16.66%] h-px"
+                aria-hidden="true"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(232,89,60,0.3), rgba(232,89,60,0.3), transparent)' }}
+              />
+
+              {HOW_IT_WORKS.map(({ step, icon, title, sub }, i) => (
+                <div key={step} className="reveal relative flex flex-col items-center md:items-start text-center md:text-left px-6 py-8 md:py-0" data-delay={String(i * 100)}>
+                  {/* Number badge */}
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center mb-6 text-2xl relative z-10"
+                    style={{ background: '#0A0A0A', border: '1px solid rgba(232,89,60,0.3)', boxShadow: '0 0 0 4px #060606' }}
+                    aria-label={`Step ${step}`}
+                  >
+                    <span aria-hidden="true">{icon}</span>
+                  </div>
+                  <h3 className="text-white font-semibold text-lg mb-2">{title}</h3>
+                  <p className="text-white/40 text-sm leading-relaxed max-w-[180px]">{sub}</p>
+                </div>
+              ))}
             </div>
 
-            {/* Pro */}
-            <div id="pricing-pro" className="bg-[#E8593C] p-8 md:p-10 flex flex-col relative overflow-hidden">
-              <div className="absolute top-5 right-5 text-[9px] bg-white/20 text-white px-3 py-1 tracking-widest uppercase">Most popular</div>
-              <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-white/5" />
-              <div className="font-display text-4xl tracking-wider mb-1 relative">PRO</div>
-              <div className="font-display text-6xl text-white mb-0 relative">₹399</div>
-              <div className="text-white/70 text-xs tracking-widest uppercase mb-2 relative">/month</div>
-              <div className="text-white/60 text-xs mb-8 relative">That&apos;s ₹13/day. Less than a chai.</div>
-              <ul className="space-y-3 mb-10 flex-1 relative">
-                {[
-                  'Everything in Free',
-                  'Click analytics — see what fans tap',
-                  'Auto Instagram Reels on your page',
-                  'Sell up to 5 digital products',
-                  'Razorpay + auto email delivery',
-                  'Remove Taar watermark',
-                ].map(f => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-white">
-                    <span className="w-4 h-px bg-white" />{f}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/dashboard/upgrade" className="relative block text-center bg-white text-[#E8593C] py-4 text-xs tracking-[0.2em] uppercase font-bold hover:bg-[#060606] hover:text-white transition-all">
-                Go Pro — cancel anytime →
+            <div className="text-center mt-16">
+              <Link
+                href="/login"
+                className="inline-block bg-[#E8593C] text-white text-sm px-8 py-4 rounded-full hover:bg-[#d44a2b] transition-colors"
+                style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.1em' }}
+              >
+                Create your Taar →
               </Link>
             </div>
           </div>
+        </section>
 
-          {/* Trust signals */}
-          <div className="mt-10 flex flex-col md:flex-row items-start md:items-center gap-6 text-xs text-white/25 tracking-widest uppercase">
-            <span>✓ Cancel anytime — no lock-in</span>
-            <span>✓ Razorpay secure payments</span>
-            <span>✓ Indian company · Indian support</span>
+        {/* ── 5. TEMPLATES ─────────────────────────────────── */}
+        <section id="templates" aria-labelledby="templates-heading" className="bg-[#060606] py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">50 templates</p>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
+              <h2
+                id="templates-heading"
+                className="text-white"
+                style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+              >
+                Your page,<br />your aesthetic.
+              </h2>
+              <Link href="/login" className="shrink-0 text-xs text-white/40 hover:text-white transition-colors underline underline-offset-4">
+                Browse all 50 templates →
+              </Link>
+            </div>
+
+            {/* Mobile: horizontally scrollable with snap; Desktop: 3-col grid */}
+            <div
+              className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto md:overflow-visible pb-4 md:pb-0 snap-x snap-mandatory md:snap-none scroll-smooth"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+            >
+              {TEMPLATES.map((t, i) => (
+                <Link
+                  key={t.name}
+                  href="/login"
+                  className="template-card group relative shrink-0 w-[60vw] sm:w-[44vw] md:w-auto rounded-2xl overflow-hidden cursor-pointer snap-start"
+                  data-delay={String(i * 60)}
+                  style={{ background: t.bg, aspectRatio: '9/16' }}
+                  aria-label={`Use ${t.name} template`}
+                >
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4">
+                    <div className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold shrink-0" style={{ background: `${t.accent}22`, color: t.accent, border: `1.5px solid ${t.accent}55` }}>P</div>
+                    <p className="text-center text-sm font-semibold" style={{ color: t.textColor, fontFamily: t.nameFontFamily }}>Priya Sharma</p>
+                    <span className="text-[9px] font-mono px-2 py-0.5 rounded-full" style={{ background: `${t.accent}22`, color: t.accent }}>{t.tag}</span>
+                    {[1, 2, 3].map((n) => (
+                      <div key={n} className="w-full max-w-[140px] h-6 rounded-full opacity-30" style={{ background: t.accent }} />
+                    ))}
+                  </div>
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <p className="text-[10px] font-mono text-white/50 truncate">{t.name}</p>
+                  </div>
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">
+                    <span className="opacity-0 group-hover:opacity-100 text-white text-sm tracking-widest transition-opacity duration-300" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>USE THIS →</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            {/* Mobile scroll fade hint */}
+            <div className="md:hidden mt-3 flex justify-center">
+              <p className="text-white/20 text-xs font-mono">← scroll for more →</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 6. MARQUEE TAPE ──────────────────────────────── */}
+        <div className="overflow-hidden border-y border-white/[0.06] py-4" style={{ background: '#0A0A0A' }} aria-hidden="true">
+          <div className="animate-marquee whitespace-nowrap">
+            {Array(2).fill(null).map((_, i) => (
+              <span key={i} className="inline-flex items-center gap-8 mr-8">
+                {['UPI Payments', 'Instagram Reels', '50 Templates', 'Custom Domain', 'Digital Products', 'Analytics', 'Free Forever'].map((item) => (
+                  <span key={item} className="inline-flex items-center gap-3">
+                    <span className="w-1 h-1 rounded-full bg-[#E8593C] shrink-0" />
+                    <span className="font-mono text-xs tracking-[0.15em] text-white/30 uppercase">{item}</span>
+                  </span>
+                ))}
+              </span>
+            ))}
           </div>
         </div>
-      </section>
 
-      {/* ─────────────────────────────── VS LINKTREE */}
-      <section className="bg-[#080808] py-24 md:py-36 px-6 md:px-12 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-6 font-semibold">Why switch</p>
-          <h2 className="font-display text-5xl md:text-7xl tracking-wider leading-none mb-4">
-            TAAR VS<br/><span className="text-white/20">LINKTREE.</span>
-          </h2>
-          <p className="text-white/40 text-sm mb-14 max-w-lg">Linktree is built for the world. Taar is built for India. Here&apos;s the difference that matters.</p>
+        {/* ── 7. TESTIMONIALS ──────────────────────────────── */}
+        <section aria-labelledby="testimonials-heading" className="bg-[#060606] py-24 px-6">
+          <div className="max-w-5xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Creators love Taar</p>
+            <h2
+              id="testimonials-heading"
+              className="text-white mb-16"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+            >
+              Real creators,<br />real results.
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {TESTIMONIALS.map(({ quote, name, handle, initial }, i) => (
+                <figure
+                  key={name}
+                  className="reveal border border-white/[0.07] rounded-2xl p-7 flex flex-col gap-5 hover:border-white/[0.12] transition-colors"
+                  data-delay={String(i * 80)}
+                  style={{ background: 'rgba(255,255,255,0.02)' }}
+                >
+                  <blockquote className="text-white/70 text-sm leading-relaxed flex-1">&ldquo;{quote}&rdquo;</blockquote>
+                  <figcaption className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0" style={{ background: 'rgba(232,89,60,0.15)', color: '#E8593C' }} aria-hidden="true">{initial}</div>
+                    <div>
+                      <p className="text-white text-sm font-semibold">{name}</p>
+                      <p className="text-white/30 text-xs mt-0.5">{handle}</p>
+                    </div>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-4 pr-8 text-white/30 text-xs tracking-widest uppercase font-medium w-1/3">Feature</th>
-                  <th className="text-left py-4 pr-8 text-[#E8593C] text-xs tracking-widest uppercase font-bold">Taar</th>
-                  <th className="text-left py-4 text-white/20 text-xs tracking-widest uppercase font-medium">Linktree</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['UPI Payment Links (GPay, PhonePe, Paytm)', '✓ Free', '✗ Not available'],
-                  ['Price (equivalent Pro plan)', '₹399 / month', '~₹750 / month ($9)'],
-                  ['Indian payment gateway', 'Razorpay ✓', '✗ No INR support'],
-                  ['Auto Instagram Reels shelf', '✓ Pro', '✗ Basic'],
-                  ['Sell digital products', '✓ Pro — Razorpay', '✓ Paid only'],
-                  ['Templates made for India', '✓ Bollywood, Desi, Marigold…', '✗ Generic only'],
-                  ['Total templates', '50 templates', '30+ templates'],
-                  ['Free plan limit', '8 links, forever free', '5 links free'],
-                  ['Built & supported in India', '✓ Yes', '✗ No'],
-                ].map(([feat, taar, other], i) => (
-                  <tr key={i} className="compare-row border-b border-white/5 hover:bg-white/2 transition-colors">
-                    <td className="py-4 pr-8 text-white/50">{feat}</td>
-                    <td className="py-4 pr-8 text-white font-medium">{taar}</td>
-                    <td className="py-4 text-white/25">{other}</td>
+        {/* ── 8. PRICING ───────────────────────────────────── */}
+        <section id="pricing" aria-labelledby="pricing-heading" className="bg-[#060606] py-24 px-6">
+          <div className="max-w-4xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 text-center uppercase">Simple pricing</p>
+            <h2
+              id="pricing-heading"
+              className="text-white text-center mb-16"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+            >
+              Free. Forever.<br />Seriously.
+            </h2>
+
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Free */}
+              <div id="pricing-free" className="reveal flex-1 border border-white/[0.08] rounded-2xl p-8" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                <p className="font-mono text-xs text-white/40 tracking-wide mb-3">FREE</p>
+                <p className="text-white mb-1" style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 52, lineHeight: 1 }}>₹0</p>
+                <p className="text-white/30 text-xs mb-8">forever · no credit card</p>
+                <ul className="space-y-3 mb-10" aria-label="Free plan features">
+                  {['All 50 templates', 'UPI payment links', 'Instagram Reels shelf', 'Unlimited links', 'Basic analytics'].map((f) => (
+                    <li key={f} className="flex items-center gap-3 text-sm text-white/60">
+                      <span className="text-[#E8593C] shrink-0" aria-hidden="true">✓</span>{f}
+                    </li>
+                  ))}
+                </ul>
+                <Link href="/login" className="block text-center py-3.5 rounded-full border border-white/20 text-white text-sm hover:border-white/40 transition-colors" style={{ fontFamily: 'Bebas Neue, sans-serif', letterSpacing: '0.1em' }}>
+                  Start for free →
+                </Link>
+              </div>
+
+              {/* Pro */}
+              <PricingProCard price={PRO_PRICE_INR} />
+            </div>
+          </div>
+        </section>
+
+        {/* ── 9. COMPARISON TABLE ──────────────────────────── */}
+        <section aria-labelledby="compare-heading" className="bg-[#060606] py-24 px-6">
+          <div className="max-w-4xl mx-auto">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">vs Linktree</p>
+            <h2
+              id="compare-heading"
+              className="text-white mb-12"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 0.95 }}
+            >
+              Why creators switch<br />from Linktree.
+            </h2>
+
+            <div className="overflow-x-auto rounded-2xl border border-white/[0.07]" style={{ WebkitOverflowScrolling: 'touch' }}>
+              <table className="w-full min-w-[540px] text-sm" role="table" aria-label="Taar vs Linktree feature comparison">
+                <thead>
+                  <tr className="border-b border-white/[0.07]" style={{ background: 'rgba(255,255,255,0.02)' }}>
+                    <th className="text-left px-6 py-4 text-white/40 font-mono text-xs tracking-widest uppercase" scope="col">Feature</th>
+                    <th className="px-6 py-4 text-[#E8593C] font-mono text-xs tracking-widest uppercase text-center" scope="col">Taar</th>
+                    <th className="px-6 py-4 text-white/25 font-mono text-xs tracking-widest uppercase text-center" scope="col">Linktree</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {COMPARE.map(({ feature, taar, linktree }, i) => (
+                    <tr
+                      key={feature}
+                      className="compare-row border-b border-white/[0.04] last:border-0"
+                      style={{ background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)' }}
+                    >
+                      <td className="px-6 py-4 text-white/60">{feature}</td>
+                      <td className="px-6 py-4 text-center font-semibold" style={{ color: '#E8593C' }}>{taar}</td>
+                      <td className="px-6 py-4 text-center text-white/30">{linktree}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
+        </section>
 
-          <div className="mt-10">
-            <Link href="/login"
-              className="inline-flex items-center gap-3 bg-[#E8593C] text-white px-8 py-4 text-xs font-bold tracking-widest uppercase hover:bg-white hover:text-[#060606] transition-all">
-              Switch to Taar — free →
-            </Link>
+        {/* ── 10. FINAL CTA ────────────────────────────────── */}
+        <section aria-labelledby="cta-heading" className="bg-[#060606] py-32 px-6 relative overflow-hidden">
+          <div className="pointer-events-none absolute inset-0" aria-hidden="true" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(232,89,60,0.08) 0%, transparent 70%)' }} />
+          <div className="max-w-2xl mx-auto text-center relative z-10">
+            <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-6 reveal uppercase">Get started in 5 minutes</p>
+            <h2
+              id="cta-heading"
+              className="text-white mb-4 reveal"
+              data-delay="80"
+              style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: 'clamp(48px, 7vw, 88px)', lineHeight: 0.92 }}
+            >
+              Claim your<br /><span className="text-[#E8593C]">taar.bio</span> link.
+            </h2>
+            <p className="text-white/40 text-base mb-10 reveal" data-delay="160">Free forever. No credit card. Set up in 5 minutes.</p>
+            <div className="max-w-sm mx-auto reveal" data-delay="240">
+              <UsernameInput />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ─────────────────────────────── FAQ */}
-      <section className="bg-[#060606] py-24 md:py-36 px-6 md:px-12 border-t border-white/5">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-6 font-semibold">FAQ</p>
-          <h2 className="font-display text-5xl md:text-6xl tracking-wider leading-none mb-14">
-            COMMON<br/><span className="text-white/20">QUESTIONS.</span>
-          </h2>
+      </main>
 
-          <div className="space-y-0">
-            {[
-              {
-                q: 'What is Taar?',
-                a: 'Taar is a free link in bio tool built for Indian creators. Put all your links — UPI, Instagram, YouTube, WhatsApp, digital products — on one custom page. Share that one link in your Instagram bio. Done.',
-              },
-              {
-                q: 'Is it really free? What\'s the catch?',
-                a: 'No catch. The free plan is free forever — no credit card, no 14-day trial. You get 1 page, 8 links, all 50 templates, UPI payment links, and a custom username. The Pro plan (₹399/month) unlocks analytics, Reels shelf, and digital products.',
-              },
-              {
-                q: 'How is Taar different from Linktree?',
-                a: 'Taar is built specifically for India. We have UPI payment link support (Linktree doesn\'t), Indian-specific templates, Razorpay for digital product payments, pricing in INR, and customer support based in India. Linktree is a great global tool — Taar is the version made for how Indian creators actually work.',
-              },
-              {
-                q: 'Can my fans pay me directly from my Taar page?',
-                a: 'Yes. Add your UPI ID as a link and your fans can pay you via GPay, PhonePe, Paytm, or any UPI app — directly to your bank account. No platform cut, no gateway fee. It\'s your money.',
-              },
-              {
-                q: 'How do I set up my Taar page?',
-                a: 'Sign up with email, get a magic link (no password needed), pick a username, choose a template, add your links. Your page is live in under 5 minutes. Share your taar link anywhere.',
-              },
-              {
-                q: 'Can I sell eBooks, presets, or courses through Taar?',
-                a: 'Yes, on the Pro plan. Upload your file, set a price, and Razorpay handles the checkout. The buyer gets an automatic download link by email. Works for PDFs, Lightroom presets, music packs, course access links — anything digital.',
-              },
-              {
-                q: 'What is the best link in bio tool for Indian creators?',
-                a: 'Taar. It is the only link in bio tool built specifically for India — with UPI payment support, Indian templates, Razorpay integration, and INR pricing. Free to start, with a Pro plan at ₹399/month (less than a chai a day).',
-              },
-            ].map((item, i) => (
-              <details key={i} className="group border-t border-white/8 py-6 cursor-pointer list-none">
-                <summary className="flex items-center justify-between gap-4 list-none">
-                  <h3 className="font-semibold text-white text-base pr-4">{item.q}</h3>
-                  <span className="text-white/30 group-open:rotate-45 transition-transform duration-200 shrink-0 text-xl font-light">+</span>
-                </summary>
-                <p className="mt-4 text-white/50 text-sm leading-relaxed max-w-2xl">{item.a}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────── FINAL CTA */}
-      <section className="bg-[#060606] py-32 md:py-48 px-6 md:px-12 border-t border-white/5 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div className="relative max-w-7xl mx-auto">
-          <p className="text-[10px] tracking-[0.4em] text-[#E8593C] uppercase mb-8 font-semibold">06 / 06</p>
-          <h2 className="font-display leading-none tracking-tight" style={{ fontSize: 'clamp(72px, 14vw, 220px)' }}>
-            <span className="block text-white" data-cta-word>YOUR</span>
-            <span className="block" data-cta-word style={{ color: 'transparent', WebkitTextStroke: '1px rgba(255,255,255,0.15)' }}>THREAD</span>
-            <span className="block text-[#E8593C]" data-cta-word>STARTS</span>
-            <span className="block text-white" data-cta-word>NOW.</span>
-          </h2>
-          <div className="mt-16 flex flex-col md:flex-row items-start md:items-center gap-6">
-            <Link href="/login"
-              className="group inline-flex items-center gap-4 bg-[#E8593C] text-white px-10 md:px-12 py-5 md:py-6 text-sm font-bold tracking-widest uppercase hover:bg-white hover:text-[#060606] transition-all duration-300">
-              Create your Taar — it&apos;s free
-              <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
-            </Link>
-            <p className="text-white/20 text-xs tracking-widest uppercase">No card needed · Live in 5 minutes</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────── FOOTER */}
-      <footer className="border-t border-white/5 py-10 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      {/* ── FOOTER ─────────────────────────────────────────── */}
+      <footer className="border-t border-white/[0.06] py-16 px-6" style={{ background: '#040404' }}>
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Left col */}
           <div>
-            <span className="font-display text-2xl tracking-[0.15em] text-white">TAAR</span>
-            <p className="text-white/20 text-xs mt-1 tracking-widest">Your thread to everything.</p>
+            <p className="text-white/80 text-2xl tracking-[0.15em] mb-3" style={{ fontFamily: 'Bebas Neue, sans-serif' }}>TAAR</p>
+            <p className="text-white/25 text-xs font-mono mb-6">Made by creators, for creators.</p>
+            {/* Social icons */}
+            <div className="flex items-center gap-4 mb-8">
+              <a href="https://twitter.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Twitter / X" className="text-white/25 hover:text-white/60 transition-colors">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L2.25 2.25h6.952l4.26 5.635L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/>
+                </svg>
+              </a>
+              <a href="https://instagram.com/taarbio" target="_blank" rel="noopener noreferrer" aria-label="Taar on Instagram" className="text-white/25 hover:text-white/60 transition-colors">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162S8.597 18.163 12 18.163s6.162-2.759 6.162-6.162S15.403 5.838 12 5.838zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+              </a>
+            </div>
+            <p className="text-white/15 text-xs font-mono">
+              © {new Date().getFullYear()} Taar · Made with ♥ in India
+            </p>
           </div>
-          <div className="flex items-center gap-8 flex-wrap">
-            {['Templates','Pricing','Login'].map(l => (
-              <Link key={l} href={l === 'Login' ? '/login' : `#${l.toLowerCase()}`}
-                className="text-[10px] text-white/25 hover:text-white transition-colors tracking-widest uppercase underline-wipe">
-                {l}
-              </Link>
-            ))}
-            <Link href="/linktree-alternative-india"
-              className="text-[10px] text-white/25 hover:text-white transition-colors tracking-widest uppercase underline-wipe">
-              Linktree Alternative
-            </Link>
-            <Link href="/privacy"
-              className="text-[10px] text-white/25 hover:text-white transition-colors tracking-widest uppercase underline-wipe">
-              Privacy
-            </Link>
-            <Link href="/terms"
-              className="text-[10px] text-white/25 hover:text-white transition-colors tracking-widest uppercase underline-wipe">
-              Terms
-            </Link>
+
+          {/* Right col — nav */}
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <p className="text-white/40 text-xs font-mono tracking-widest uppercase mb-4">Product</p>
+              <nav aria-label="Product footer navigation">
+                <ul className="space-y-3">
+                  {[
+                    { label: 'How It Works', href: '/#how-heading' },
+                    { label: 'Templates', href: '/#templates' },
+                    { label: 'Pricing', href: '/#pricing' },
+                    { label: 'Demo', href: '/demo' },
+                    { label: 'Blog', href: '/blog' },
+                  ].map(({ label, href }) => (
+                    <li key={label}>
+                      <Link href={href} className="text-white/30 text-xs hover:text-white/60 transition-colors font-mono">{label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+            <div>
+              <p className="text-white/40 text-xs font-mono tracking-widest uppercase mb-4">Company</p>
+              <nav aria-label="Company footer navigation">
+                <ul className="space-y-3">
+                  {[
+                    { label: 'Privacy', href: '/privacy' },
+                    { label: 'Terms', href: '/terms' },
+                    { label: 'Contact', href: 'mailto:hello@taar.bio' },
+                  ].map(({ label, href }) => (
+                    <li key={label}>
+                      <Link href={href} className="text-white/30 text-xs hover:text-white/60 transition-colors font-mono">{label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
           </div>
-          <p className="text-white/15 text-xs tracking-wider">Made in India 🇮🇳 for Indian creators</p>
         </div>
       </footer>
+
+      {/* Mobile padding for sticky CTA */}
+      <div className="md:hidden h-16" aria-hidden="true" />
     </div>
   )
 }

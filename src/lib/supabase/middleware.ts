@@ -41,18 +41,13 @@ export async function updateSession(request: NextRequest) {
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
+    const redirectTo = request.nextUrl.pathname + request.nextUrl.search
     url.pathname = '/login'
+    url.searchParams.set('redirect', redirectTo)
     return NextResponse.redirect(url)
   }
 
   if (user && request.nextUrl.pathname === '/login') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
-  }
-
-  // Redirect authenticated users from homepage to dashboard
-  if (user && request.nextUrl.pathname === '/') {
     const url = request.nextUrl.clone()
     url.pathname = '/dashboard'
     return NextResponse.redirect(url)

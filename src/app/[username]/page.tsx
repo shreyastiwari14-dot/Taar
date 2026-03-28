@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { TemplateRenderer } from '@/components/templates/TemplateRenderer'
+import { ViewTracker } from '@/components/templates/ViewTracker'
 
 export const revalidate = 60
 
@@ -84,13 +85,16 @@ export default async function UserBioPage({ params }: Props) {
     : { data: null }
 
   return (
-    <TemplateRenderer
-      page={page}
-      links={links || []}
-      products={products || []}
-      username={user.username || params.username}
-      isPro={user.is_pro}
-      showWatermark={!user.is_pro}
-    />
+    <>
+      <ViewTracker pageId={page.id} />
+      <TemplateRenderer
+        page={page}
+        links={links || []}
+        products={products || []}
+        username={user.username || params.username}
+        isPro={user.is_pro}
+        showWatermark={!user.is_pro}
+      />
+    </>
   )
 }

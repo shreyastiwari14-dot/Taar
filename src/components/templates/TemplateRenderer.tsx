@@ -2,6 +2,7 @@ import { getTemplate, TemplateConfig } from '@/lib/templates'
 import { Page, Link as LinkType, Product } from '@/lib/types'
 import { getLinkUrl, getLinkIcon } from '@/lib/utils'
 import { TrackableLink, ProductCard } from './shared'
+import { EmailCaptureForm } from './EmailCaptureForm'
 
 interface Props {
   page: Page
@@ -75,83 +76,11 @@ function getFontFamily(f: string): string {
   return map[f] || f
 }
 
-// ─── CSS animations injected once per render ─────────────────────────────────
+// ─── Per-template CSS (tid-scoped only — global keyframes live in globals.css) ─
 
 function GlobalStyles({ tid }: { tid: string }) {
   return (
     <style>{`
-      @keyframes taar-glow {
-        0%, 100% { opacity: 1; box-shadow: 0 0 8px currentColor, 0 0 20px currentColor; }
-        50% { opacity: 0.7; box-shadow: 0 0 4px currentColor, 0 0 10px currentColor; }
-      }
-      @keyframes taar-shimmer {
-        0% { background-position: -200% center; }
-        100% { background-position: 200% center; }
-      }
-      @keyframes taar-float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-6px); }
-      }
-      @keyframes taar-scanline {
-        0% { transform: translateY(-100%); }
-        100% { transform: translateY(100vh); }
-      }
-      @keyframes taar-grain {
-        0%, 100% { transform: translate(0, 0); }
-        10% { transform: translate(-1%, -1%); }
-        20% { transform: translate(1%, 1%); }
-        30% { transform: translate(-1%, 1%); }
-        40% { transform: translate(1%, -1%); }
-        50% { transform: translate(-2%, 0); }
-        60% { transform: translate(2%, 0); }
-        70% { transform: translate(0, -2%); }
-        80% { transform: translate(0, 2%); }
-        90% { transform: translate(-1%, 2%); }
-      }
-      @keyframes taar-spin-slow {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-      }
-      @keyframes taar-fade-up {
-        from { opacity: 0; transform: translateY(12px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes taar-avatar-in {
-        from { opacity: 0; transform: scale(0.8); }
-        to { opacity: 1; transform: scale(1); }
-      }
-      @keyframes taar-name-in {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-      @keyframes taar-twinkle {
-        0%, 100% { opacity: 0.2; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.3); }
-      }
-      @keyframes taar-gold-shimmer {
-        0% { background-position: -300% center; }
-        100% { background-position: 300% center; }
-      }
-      @keyframes taar-pulse-ring {
-        0% { transform: scale(1); opacity: 0.6; }
-        100% { transform: scale(1.4); opacity: 0; }
-      }
-
-      .taar-avatar-wrap { animation: taar-avatar-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-      .taar-name-wrap { animation: taar-name-in 0.5s ease 0.1s both; }
-      .taar-bio-wrap { animation: taar-fade-up 0.5s ease 0.2s both; }
-
-      .taar-links-wrap > * { animation: taar-fade-up 0.4s ease both; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(1) { animation-delay: 0.25s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(2) { animation-delay: 0.30s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(3) { animation-delay: 0.35s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(4) { animation-delay: 0.40s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(5) { animation-delay: 0.45s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(6) { animation-delay: 0.50s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(7) { animation-delay: 0.55s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(8) { animation-delay: 0.60s; animation-fill-mode: both; }
-      .taar-links-wrap > *:nth-child(n+9) { animation-delay: 0.65s; animation-fill-mode: both; }
-
       /* Per-template button hover — class names scoped by template ID */
       .taar-btn-${tid} {
         transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, border-color 0.2s ease !important;
@@ -753,6 +682,18 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
             </div>
           )}
 
+          {page.email_capture_enabled && !isPreview && (
+            <div style={{ marginTop: 8, marginBottom: p ? 12 : 20 }}>
+              <EmailCaptureForm
+                pageId={page.id}
+                accentColor={t.textAccent}
+                textColor={t.textSecondary}
+                borderColor={isLight ? '#00000018' : '#ffffff18'}
+                bgColor={isLight ? '#00000008' : '#ffffff06'}
+              />
+            </div>
+          )}
+
           {showWatermark && (
             <div style={{ color: t.watermarkColor, fontSize: 9, letterSpacing: '0.15em', marginTop: 12 }}>
               <a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>MADE WITH TAAR</a>
@@ -830,6 +771,18 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {activeProducts.map(pr => <ProductCard key={pr.id} product={pr} theme={isLight ? 'light' : 'dark'}/>)}
             </div>
+          </div>
+        )}
+
+        {page.email_capture_enabled && !isPreview && (
+          <div style={{ width: '100%', marginTop: 8, marginBottom: p ? 12 : 20 }}>
+            <EmailCaptureForm
+              pageId={page.id}
+              accentColor={t.textAccent}
+              textColor={t.textSecondary}
+              borderColor={isLight ? '#00000018' : '#ffffff18'}
+              bgColor={isLight ? '#00000008' : '#ffffff06'}
+            />
           </div>
         )}
 
