@@ -352,6 +352,21 @@ export default async function HomePage() {
         </section>
 
         {/* ── 10. FAQ ──────────────────────────────────────── */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              { '@type': 'Question', name: 'Is UPI really free?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. There are no platform fees on UPI payments. You keep 100% of what your audience sends.' } },
+              { '@type': 'Question', name: 'What is the Taar watermark?', acceptedAnswer: { '@type': 'Answer', text: "On the free plan, a small 'Made with Taar' badge appears at the bottom of your page. Upgrade to Pro to remove it." } },
+              { '@type': 'Question', name: 'Can I use my own domain?', acceptedAnswer: { '@type': 'Answer', text: 'Custom domains are a Pro feature. On free, your link is taar.bio/yourname.' } },
+              { '@type': 'Question', name: 'How do I connect UPI?', acceptedAnswer: { '@type': 'Answer', text: 'Just enter your UPI ID in your dashboard. We generate the payment link — no gateway setup needed.' } },
+              { '@type': 'Question', name: 'What happens if I cancel Pro?', acceptedAnswer: { '@type': 'Answer', text: 'You drop back to the free plan. Your page stays live, links stay active, you just lose Pro features.' } },
+              { '@type': 'Question', name: 'Is my data safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Payments go directly through Razorpay. We never store your UPI credentials or payment details.' } },
+            ],
+          }) }}
+        />
         <FAQSection />
 
         {/* ── 11. FINAL CTA ────────────────────────────────── */}

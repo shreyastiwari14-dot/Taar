@@ -29,25 +29,12 @@ const FAQS = [
   },
 ]
 
-const FAQ_JSONLD = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map(({ q, a }) => ({
-    '@type': 'Question',
-    name: q,
-    acceptedAnswer: { '@type': 'Answer', text: a },
-  })),
-}
 
 export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null)
 
   return (
     <section aria-labelledby="faq-heading" className="bg-[#060606] py-24 px-6">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }}
-      />
       <div className="max-w-3xl mx-auto">
         <p className="font-mono text-xs tracking-[0.2em] text-[#E8593C] mb-4 uppercase">Got questions?</p>
         <h2
