@@ -13,8 +13,8 @@ export default async function AnalyticsPage() {
     .eq('id', user.id)
     .single()
 
-  const isPro = userData?.is_pro ?? false
-  const days = isPro ? 30 : 7
+  const isPro = true
+  const days = 30
 
   const { data: page } = await supabase
     .from('pages')

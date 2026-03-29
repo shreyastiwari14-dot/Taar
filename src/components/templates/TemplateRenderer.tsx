@@ -442,7 +442,7 @@ function Avatar({ t, page, username, size, p }: {
         {page.avatar_url
           ? <img src={page.avatar_url} alt={page.title || username} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
           : <span style={{
-              fontFamily: getFontFamily(t.fontDisplay),
+              fontFamily: "'Inter', -apple-system, sans-serif",
               fontSize: innerFontSize,
               color: t.btnStyle === 'solid' ? t.btnText : t.textPrimary,
               letterSpacing: '0.05em',
@@ -471,13 +471,13 @@ function NameDisplay({ t, text, p }: { t: TemplateConfig; text: string; p: boole
     : isSerifDisplay ? 42 : isBoldDisplay ? 36 : 30
 
   let textStyle: React.CSSProperties = {
-    fontFamily: getFontFamily(t.fontDisplay),
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
     fontSize: baseFontSize,
     color: t.textPrimary,
-    letterSpacing: isBoldDisplay ? '0.08em' : isSerifDisplay ? '-0.01em' : '0.01em',
+    letterSpacing: '-0.02em',
     lineHeight: 1.05,
-    fontWeight: isBoldDisplay ? 400 : isSerifDisplay ? 600 : 700,
-    fontStyle: isCormorant && !p ? 'italic' : 'normal',
+    fontWeight: 800,
+    fontStyle: 'normal',
   }
 
   if ((isIndian || isLuxury) && !p) {
@@ -496,7 +496,7 @@ function NameDisplay({ t, text, p }: { t: TemplateConfig; text: string; p: boole
 
   return (
     <div className="taar-name-wrap" style={textStyle}>
-      {isBoldDisplay ? text.toUpperCase() : text}
+      {text}
     </div>
   )
 }
@@ -512,10 +512,10 @@ function LinkButton({ link, t, p, isPreview }: {
 
   let baseStyle: React.CSSProperties = {
     borderRadius: btnRadius,
-    fontFamily: getFontFamily(t.fontDisplay),
+    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
     fontSize: p ? 12 : 15,
     fontWeight: 600,
-    letterSpacing: isBoldFont ? '0.1em' : '0.02em',
+    letterSpacing: '0.01em',
     width: '100%',
     padding: p ? '10px 16px' : '15px 24px',
     textAlign: 'center',
@@ -558,7 +558,7 @@ function LinkButton({ link, t, p, isPreview }: {
   }
 
   const icon = getLinkIcon(link.type)
-  const label = isBoldFont ? link.label.toUpperCase() : link.label
+  const label = link.label
 
   const inner = (
     <div className={extraClasses} style={baseStyle}>
@@ -615,7 +615,7 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
   // ── EDITORIAL LAYOUT ──────────────────────────────────────────────────────
   if (t.layout === 'editorial') {
     return (
-      <div style={{ ...bgStyle, minHeight: p ? '100%' : '100vh', fontFamily: getFontFamily(t.fontBody), position: 'relative', overflow: 'hidden' }}>
+      <div style={{ ...bgStyle, minHeight: p ? '100%' : '100vh', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", position: 'relative', overflow: 'hidden' }}>
         <GlobalStyles tid={t.id} t={t} />
         <Decoration t={t} p={p}/>
 
@@ -699,7 +699,7 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
 
   // ── CENTERED LAYOUT (default) ─────────────────────────────────────────────
   return (
-    <div style={{ ...bgStyle, minHeight: p ? '100%' : '100vh', fontFamily: getFontFamily(t.fontBody), position: 'relative', overflow: 'hidden' }}>
+    <div style={{ ...bgStyle, minHeight: p ? '100%' : '100vh', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", position: 'relative', overflow: 'hidden' }}>
       <GlobalStyles tid={t.id} t={t}/>
       <Decoration t={t} p={p}/>
 

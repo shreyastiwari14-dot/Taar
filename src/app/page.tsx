@@ -22,13 +22,14 @@ const LABEL = '#6E6E73'
 const GOLD  = '#C9A96E'
 const INTER = 'Inter, -apple-system, BlinkMacSystemFont, sans-serif'
 
+const INTER_FAMILY = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
 const TEMPLATES = [
-  { name: 'Bollywood Editorial', bg: '#0A0005', accent: '#F5C842', textColor: '#F5C842', nameFontFamily: "'Cinzel', serif", tag: 'Cinematic' },
-  { name: 'Desi Marigold', bg: 'linear-gradient(160deg,#FF6500,#c8500a)', accent: '#FFD700', textColor: '#fff', nameFontFamily: "'Raleway', sans-serif", tag: 'Vibrant' },
-  { name: 'Mumbai Noir', bg: '#08080F', accent: '#9B59B6', textColor: '#E0D0F8', nameFontFamily: "'Josefin Sans', sans-serif", tag: 'Dark' },
-  { name: 'Rajasthani Royal', bg: '#1A0800', accent: '#D4AF37', textColor: '#D4AF37', nameFontFamily: "'Cinzel', serif", tag: 'Regal' },
-  { name: 'Cyberpunk', bg: '#000', accent: '#00FF41', textColor: '#00FF41', nameFontFamily: 'monospace', tag: 'Futuristic' },
-  { name: 'Rose Gold', bg: 'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', accent: '#fff', textColor: '#fff', nameFontFamily: "'Cormorant Garamond', serif", tag: 'Elegant' },
+  { name: 'Bollywood Editorial', bg: '#0A0005', accent: '#F5C842', textColor: '#F5C842', nameFontFamily: INTER_FAMILY, tag: 'Cinematic' },
+  { name: 'Desi Marigold', bg: 'linear-gradient(160deg,#FF6500,#c8500a)', accent: '#FFD700', textColor: '#fff', nameFontFamily: INTER_FAMILY, tag: 'Vibrant' },
+  { name: 'Mumbai Noir', bg: '#08080F', accent: '#9B59B6', textColor: '#E0D0F8', nameFontFamily: INTER_FAMILY, tag: 'Dark' },
+  { name: 'Rajasthani Royal', bg: '#1A0800', accent: '#D4AF37', textColor: '#D4AF37', nameFontFamily: INTER_FAMILY, tag: 'Regal' },
+  { name: 'Cyberpunk', bg: '#000', accent: '#00FF41', textColor: '#00FF41', nameFontFamily: INTER_FAMILY, tag: 'Futuristic' },
+  { name: 'Rose Gold', bg: 'linear-gradient(160deg,#B76E79,#E8B4B8,#F7C59F)', accent: '#fff', textColor: '#fff', nameFontFamily: INTER_FAMILY, tag: 'Elegant' },
 ]
 
 const HOW_IT_WORKS = [
@@ -38,7 +39,7 @@ const HOW_IT_WORKS = [
 ]
 
 const COMPARE = [
-  { feature: 'UPI Payments (GPay, PhonePe)', taar: '✓ Free', linktree: '✗ Not available' },
+  { feature: 'UPI Payments via Razorpay', taar: '✓ Free', linktree: '✗ Not available' },
   { feature: 'Indian-built templates', taar: '✓ 50 templates', linktree: '✗ Generic only' },
   { feature: 'Analytics dashboard', taar: '✓ Built-in', linktree: 'Paid only' },
   { feature: 'Sell digital products', taar: '✓ Pro', linktree: 'Paid only' },
@@ -261,7 +262,7 @@ export default async function HomePage() {
                   <span style={{ fontSize: 20, color: HEAD }}>₹</span>
                 </div>
                 <h3 style={{ fontFamily: INTER, fontWeight: 700, fontSize: 28, color: HEAD, letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>UPI Payment Links</h3>
-                <p style={{ fontSize: 17, color: BODY, lineHeight: 1.65, marginBottom: 20 }}>Accept tips, donations, and payments via GPay, PhonePe, Paytm — directly on your page. No gateway setup.</p>
+                <p style={{ fontSize: 17, color: BODY, lineHeight: 1.65, marginBottom: 20 }}>Accept tips, donations, and payments via Razorpay UPI — directly on your page. No gateway setup required.</p>
                 <Link href="/login" style={{ fontSize: 15, color: ACC, fontWeight: 500 }}>Learn more →</Link>
               </div>
               <div className="flex-1 flex justify-center md:justify-end">
@@ -283,10 +284,8 @@ export default async function HomePage() {
                     </div>
                     <p style={{ color: BODY, fontSize: 12 }}>Scan with any UPI app</p>
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                    {['GPay', 'PhonePe', 'Paytm'].map((p) => (
-                      <div key={p} style={{ background: '#1C1C1E', borderRadius: 10, padding: '8px 0', textAlign: 'center', fontSize: 11, color: BODY }}>{p}</div>
-                    ))}
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ background: '#1C1C1E', borderRadius: 10, padding: '8px 16px', display: 'inline-block', fontSize: 11, color: BODY }}>Powered by Razorpay</div>
                   </div>
                 </div>
               </div>
@@ -588,15 +587,21 @@ export default async function HomePage() {
                       position: 'relative',
                     }}
                   >
-                    {/* Notch */}
-                    <div style={{ position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)', width: 60, height: 16, background: '#000', borderRadius: 100, zIndex: 2 }} />
-                    <div style={{ padding: '32px 14px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, height: '100%' }}>
-                      <div style={{ width: 40, height: 40, borderRadius: '50%', background: `${t.accent}22`, border: `1.5px solid ${t.accent}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.accent, fontSize: 14, fontWeight: 700, flexShrink: 0 }}>P</div>
-                      <p style={{ color: t.textColor, fontFamily: t.nameFontFamily, fontSize: 11, fontWeight: 600, textAlign: 'center' }}>Priya Sharma</p>
-                      <span style={{ fontSize: 7, fontFamily: 'monospace', padding: '2px 8px', borderRadius: 20, background: `${t.accent}22`, color: t.accent }}>{t.tag.toUpperCase()}</span>
-                      {[1, 2, 3].map((n) => (
-                        <div key={n} style={{ width: '90%', height: 20, borderRadius: 10, background: t.accent, opacity: 0.18 }} />
-                      ))}
+                    {/* Dynamic Island */}
+                    <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', width: 72, height: 20, background: '#000', borderRadius: 100, zIndex: 2 }} />
+                    <div style={{ padding: '42px 16px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, height: '100%' }}>
+                      {/* Avatar */}
+                      <div style={{ width: 46, height: 46, borderRadius: '50%', background: `${t.accent}20`, border: `2px solid ${t.accent}55`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.accent, fontSize: 16, fontWeight: 800, flexShrink: 0, fontFamily: INTER_FAMILY, marginBottom: 8 }}>P</div>
+                      {/* Name */}
+                      <p style={{ color: t.textColor, fontFamily: INTER_FAMILY, fontSize: 12, fontWeight: 800, textAlign: 'center', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 5 }}>Priya Sharma</p>
+                      {/* Tag */}
+                      <span style={{ fontSize: 8, padding: '2px 9px', borderRadius: 20, background: `${t.accent}22`, color: t.accent, marginBottom: 10, display: 'inline-block' }}>{t.tag}</span>
+                      {/* Link stubs */}
+                      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {[1, 2, 3].map((n) => (
+                          <div key={n} style={{ height: 24, borderRadius: 6, border: `1.5px solid ${t.accent}`, opacity: n === 1 ? 0.65 : n === 2 ? 0.4 : 0.22 }} />
+                        ))}
+                      </div>
                     </div>
                     {/* Hover overlay */}
                     <div className="absolute inset-0 flex items-end justify-center pb-6 bg-black/0 group-hover:bg-black/50 transition-all duration-300">

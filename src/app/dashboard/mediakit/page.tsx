@@ -14,22 +14,9 @@ export default async function MediaKitDashboardPage() {
     .eq('id', user.id)
     .single()
 
-  if (!userData?.is_pro) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <div className="text-5xl mb-4">📊</div>
-        <h1 className="text-white text-2xl font-semibold mb-2">Media Kit</h1>
-        <p className="text-gray-500 text-sm mb-6">
-          A shareable page with your live stats — perfect for brand collab pitches.
-        </p>
-        <Link href="/dashboard/upgrade" className="inline-block bg-[#E8593C] text-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#d44e33] transition-colors">
-          Unlock with Pro →
-        </Link>
-      </div>
-    )
-  }
 
-  const username = userData.username
+
+  const username = userData?.username
   const mediakitUrl = `https://taar.bio/${username}/mediakit`
 
   return (

@@ -80,9 +80,7 @@ export default async function UserBioPage({ params }: Props) {
     .eq('is_active', true)
     .order('position')
 
-  const { data: products } = user.is_pro
-    ? await supabase.from('products').select('*').eq('page_id', page.id).eq('is_active', true)
-    : { data: null }
+  const { data: products } = await supabase.from('products').select('*').eq('page_id', page.id).eq('is_active', true)
 
   return (
     <>
@@ -92,8 +90,8 @@ export default async function UserBioPage({ params }: Props) {
         links={links || []}
         products={products || []}
         username={user.username || params.username}
-        isPro={user.is_pro}
-        showWatermark={!user.is_pro}
+        isPro={true}
+        showWatermark={false}
       />
     </>
   )

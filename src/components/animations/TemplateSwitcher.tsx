@@ -84,7 +84,7 @@ export function TemplateSwitcher({ templates }: Props) {
           style={{
             fontFamily: 'Bebas Neue, sans-serif',
             fontSize:   'clamp(8vw, 13vw, 180px)',
-            color:      'rgba(255,255,255,0.025)',
+            color:      'rgba(255,255,255,0.08)',
             textAlign:  'center',
             lineHeight: 1,
             letterSpacing: '0.04em',

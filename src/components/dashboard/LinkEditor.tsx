@@ -46,7 +46,7 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
   const [emailCapture, setEmailCapture] = useState<boolean>(page?.email_capture_enabled ?? false)
   const [showQR, setShowQR] = useState(false)
 
-  const canAddLink = !user?.is_pro ? links.length < FREE_LINK_LIMIT : true
+  const canAddLink = true
 
   async function addLink() {
     if (!pageData || !newLink.label || !newLink.url) return
@@ -280,7 +280,7 @@ export function LinkEditor({ page, links: initialLinks, user }: Props) {
               <h2 className="font-semibold text-white">
                 Links{' '}
                 <span className="text-gray-600 text-sm font-normal">
-                  {links.length}{!user?.is_pro ? `/${FREE_LINK_LIMIT}` : ''}
+                  {links.length}
                 </span>
               </h2>
               <button

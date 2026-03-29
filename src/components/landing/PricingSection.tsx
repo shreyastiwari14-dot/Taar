@@ -207,18 +207,6 @@ export function PricingSection() {
                 ))}
               </ul>
 
-              <blockquote
-                className="pl-4 mb-8"
-                style={{ borderLeft: '2px solid rgba(232,83,58,0.3)' }}
-              >
-                <p style={{ color: '#6E6E73', fontSize: 13, fontStyle: 'italic', lineHeight: 1.5 }}>
-                  &ldquo;The Bollywood template matches my brand perfectly.&rdquo;
-                </p>
-                <footer style={{ color: 'rgba(232,83,58,0.7)', fontSize: 12, marginTop: 6 }}>
-                  — Arjun M. · 82K followers
-                </footer>
-              </blockquote>
-
               <Link
                 href="/dashboard/upgrade"
                 className="block w-full py-4 rounded-full text-white text-center transition-opacity hover:opacity-85"
@@ -227,27 +215,8 @@ export function PricingSection() {
                 Get Pro for ₹{price}/month
               </Link>
 
-              <div className="mt-5">
-                <p className="text-center mb-3" style={{ color: '#3A3A3C', fontSize: 12 }}>
-                  Powered by Razorpay · No hidden charges
-                </p>
-                <div className="flex items-center justify-center gap-3 opacity-35" aria-label="Accepted payment methods">
-                  {[
-                    { label: 'GPay', color: '#4285F4', text: 'G' },
-                    { label: 'PhonePe', color: '#5f259f', text: 'Pe' },
-                    { label: 'Paytm', color: '#00BAF2', text: 'P' },
-                    { label: 'Razorpay', color: '#2D8CF0', text: 'Rz' },
-                  ].map(({ label, color, text }) => (
-                    <div
-                      key={label}
-                      className="rounded-md px-2 py-1 text-white text-[10px] font-bold"
-                      style={{ background: color, minWidth: 32, textAlign: 'center' }}
-                      title={label}
-                    >
-                      {text}
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-5 text-center">
+                <p style={{ color: '#3A3A3C', fontSize: 12 }}>Powered by Razorpay · No hidden charges</p>
               </div>
             </div>
           </div>

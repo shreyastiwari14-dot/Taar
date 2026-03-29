@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { ProGate } from '@/components/dashboard/ProGate'
 import { ProductsManager } from '@/components/dashboard/ProductsManager'
 
 export default async function ProductsPage() {
@@ -13,8 +12,6 @@ export default async function ProductsPage() {
     .select('*')
     .eq('id', user.id)
     .single()
-
-  if (!userData?.is_pro) return <ProGate feature="Digital Products" />
 
   const { data: page } = await supabase
     .from('pages')
