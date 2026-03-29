@@ -304,42 +304,39 @@ export default async function HomePage() {
               <div className="flex-1 flex justify-center md:justify-start">
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, maxWidth: 300 }}>
                   {TEMPLATES.slice(0, 4).map((tpl) => (
-                    <div key={tpl.name} style={{
-                      aspectRatio: '9/16', borderRadius: 18,
-                      background: tpl.bg, overflow: 'hidden',
-                      boxShadow: `0 12px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)`,
-                      padding: '10px 8px 12px',
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
-                    }}>
-                      {/* Dynamic Island */}
-                      <div style={{ width: 34, height: 8, background: '#000', borderRadius: 100, marginBottom: 2, flexShrink: 0 }} />
-                      {/* Avatar */}
+                    <div key={tpl.name} style={{ aspectRatio: '9/19.5', position: 'relative' }}>
+                      {/* Side buttons */}
+                      <div style={{ position: 'absolute', right: -1.5, top: '28%', width: 2, height: '10%', background: 'rgba(255,255,255,0.18)', borderRadius: '0 1.5px 1.5px 0', zIndex: 1 }} />
+                      <div style={{ position: 'absolute', left: -1.5, top: '20%', width: 2, height: '6.5%', background: 'rgba(255,255,255,0.18)', borderRadius: '1.5px 0 0 1.5px', zIndex: 1 }} />
+                      <div style={{ position: 'absolute', left: -1.5, top: '30%', width: 2, height: '6.5%', background: 'rgba(255,255,255,0.18)', borderRadius: '1.5px 0 0 1.5px', zIndex: 1 }} />
+                      {/* Screen */}
                       <div style={{
-                        width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
-                        background: `${tpl.accent}25`, border: `1.5px solid ${tpl.accent}70`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        color: tpl.accent, fontSize: 9, fontWeight: 700,
-                        fontFamily: tpl.nameFontFamily,
-                      }}>P</div>
-                      {/* Name */}
-                      <p style={{
-                        color: tpl.textColor, fontSize: 8, fontWeight: 700,
-                        fontFamily: tpl.nameFontFamily, textAlign: 'center',
-                        letterSpacing: '0.01em', lineHeight: 1.1, margin: 0,
-                      }}>Priya Sharma</p>
-                      {/* Tag */}
-                      <span style={{
-                        fontSize: 6, background: `${tpl.accent}22`, color: tpl.accent,
-                        borderRadius: 20, padding: '2px 7px', flexShrink: 0,
-                      }}>{tpl.tag}</span>
-                      {/* Link stubs */}
-                      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, marginTop: 1 }}>
-                        {[0.38, 0.22, 0.15].map((op, i) => (
-                          <div key={i} style={{
-                            height: 12, borderRadius: 6,
-                            background: tpl.accent, opacity: op,
-                          }} />
-                        ))}
+                        position: 'absolute', inset: 0, borderRadius: 22, overflow: 'hidden',
+                        background: tpl.bg,
+                        boxShadow: [
+                          '0 0 0 1px rgba(255,255,255,0.1)',
+                          '0 0 0 2.5px rgba(0,0,0,0.35)',
+                          '0 16px 40px rgba(0,0,0,0.65)',
+                          `0 0 30px ${tpl.accent}15`,
+                        ].join(', '),
+                      }}>
+                        {/* Glass */}
+                        <div style={{ position: 'absolute', inset: 0, borderRadius: 22, background: 'linear-gradient(145deg, rgba(255,255,255,0.08) 0%, transparent 50%)', pointerEvents: 'none', zIndex: 5 }} />
+                        {/* Dynamic Island */}
+                        <div style={{ position: 'absolute', top: 6, left: '50%', transform: 'translateX(-50%)', width: '32%', height: 11, background: '#000', borderRadius: 100, zIndex: 6 }} />
+                        {/* Time */}
+                        <div style={{ position: 'absolute', top: 7, left: '10%', fontSize: 5, fontWeight: 700, color: tpl.textColor, opacity: 0.7, fontFamily: INTER_FAMILY, zIndex: 6 }}>9:41</div>
+                        {/* Content */}
+                        <div style={{ position: 'absolute', inset: 0, paddingTop: 24, paddingLeft: 8, paddingRight: 8, paddingBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                          <div style={{ width: 26, height: 26, borderRadius: '50%', background: `${tpl.accent}22`, border: `1.5px solid ${tpl.accent}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tpl.accent, fontSize: 9, fontWeight: 800, flexShrink: 0, fontFamily: INTER_FAMILY, marginBottom: 4 }}>P</div>
+                          <p style={{ color: tpl.textColor, fontFamily: INTER_FAMILY, fontSize: 7, fontWeight: 800, textAlign: 'center', letterSpacing: '-0.01em', lineHeight: 1.1, marginBottom: 2 }}>Priya Sharma</p>
+                          <span style={{ fontSize: 5.5, padding: '1.5px 6px', borderRadius: 20, background: `${tpl.accent}22`, color: tpl.accent, marginBottom: 6, display: 'inline-block' }}>{tpl.tag}</span>
+                          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+                            {['Instagram', 'YouTube', 'UPI Pay'].map((label, n) => (
+                              <div key={label} style={{ width: '100%', height: 14, borderRadius: 4, border: `1px solid ${tpl.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: n === 0 ? 0.7 : n === 1 ? 0.45 : 0.25, fontSize: 5, color: tpl.textColor, fontWeight: 600, fontFamily: INTER_FAMILY }}>{label}</div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -576,41 +573,55 @@ export default async function HomePage() {
                   aria-label={`Use ${t.name} template`}
                 >
                   {/* Phone mockup */}
-                  <div
-                    style={{
-                      width: '100%',
-                      aspectRatio: '9/18',
-                      borderRadius: 28,
+                  <div style={{ width: '100%', aspectRatio: '9/19.5', position: 'relative' }}>
+                    {/* Side buttons — power */}
+                    <div style={{ position: 'absolute', right: -2, top: '28%', width: 3, height: '11%', background: 'rgba(255,255,255,0.18)', borderRadius: '0 2px 2px 0', zIndex: 1 }} />
+                    {/* Volume up/down */}
+                    <div style={{ position: 'absolute', left: -2, top: '20%', width: 3, height: '7%', background: 'rgba(255,255,255,0.18)', borderRadius: '2px 0 0 2px', zIndex: 1 }} />
+                    <div style={{ position: 'absolute', left: -2, top: '30%', width: 3, height: '7%', background: 'rgba(255,255,255,0.18)', borderRadius: '2px 0 0 2px', zIndex: 1 }} />
+                    {/* Screen */}
+                    <div style={{
+                      position: 'absolute', inset: 0,
+                      borderRadius: 40,
                       background: t.bg,
-                      boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
                       overflow: 'hidden',
-                      position: 'relative',
-                    }}
-                  >
-                    {/* Dynamic Island */}
-                    <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', width: 72, height: 20, background: '#000', borderRadius: 100, zIndex: 2 }} />
-                    <div style={{ padding: '42px 16px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0, height: '100%' }}>
-                      {/* Avatar */}
-                      <div style={{ width: 46, height: 46, borderRadius: '50%', background: `${t.accent}20`, border: `2px solid ${t.accent}55`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.accent, fontSize: 16, fontWeight: 800, flexShrink: 0, fontFamily: INTER_FAMILY, marginBottom: 8 }}>P</div>
-                      {/* Name */}
-                      <p style={{ color: t.textColor, fontFamily: INTER_FAMILY, fontSize: 12, fontWeight: 800, textAlign: 'center', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 5 }}>Priya Sharma</p>
-                      {/* Tag */}
-                      <span style={{ fontSize: 8, padding: '2px 9px', borderRadius: 20, background: `${t.accent}22`, color: t.accent, marginBottom: 10, display: 'inline-block' }}>{t.tag}</span>
-                      {/* Link stubs */}
-                      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        {[1, 2, 3].map((n) => (
-                          <div key={n} style={{ height: 24, borderRadius: 6, border: `1.5px solid ${t.accent}`, opacity: n === 1 ? 0.65 : n === 2 ? 0.4 : 0.22 }} />
-                        ))}
+                      boxShadow: [
+                        '0 0 0 1px rgba(255,255,255,0.1)',
+                        '0 0 0 3px rgba(0,0,0,0.35)',
+                        '0 32px 80px rgba(0,0,0,0.7)',
+                        '0 8px 20px rgba(0,0,0,0.4)',
+                        `0 0 60px ${t.accent}18`,
+                      ].join(', '),
+                    }}>
+                      {/* Glass highlight */}
+                      <div style={{ position: 'absolute', inset: 0, borderRadius: 40, background: 'linear-gradient(145deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.02) 35%, transparent 60%)', pointerEvents: 'none', zIndex: 5 }} />
+                      {/* Status bar */}
+                      <div style={{ position: 'absolute', top: 11, left: '10%', fontSize: 7.5, fontWeight: 700, color: t.textColor, opacity: 0.7, fontFamily: INTER_FAMILY, zIndex: 6 }}>9:41</div>
+                      {/* Dynamic Island */}
+                      <div style={{ position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)', width: '32%', height: 19, background: '#000', borderRadius: 100, zIndex: 6 }} />
+                      {/* Content */}
+                      <div style={{ position: 'absolute', inset: 0, paddingTop: 40, paddingLeft: 14, paddingRight: 14, paddingBottom: 14, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        {/* Avatar */}
+                        <div style={{ width: 46, height: 46, borderRadius: '50%', background: `${t.accent}22`, border: `2px solid ${t.accent}60`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: t.accent, fontSize: 16, fontWeight: 800, flexShrink: 0, fontFamily: INTER_FAMILY, marginBottom: 7 }}>P</div>
+                        {/* Name */}
+                        <p style={{ color: t.textColor, fontFamily: INTER_FAMILY, fontSize: 12, fontWeight: 800, textAlign: 'center', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 3 }}>Priya Sharma</p>
+                        {/* Bio */}
+                        <p style={{ color: t.textColor, opacity: 0.45, fontFamily: INTER_FAMILY, fontSize: 8.5, textAlign: 'center', lineHeight: 1.3, marginBottom: 7 }}>Content Creator · Mumbai</p>
+                        {/* Tag */}
+                        <span style={{ fontSize: 7.5, padding: '2px 9px', borderRadius: 20, background: `${t.accent}22`, color: t.accent, marginBottom: 11, display: 'inline-block', fontFamily: INTER_FAMILY }}>{t.tag}</span>
+                        {/* Link buttons with labels */}
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          {['Instagram', 'YouTube', 'UPI Pay'].map((label, n) => (
+                            <div key={label} style={{ width: '100%', height: 26, borderRadius: 7, border: `1px solid ${t.accent}`, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: n === 0 ? 0.75 : n === 1 ? 0.5 : 0.3, fontSize: 8.5, color: t.textColor, fontWeight: 600, fontFamily: INTER_FAMILY }}>{label}</div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 flex items-end justify-center pb-6 bg-black/0 group-hover:bg-black/50 transition-all duration-300">
-                      <span
-                        className="opacity-0 group-hover:opacity-100 text-white transition-opacity duration-300 rounded-full px-5 py-2.5"
-                        style={{ background: ACC, fontSize: 13, fontWeight: 600 }}
-                      >
-                        Use this →
-                      </span>
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 flex items-end justify-center pb-6 bg-black/0 group-hover:bg-black/40 transition-all duration-300">
+                        <span className="opacity-0 group-hover:opacity-100 text-white transition-opacity duration-300 rounded-full px-4 py-2" style={{ background: ACC, fontSize: 12, fontWeight: 600 }}>
+                          Use this →
+                        </span>
+                      </div>
                     </div>
                   </div>
                   {/* Label */}
