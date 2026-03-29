@@ -100,63 +100,69 @@ export function TemplateSwitcher({ templates }: Props) {
       <div className="absolute inset-0 flex items-center justify-center z-10">
         <div
           style={{
-            width:       'clamp(180px, 22vw, 260px)',
-            aspectRatio: '9/18',
-            borderRadius: 28,
+            width:        'clamp(190px, 24vw, 270px)',
+            aspectRatio:  '9/19',
+            borderRadius: 40,
             background:   active.bg,
-            border:       '1.5px solid rgba(255,255,255,0.12)',
+            border:       '1.5px solid rgba(255,255,255,0.1)',
             overflow:     'hidden',
-            boxShadow:    `0 40px 80px rgba(0,0,0,0.8), 0 0 50px ${active.accent}18`,
-            transition:   'background 0.5s ease, box-shadow 0.5s ease',
+            boxShadow:    `0 48px 96px rgba(0,0,0,0.85), 0 0 60px ${active.accent}14`,
+            transition:   'background 0.45s ease, box-shadow 0.45s ease',
             display:      'flex',
             flexDirection: 'column',
             alignItems:   'center',
-            justifyContent: 'center',
-            gap:          10,
-            padding:      20,
+            padding:      '14px 18px 22px',
+            gap:          0,
+            position:     'relative',
           }}
         >
-          <div
-            style={{
-              width:        52, height: 52, borderRadius: '50%',
-              background:   `${active.accent}28`,
-              border:       `1.5px solid ${active.accent}55`,
-              display:      'flex', alignItems: 'center', justifyContent: 'center',
-              color:        active.accent,
-              fontFamily:   'Bebas Neue, sans-serif',
-              fontSize:     20,
-            }}
-          >P</div>
-          <p
-            style={{
-              color:      active.textColor,
-              fontFamily: active.nameFontFamily,
-              fontSize:   13,
-              fontWeight: 600,
-              textAlign:  'center',
-            }}
-          >
+          {/* Dynamic Island */}
+          <div style={{
+            width: 90, height: 24, background: '#000',
+            borderRadius: 100, marginBottom: 20, flexShrink: 0,
+          }}/>
+          {/* Avatar */}
+          <div style={{
+            width: 56, height: 56, borderRadius: '50%',
+            background: `${active.accent}28`,
+            border: `2px solid ${active.accent}60`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: active.accent,
+            fontFamily: active.nameFontFamily,
+            fontSize: 20, fontWeight: 700,
+            marginBottom: 10, flexShrink: 0,
+            transition: 'border-color 0.45s ease, color 0.45s ease',
+          }}>P</div>
+          {/* Name */}
+          <p style={{
+            color: active.textColor,
+            fontFamily: active.nameFontFamily,
+            fontSize: 15, fontWeight: 700,
+            textAlign: 'center', lineHeight: 1.1,
+            marginBottom: 6,
+            transition: 'color 0.45s ease',
+          }}>
             Priya Sharma
           </p>
-          <span
-            style={{
-              fontSize:   9, fontFamily: 'monospace',
-              padding:    '3px 10px', borderRadius: 20,
-              background: `${active.accent}22`, color: active.accent,
-              transition: 'background 0.5s ease, color 0.5s ease',
-            }}
-          >
+          {/* Tag */}
+          <span style={{
+            fontSize: 9,
+            padding: '3px 11px', borderRadius: 20,
+            background: `${active.accent}22`, color: active.accent,
+            marginBottom: 14, flexShrink: 0,
+            transition: 'background 0.45s ease, color 0.45s ease',
+          }}>
             {active.tag}
           </span>
-          {[1,2,3].map(n => (
-            <div
-              key={n}
-              style={{
-                width: '100%', height: 28, borderRadius: 14,
-                background: active.accent, opacity: 0.22,
-                transition: 'background 0.5s ease',
-              }}
-            />
+          {/* Link buttons */}
+          {[1, 2, 3].map(n => (
+            <div key={n} style={{
+              width: '100%', height: 30, borderRadius: 15,
+              border: `1.5px solid ${active.accent}`,
+              opacity: n === 1 ? 0.7 : n === 2 ? 0.45 : 0.25,
+              marginBottom: n < 3 ? 8 : 0,
+              transition: 'border-color 0.45s ease, opacity 0.45s ease',
+            }}/>
           ))}
         </div>
       </div>

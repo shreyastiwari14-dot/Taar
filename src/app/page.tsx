@@ -303,12 +303,45 @@ export default async function HomePage() {
                 <Link href="/login" style={{ fontSize: 15, color: ACC, fontWeight: 500 }}>Browse templates →</Link>
               </div>
               <div className="flex-1 flex justify-center md:justify-start">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10, maxWidth: 320 }}>
-                  {TEMPLATES.slice(0, 4).map((t) => (
-                    <div key={t.name} style={{ aspectRatio: '9/16', borderRadius: 16, background: t.bg, overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.4)', padding: '20px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 28, height: 28, borderRadius: '50%', background: `${t.accent}22`, border: `1px solid ${t.accent}44` }} />
-                      <div style={{ width: '80%', height: 3, borderRadius: 4, background: t.accent, opacity: 0.6 }} />
-                      <div style={{ width: '60%', height: 3, borderRadius: 4, background: t.accent, opacity: 0.3 }} />
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, maxWidth: 300 }}>
+                  {TEMPLATES.slice(0, 4).map((tpl) => (
+                    <div key={tpl.name} style={{
+                      aspectRatio: '9/16', borderRadius: 18,
+                      background: tpl.bg, overflow: 'hidden',
+                      boxShadow: `0 12px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.06)`,
+                      padding: '10px 8px 12px',
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                    }}>
+                      {/* Dynamic Island */}
+                      <div style={{ width: 34, height: 8, background: '#000', borderRadius: 100, marginBottom: 2, flexShrink: 0 }} />
+                      {/* Avatar */}
+                      <div style={{
+                        width: 26, height: 26, borderRadius: '50%', flexShrink: 0,
+                        background: `${tpl.accent}25`, border: `1.5px solid ${tpl.accent}70`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: tpl.accent, fontSize: 9, fontWeight: 700,
+                        fontFamily: tpl.nameFontFamily,
+                      }}>P</div>
+                      {/* Name */}
+                      <p style={{
+                        color: tpl.textColor, fontSize: 8, fontWeight: 700,
+                        fontFamily: tpl.nameFontFamily, textAlign: 'center',
+                        letterSpacing: '0.01em', lineHeight: 1.1, margin: 0,
+                      }}>Priya Sharma</p>
+                      {/* Tag */}
+                      <span style={{
+                        fontSize: 6, background: `${tpl.accent}22`, color: tpl.accent,
+                        borderRadius: 20, padding: '2px 7px', flexShrink: 0,
+                      }}>{tpl.tag}</span>
+                      {/* Link stubs */}
+                      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 3, marginTop: 1 }}>
+                        {[0.38, 0.22, 0.15].map((op, i) => (
+                          <div key={i} style={{
+                            height: 12, borderRadius: 6,
+                            background: tpl.accent, opacity: op,
+                          }} />
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>

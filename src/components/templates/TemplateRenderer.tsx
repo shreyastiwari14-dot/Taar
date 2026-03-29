@@ -78,51 +78,42 @@ function getFontFamily(f: string): string {
 
 // ─── Per-template CSS (tid-scoped only — global keyframes live in globals.css) ─
 
-function GlobalStyles({ tid }: { tid: string }) {
+function GlobalStyles({ tid, t }: { tid: string; t: TemplateConfig }) {
   return (
     <style>{`
-      /* Per-template button hover — class names scoped by template ID */
       .taar-btn-${tid} {
-        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease, border-color 0.2s ease !important;
-        position: relative;
-        overflow: hidden;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.15s ease !important;
       }
-      .taar-btn-${tid}:hover {
-        transform: translateY(-2px);
-      }
+      .taar-btn-${tid}:hover { transform: translateY(-2px); }
 
-      /* Solid button hover */
       .taar-solid-${tid}:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 24px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.15);
+        opacity: 0.88;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2) !important;
       }
 
-      /* Outline fill-on-hover via pseudo bg layer */
       .taar-outline-${tid} {
-        background-size: 0% 100% !important;
-        background-repeat: no-repeat !important;
-        transition: background-size 0.25s ease, transform 0.15s ease, box-shadow 0.15s ease, color 0.2s ease !important;
+        transition: background 0.2s ease, transform 0.18s ease, box-shadow 0.18s ease !important;
       }
       .taar-outline-${tid}:hover {
-        background-size: 100% 100% !important;
+        background: ${t.textAccent}18 !important;
         transform: translateY(-2px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
       }
 
-      /* Ghost left-bar hover */
       .taar-ghost-${tid} {
         border-left: 3px solid transparent !important;
         transition: border-left-color 0.2s ease, background 0.2s ease, transform 0.15s ease !important;
       }
       .taar-ghost-${tid}:hover {
         transform: translateY(-2px);
-        border-left-color: currentColor !important;
-        background: rgba(255,255,255,0.06) !important;
+        border-left-color: ${t.textAccent} !important;
+        background: ${t.textAccent}08 !important;
       }
 
-      /* Glow pulse on links for glow templates */
       .taar-glow-btn-${tid}:hover {
         animation: taar-glow 1.5s ease infinite;
+        box-shadow: 0 0 20px ${t.glowColor || t.textAccent + '44'} !important;
       }
     `}</style>
   )
@@ -473,18 +464,20 @@ function NameDisplay({ t, text, p }: { t: TemplateConfig; text: string; p: boole
   const isGlow = GLOW_TEMPLATES.has(t.id)
   const isSerifDisplay = ['Cormorant Garamond','Playfair Display','Cinzel','Abril Fatface','Libre Baskerville'].includes(t.fontDisplay)
   const isBoldDisplay = ['Bebas Neue','Anton','Russo One','Oswald','Josefin Sans'].includes(t.fontDisplay)
+  const isCormorant = t.fontDisplay === 'Cormorant Garamond'
 
   const baseFontSize = p
-    ? 20
-    : isSerifDisplay ? 32 : 28
+    ? 18
+    : isSerifDisplay ? 42 : isBoldDisplay ? 36 : 30
 
   let textStyle: React.CSSProperties = {
     fontFamily: getFontFamily(t.fontDisplay),
     fontSize: baseFontSize,
     color: t.textPrimary,
-    letterSpacing: isBoldDisplay ? '0.1em' : isSerifDisplay ? '0.02em' : '0.02em',
+    letterSpacing: isBoldDisplay ? '0.08em' : isSerifDisplay ? '-0.01em' : '0.01em',
     lineHeight: 1.05,
-    fontWeight: isBoldDisplay ? 400 : 700,
+    fontWeight: isBoldDisplay ? 400 : isSerifDisplay ? 600 : 700,
+    fontStyle: isCormorant && !p ? 'italic' : 'normal',
   }
 
   if ((isIndian || isLuxury) && !p) {
@@ -520,15 +513,16 @@ function LinkButton({ link, t, p, isPreview }: {
   let baseStyle: React.CSSProperties = {
     borderRadius: btnRadius,
     fontFamily: getFontFamily(t.fontDisplay),
-    fontSize: p ? 12 : 14,
+    fontSize: p ? 12 : 15,
     fontWeight: 600,
-    letterSpacing: isBoldFont ? '0.12em' : '0.02em',
+    letterSpacing: isBoldFont ? '0.1em' : '0.02em',
     width: '100%',
-    padding: p ? '10px 16px' : '14px 20px',
+    padding: p ? '10px 16px' : '15px 24px',
     textAlign: 'center',
     display: 'block',
     textDecoration: 'none',
     cursor: 'pointer',
+    lineHeight: 1,
   }
 
   let extraClasses = `taar-btn-${t.id}`
@@ -538,20 +532,18 @@ function LinkButton({ link, t, p, isPreview }: {
       ...baseStyle,
       background: t.btnBg,
       color: t.btnText,
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.15)',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
     }
     extraClasses += ` taar-solid-${t.id}`
   } else if (t.btnStyle === 'outline') {
     const borderColor = t.btnBorder || t.btnText
     baseStyle = {
       ...baseStyle,
-      background: `linear-gradient(${t.btnText}, ${t.btnText}) no-repeat left center`,
-      backgroundColor: 'transparent',
+      background: 'transparent',
       color: t.btnText,
-      border: `1px solid ${borderColor}`,
+      border: `1.5px solid ${borderColor}`,
     }
     extraClasses += ` taar-outline-${t.id}`
-    // On hover the bg-image fills; initial state 0% width is set via CSS
   } else if (t.btnStyle === 'gradient') {
     baseStyle = { ...baseStyle, background: t.bgGradient || t.btnBg, color: t.btnText }
     extraClasses += ` taar-solid-${t.id}`
@@ -624,7 +616,7 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
   if (t.layout === 'editorial') {
     return (
       <div style={{ ...bgStyle, minHeight: p ? '100%' : '100vh', fontFamily: getFontFamily(t.fontBody), position: 'relative', overflow: 'hidden' }}>
-        <GlobalStyles tid={t.id} />
+        <GlobalStyles tid={t.id} t={t} />
         <Decoration t={t} p={p}/>
 
         {isGlow && <GlowBackground t={t}/>}
@@ -637,11 +629,11 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
         {/* Accent top bar */}
         <div style={{ height: 3, background: t.textAccent, position: 'relative', zIndex: 3 }}/>
 
-        <div style={{ maxWidth: 420, margin: '0 auto', padding: p ? '16px 16px' : '36px 24px', position: 'relative', zIndex: 2 }}>
+        <div style={{ maxWidth: 420, margin: '0 auto', padding: p ? '16px 16px' : '40px 24px', position: 'relative', zIndex: 2 }}>
 
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'center', gap: p ? 12 : 20, marginBottom: p ? 16 : 28 }}>
-            <Avatar t={t} page={page} username={username} size={p ? 52 : 76} p={p}/>
+            <Avatar t={t} page={page} username={username} size={p ? 52 : 80} p={p}/>
             <div style={{ flex: 1, minWidth: 0 }}>
               <NameDisplay t={t} text={displayTitle} p={p}/>
               {page.bio && (
@@ -708,7 +700,7 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
   // ── CENTERED LAYOUT (default) ─────────────────────────────────────────────
   return (
     <div style={{ ...bgStyle, minHeight: p ? '100%' : '100vh', fontFamily: getFontFamily(t.fontBody), position: 'relative', overflow: 'hidden' }}>
-      <GlobalStyles tid={t.id}/>
+      <GlobalStyles tid={t.id} t={t}/>
       <Decoration t={t} p={p}/>
 
       {isGlow && <GlowBackground t={t}/>}
@@ -718,9 +710,9 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
 
       {t.bgNoise && <NoiseLayer opacity={0.035}/>}
 
-      <div style={{ maxWidth: 420, margin: '0 auto', padding: p ? '24px 16px' : '52px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: 420, margin: '0 auto', padding: p ? '24px 16px' : '64px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 2 }}>
 
-        <Avatar t={t} page={page} username={username} size={p ? 64 : 92} p={p}/>
+        <Avatar t={t} page={page} username={username} size={p ? 64 : 100} p={p}/>
 
         <div style={{ height: p ? 12 : 18 }}/>
 
@@ -731,11 +723,11 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
         {page.bio && (
           <p className="taar-bio-wrap" style={{
             color: t.textSecondary,
-            fontSize: p ? 10 : 14,
+            fontSize: p ? 10 : 15,
             textAlign: 'center',
-            marginBottom: p ? 16 : 26,
-            maxWidth: 288,
-            lineHeight: 1.55,
+            marginBottom: p ? 16 : 28,
+            maxWidth: 300,
+            lineHeight: 1.6,
             fontStyle: ['Cormorant Garamond','Libre Baskerville'].includes(t.fontDisplay) ? 'italic' : 'normal',
           }}>
             {page.bio}

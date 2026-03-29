@@ -15,8 +15,7 @@
 
 * { box-sizing: border-box; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
 
-html, body { background: #0A0A0A; }
-html { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; }
+html, body { background: #0A0A0A; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif; }
 
 /* cursor: none is scoped via JS class — only on pages that mount CursorGlow */
 .has-custom-cursor,
