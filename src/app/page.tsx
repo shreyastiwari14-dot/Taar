@@ -249,7 +249,7 @@ export default async function HomePage() {
               id="features-heading"
               className="mb-24 reveal"
               data-delay="80"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontWeight: 400, fontSize: 'clamp(36px, 5vw, 56px)', lineHeight: 1.05, color: HEAD, maxWidth: 700 }}
+              style={{ fontFamily: INTER, fontWeight: 700, fontSize: 'clamp(32px, 4.5vw, 52px)', lineHeight: 1.06, letterSpacing: '-0.03em', color: HEAD, maxWidth: 700 }}
             >
               Built for how Indian creators work.
             </h2>
@@ -662,7 +662,7 @@ export default async function HomePage() {
             <div
               className="mb-8 reveal"
               data-delay="60"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 'clamp(32px, 4.5vw, 52px)', lineHeight: 1.05, color: HEAD }}
+              style={{ fontFamily: INTER, fontWeight: 700, fontSize: 'clamp(32px, 4.5vw, 52px)', lineHeight: 1.06, letterSpacing: '-0.03em', color: HEAD }}
               aria-hidden="true"
             >
               <ScrubText text="Built because we were frustrated too." />
@@ -795,7 +795,7 @@ export default async function HomePage() {
             </p>
             <p
               className="mb-6"
-              style={{ fontFamily: 'Cormorant Garamond, serif', fontStyle: 'italic', fontSize: 15, color: BODY }}
+              style={{ fontFamily: INTER, fontWeight: 400, fontSize: 15, color: BODY }}
             >
               Made by creators, for creators.
             </p>
