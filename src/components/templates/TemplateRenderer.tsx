@@ -102,13 +102,12 @@ function GlobalStyles({ tid, t }: { tid: string; t: TemplateConfig }) {
       }
 
       .taar-ghost-${tid} {
-        border-left: 3px solid transparent !important;
-        transition: border-left-color 0.2s ease, background 0.2s ease, transform 0.15s ease !important;
+        transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.18s ease !important;
       }
       .taar-ghost-${tid}:hover {
         transform: translateY(-2px);
-        border-left-color: ${t.textAccent} !important;
-        background: ${t.textAccent}08 !important;
+        background: ${t.textAccent}0D !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.18) !important;
       }
 
       .taar-glow-btn-${tid}:hover {
@@ -503,66 +502,120 @@ function NameDisplay({ t, text, p }: { t: TemplateConfig; text: string; p: boole
 
 // ─── Link button ──────────────────────────────────────────────────────────────
 
+function ArrowIcon({ color }: { color: string }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, opacity: 0.45 }}>
+      <path d="M3 11L11 3M11 3H6M11 3V8" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  )
+}
+
 function LinkButton({ link, t, p, isPreview }: {
   link: LinkType; t: TemplateConfig; p: boolean; isPreview?: boolean
 }) {
-  const btnRadius = { none: '0px', sm: '6px', lg: '12px', full: '9999px' }[t.btnRadius]
+  const btnRadius = { none: '0px', sm: '8px', lg: '14px', full: '9999px' }[t.btnRadius]
   const isGlow = GLOW_TEMPLATES.has(t.id)
-  const isBoldFont = ['Bebas Neue','Anton','Russo One','Oswald','Josefin Sans','Raleway','Space Mono'].includes(t.fontDisplay)
-
-  let baseStyle: React.CSSProperties = {
-    borderRadius: btnRadius,
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
-    fontSize: p ? 12 : 15,
-    fontWeight: 600,
-    letterSpacing: '0.01em',
-    width: '100%',
-    padding: p ? '10px 16px' : '15px 24px',
-    textAlign: 'center',
-    display: 'block',
-    textDecoration: 'none',
-    cursor: 'pointer',
-    lineHeight: 1,
-  }
-
-  let extraClasses = `taar-btn-${t.id}`
-
-  if (t.btnStyle === 'solid') {
-    baseStyle = {
-      ...baseStyle,
-      background: t.btnBg,
-      color: t.btnText,
-      boxShadow: '0 2px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
-    }
-    extraClasses += ` taar-solid-${t.id}`
-  } else if (t.btnStyle === 'outline') {
-    const borderColor = t.btnBorder || t.btnText
-    baseStyle = {
-      ...baseStyle,
-      background: 'transparent',
-      color: t.btnText,
-      border: `1.5px solid ${borderColor}`,
-    }
-    extraClasses += ` taar-outline-${t.id}`
-  } else if (t.btnStyle === 'gradient') {
-    baseStyle = { ...baseStyle, background: t.bgGradient || t.btnBg, color: t.btnText }
-    extraClasses += ` taar-solid-${t.id}`
-  } else {
-    // ghost
-    baseStyle = { ...baseStyle, background: 'transparent', color: t.btnText }
-    extraClasses += ` taar-ghost-${t.id}`
-  }
-
-  if (isGlow) {
-    extraClasses += ` taar-glow-btn-${t.id}`
-  }
+  const isLight = LIGHT_BG_TEMPLATES.has(t.id)
 
   const icon = getLinkIcon(link.type)
   const label = link.label
 
+  // Heights & padding
+  const rowH   = p ? 40 : 56
+  const hPad   = p ? 10 : 16
+  const iconSz = p ? 26 : 36
+  const iconFs = p ? 12 : 17
+  const labelFs = p ? 11 : 14
+
+  // Per-style colours
+  let rowBg: string
+  let rowBorder: string | undefined
+  let iconCircleBg: string
+  let textCol: string
+  let shadowVal: string | undefined
+
+  if (t.btnStyle === 'solid') {
+    rowBg        = t.btnBg
+    iconCircleBg = 'rgba(255,255,255,0.15)'
+    textCol      = t.btnText
+    shadowVal    = '0 2px 12px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.1)'
+  } else if (t.btnStyle === 'gradient') {
+    rowBg        = t.bgGradient || t.btnBg
+    iconCircleBg = 'rgba(255,255,255,0.15)'
+    textCol      = t.btnText
+    shadowVal    = '0 2px 12px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.1)'
+  } else if (t.btnStyle === 'outline') {
+    const borderColor = t.btnBorder || t.textAccent
+    rowBg        = isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.04)'
+    rowBorder    = `1.5px solid ${borderColor}`
+    iconCircleBg = `${t.textAccent}1A`
+    textCol      = t.btnText
+  } else {
+    // ghost
+    rowBg        = isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.05)'
+    rowBorder    = `1px solid ${isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.09)'}`
+    iconCircleBg = `${t.textAccent}1A`
+    textCol      = t.btnText
+  }
+
+  let extraClasses = `taar-btn-${t.id}`
+  if (t.btnStyle === 'solid' || t.btnStyle === 'gradient') {
+    extraClasses += ` taar-solid-${t.id}`
+  } else if (t.btnStyle === 'outline') {
+    extraClasses += ` taar-outline-${t.id}`
+  } else {
+    extraClasses += ` taar-ghost-${t.id}`
+  }
+  if (isGlow) extraClasses += ` taar-glow-btn-${t.id}`
+
   const inner = (
-    <div className={extraClasses} style={baseStyle}>
-      {icon} {label}
+    <div
+      className={extraClasses}
+      style={{
+        display:        'flex',
+        alignItems:     'center',
+        gap:            p ? 10 : 14,
+        width:          '100%',
+        height:         rowH,
+        padding:        `0 ${hPad}px`,
+        borderRadius:   btnRadius,
+        background:     rowBg,
+        border:         rowBorder,
+        boxShadow:      shadowVal,
+        textDecoration: 'none',
+        cursor:         'pointer',
+        boxSizing:      'border-box',
+      }}
+    >
+      {/* Icon circle */}
+      <div style={{
+        width: iconSz, height: iconSz,
+        borderRadius: '50%',
+        background: iconCircleBg,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: iconFs,
+        flexShrink: 0,
+      }}>
+        {icon}
+      </div>
+
+      {/* Label */}
+      <span style={{
+        flex:          1,
+        fontFamily:    "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+        fontSize:      labelFs,
+        fontWeight:    500,
+        color:         textCol,
+        letterSpacing: '-0.01em',
+        whiteSpace:    'nowrap',
+        overflow:      'hidden',
+        textOverflow:  'ellipsis',
+      }}>
+        {label}
+      </span>
+
+      {/* Arrow */}
+      <ArrowIcon color={textCol} />
     </div>
   )
 
@@ -652,7 +705,7 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
           <EditorialRule t={t} p={p}/>
 
           {/* Links */}
-          <div className="taar-links-wrap" style={{ display: 'flex', flexDirection: 'column', gap: p ? 8 : 10, marginBottom: p ? 12 : 20 }}>
+          <div className="taar-links-wrap" style={{ display: 'flex', flexDirection: 'column', gap: p ? 7 : 10, marginBottom: p ? 12 : 20 }}>
             {activeLinks.map(link => (
               <LinkButton key={link.id} link={link} t={t} p={p} isPreview={isPreview}/>
             ))}
@@ -709,6 +762,16 @@ export function TemplateRenderer({ page, links, products, username, showWatermar
       {isNature && <NatureBackground t={t}/>}
 
       {t.bgNoise && <NoiseLayer opacity={0.035}/>}
+
+      {/* Atmospheric top halo behind avatar — universal */}
+      {!isGlow && !isIndian && !isNature && (
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0,
+          height: p ? '45%' : '50%',
+          pointerEvents: 'none', zIndex: 1,
+          background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${t.textAccent}14 0%, transparent 75%)`,
+        }}/>
+      )}
 
       <div style={{ maxWidth: 420, margin: '0 auto', padding: p ? '24px 16px' : '64px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', zIndex: 2 }}>
 
